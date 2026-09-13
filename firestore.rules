@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Blog articles are meant to be public content, so reads stay open and the
+    // public "publish new article" panel can still create new documents.
+    // Updating/deleting an EXISTING article, however, should not be possible
+    // for an anonymous visitor — the app's "author login" is a localStorage
+    // flag checked only in the UI, not real authentication, so it cannot be
+    // trusted by security rules. Add Firebase Authentication for the doctor's
+    // login and tighten this further (e.g. request.auth.uid == '<doctor-uid>')
+    // once that exists.
+    match /blog_posts/{postId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if false;
+    }
+
+    // Appointments contain real patient PII (name, phone, email) and medical
+    // notes. The previous "allow read, write: if true" made every patient's
+    // contact details and symptoms readable by anyone on the internet with
+    // zero login required (and the app fetched the full collection on every
+    // homepage visit). Public "create" stays open so the booking form keeps
+    // working for anonymous patients; read/update/delete are closed until
+    // real authentication exists for the clinic staff who need to manage
+    // requests. Appointments are still emailed on submission and still saved
+    // here, so no data is lost — they just can't be listed from the browser
+    // until an authenticated admin flow is added.
+    match /appointments/{appointmentId} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
+  }
+}
