@@ -1,5 +1,6 @@
 import { Milestone, ExpertiseItem, BlogPost, ContactInfo } from './types';
 import { ARTICLES_TR } from './content/articles';
+import { DOCTOR } from './seo/site';
 
 // Canonical, stable URL slugs for each expertise/treatment area.
 // These power dedicated, crawlable landing pages (see ServicePage.tsx) instead of
@@ -527,13 +528,14 @@ Robotic-assisted surgery is a minimally invasive technique where the surgeon sit
 
 // Professional Contact Details and Mapping Info
 export const contactDetails: ContactInfo = {
-  phone: "+905332078903",
-  phoneFormatted: "+90 (533) 207 89 03",
-  email: "bcakiroglu@hisarhospital.com",
-  address: "Alemdağ Cad, Site Yolu Cd No: 7-9, 34768 Ümraniye/İstanbul, Türkiye",
+  // NAP — TEK KAYNAK src/seo/site.ts (JSON-LD ile harf harf aynı olmalı)
+  phone: DOCTOR.telephoneRaw,
+  phoneFormatted: DOCTOR.telephone,
+  email: DOCTOR.email,
+  address: DOCTOR.addressLine,
   // Map Embed URL of Hisar Intercontinental Hospital corresponding to the address
   mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010.1587375253813!2d29.1171887765545!3d41.021759418465175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cac8edfbf4b4a1%3A0xe108398e82d733e8!2sHisar%20Intercontinental%20Hospital!5e0!3m2!1str!2str!4v1721035200000!5m2!1str!2str",
-  gmapsDirectionUrl: "https://maps.app.goo.gl/MnS882cg8M34JW9n7",
+  gmapsDirectionUrl: DOCTOR.mapUrl,
   hours: [
     { days: "Pazartesi - Cuma / Mon - Fri", hours: "09:00 - 18:00" },
     { days: "Cumartesi / Saturday", hours: "09:00 - 14:00" },

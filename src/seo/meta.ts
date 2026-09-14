@@ -57,10 +57,34 @@ export function physicianJsonLd(): Record<string, unknown> {
     description:
       'Prof. Dr. Basri Çakıroğlu - Üroloji ve Robotik Cerrahi Uzmanı. HoLEP lazer prostat ameliyatı, daVinci robotik prostatektomi, böbrek taşı tedavisi.',
     telephone: DOCTOR.telephone,
+    email: DOCTOR.email,
     address: { '@type': 'PostalAddress', ...DOCTOR.address },
-    areaServed: { '@type': 'City', name: 'İstanbul' },
-    hospitalAffiliation: { '@type': 'Hospital', name: DOCTOR.hospital },
-    sameAs: [DOCTOR.instagram],
+    // YEREL SEO: Physician bir LocalBusiness alt türüdür → geo / saat / harita
+    // alanları geçerlidir. Google Business Profile'daki bilgilerle birebir
+    // aynı tutulmalı (bkz. src/seo/site.ts NAP notu).
+    geo: { '@type': 'GeoCoordinates', latitude: DOCTOR.geo.latitude, longitude: DOCTOR.geo.longitude },
+    hasMap: DOCTOR.mapUrl,
+    openingHoursSpecification: DOCTOR.openingHours.map((h) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: h.days,
+      opens: h.opens,
+      closes: h.closes,
+    })),
+    areaServed: DOCTOR.areaServed.map((name) => ({ '@type': 'City', name })),
+    hospitalAffiliation: {
+      '@type': 'Hospital',
+      name: DOCTOR.hospital.name,
+      url: DOCTOR.hospital.url,
+      telephone: DOCTOR.hospital.telephone,
+      address: { '@type': 'PostalAddress', ...DOCTOR.address },
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: DOCTOR.telephone,
+      contactType: 'appointments',
+      availableLanguage: ['tr', 'en'],
+    },
+    sameAs: DOCTOR.sameAs,
     availableService: getExpertiseItems('TR').map((item) => ({
       '@type': 'MedicalProcedure',
       name: item.title,

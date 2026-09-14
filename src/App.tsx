@@ -18,6 +18,7 @@ import AddArticleModal from './components/AddArticleModal';
 import AppointmentModal from './components/AppointmentModal';
 import { updatePageSeo } from './utils/seo';
 import { buildHomeMeta } from './seo/meta';
+import { DOCTOR } from './seo/site';
 
 interface AppProps {
   // SSR / prerender: sunucuda window yok, rota dışarıdan verilir.
@@ -409,11 +410,15 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
 
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
 
-          {/* Copyright Info */}
+          {/* Copyright Info + NAP (yerel SEO: adres/telefon her sayfada metin olarak) */}
           <div className="space-y-2">
             <p className="text-xs uppercase tracking-widest text-slate-400 font-medium">
               {t.footerCopyright}
             </p>
+            <address className="not-italic text-[11px] text-slate-500 max-w-md mx-auto md:mx-0">
+              {DOCTOR.hospital.name} · {DOCTOR.addressLine} ·{' '}
+              <a href={`tel:${DOCTOR.telephoneRaw}`} className="hover:text-gold">{DOCTOR.telephone}</a>
+            </address>
             <p className="text-[11px] text-slate-600 max-w-md mx-auto md:mx-0">
               {t.footerDisclaimer}
             </p>

@@ -2,6 +2,7 @@ import { Phone, Mail, MapPin, Clock, ExternalLink, Map } from 'lucide-react';
 import { Language } from '../types';
 import { uiTranslations } from '../translations';
 import { contactDetails } from '../data';
+import { DOCTOR } from '../seo/site';
 
 interface ContactProps {
   language: Language;
@@ -92,6 +93,24 @@ export default function Contact({ language }: ContactProps) {
                   </a>
                 </div>
               </div>
+            </div>
+
+            {/* YEREL SEO: hizmet bölgesi + hastane — "Ümraniye ürolog" gibi aramalar
+                için sayfada ilçe adlarının METİN olarak geçmesi gerekir */}
+            <div className="card-glass p-8 rounded-xl shadow-xl">
+              <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-3 flex items-center">
+                <MapPin className="w-4 h-4 text-gold mr-2" />
+                {language === 'TR' ? 'Ümraniye ve Anadolu Yakası’nda Üroloji' : 'Urology in Ümraniye & Istanbul Asian Side'}
+              </h3>
+              <p className="text-slate-300 text-xs leading-relaxed font-light">
+                {language === 'TR'
+                  ? `Muayene ve ameliyatlar ${DOCTOR.hospital.name} Üroloji Kliniği’nde (Ümraniye) yapılmaktadır. Başta Ümraniye olmak üzere Ataşehir, Çekmeköy, Üsküdar, Sancaktepe, Kadıköy, Maltepe ve Beykoz’dan hastalarımıza hizmet veriyoruz; Türkiye’nin diğer illerinden ve yurt dışından gelen hastalar için randevu ve konaklama planlaması yapılabilmektedir.`
+                  : `Consultations and surgeries take place at ${DOCTOR.hospital.name} Urology Clinic (Ümraniye, Istanbul). We serve patients from Ümraniye, Ataşehir, Çekmeköy, Üsküdar, Sancaktepe, Kadıköy, Maltepe and Beykoz, as well as international patients with appointment and accommodation planning.`}
+              </p>
+              <p className="text-[11px] text-slate-500 mt-3">
+                {language === 'TR' ? 'Hastane santrali: ' : 'Hospital switchboard: '}
+                <a href={`tel:${DOCTOR.hospital.telephone.replace(/\s/g, '')}`} className="text-slate-300 hover:text-gold">{DOCTOR.hospital.telephone}</a>
+              </p>
             </div>
 
             {/* Operating Hours card */}
