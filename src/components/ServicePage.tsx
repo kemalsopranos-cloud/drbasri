@@ -6,7 +6,8 @@ import {
 import { Language, ExpertiseItem } from '../types';
 import { uiTranslations } from '../translations';
 import { getExpertiseItems, expertiseSlugs, contactDetails } from '../data';
-import { updatePageSeo, injectServiceJsonLd, removeServiceJsonLd } from '../utils/seo';
+import { updatePageSeo } from '../utils/seo';
+import { buildServiceMeta } from '../seo/meta';
 
 interface ServicePageProps {
   language: Language;
@@ -41,20 +42,12 @@ export default function ServicePage({
 }: ServicePageProps) {
   const t = uiTranslations[language];
 
-  // SEO: dynamic title/description/keywords + MedicalProcedure structured data
+  // SEO: title/description/JSON-LD tek kaynaktan (src/seo/meta.ts)
   useEffect(() => {
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const title = `${item.title} | Prof. Dr. Basri Çakıroğlu`;
-    const description = item.shortDesc;
-    const keywords = `${item.title}, ${item.conditions.slice(0, 3).join(', ')}, Prof Dr Basri Çakıroğlu, Ümraniye Üroloji`;
-    updatePageSeo({ title, description, keywords, url: `${origin}/${slug}` });
-    injectServiceJsonLd(item, slug, origin);
-
+    updatePageSeo(buildServiceMeta(item, slug));
     if (typeof window !== 'undefined' && window.location.pathname !== `/${slug}`) {
       window.history.pushState({}, '', `/${slug}`);
     }
-
-    return () => removeServiceJsonLd();
   }, [item, slug]);
 
   // Related services: everything else in the same specialty list
@@ -79,9 +72,10 @@ export default function ServicePage({
           </button>
 
           <div className="text-center">
-            <h1 className="text-sm sm:text-base font-bold font-display text-white tracking-tight">
+            {/* SEO: sayfada tek <h1> olmalı — o da içerik başlığı (aşağıda) */}
+            <p className="text-sm sm:text-base font-bold font-display text-white tracking-tight">
               {language === 'TR' ? 'Uzmanlık Alanı' : 'Medical Specialty'}
-            </h1>
+            </p>
             <p className="text-[10px] text-gold tracking-wider uppercase font-medium">
               Prof. Dr. Basri Çakıroğlu
             </p>

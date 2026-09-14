@@ -17,18 +17,29 @@ import ServicePage from './components/ServicePage';
 import AddArticleModal from './components/AddArticleModal';
 import AppointmentModal from './components/AppointmentModal';
 import { updatePageSeo } from './utils/seo';
+import { buildHomeMeta } from './seo/meta';
 
-export default function App() {
+interface AppProps {
+  // SSR / prerender: sunucuda window yok, rota dışarıdan verilir.
+  initialPath?: string;
+  // Build sırasında Firestore'dan çekilen yazılar; istemci de aynı listeyle
+  // başlar (window.__SSR_POSTS__) ki hydration çıktısı birebir eşleşsin.
+  ssrPosts?: BlogPost[];
+}
+
+export default function App({ initialPath, ssrPosts }: AppProps = {}) {
   const [language, setLanguage] = useState<Language>('TR');
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('basri_logged_in') === 'true');
+  // HYDRATION: localStorage'a bağlı başlangıç değerleri sunucuda üretilemez;
+  // ilk render'da her zaman false, gerçek değer mount sonrası effect ile okunur.
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPath, setCurrentPath] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      return window.location.pathname;
-    }
-    return '/';
+    // Sondaki "/" atılır: "/blog/" ve "/blog" aynı rota (aksi hâlde hizmet
+    // sayfası eşleşmez ve SSR HTML'i ile hydrate uyumsuz olur)
+    const raw = initialPath ?? (typeof window !== 'undefined' ? window.location.pathname : '/');
+    return raw.replace(/\/+$/, '') || '/';
   });
 
   // Resolve the current path to a dedicated service/treatment page, if any
@@ -48,18 +59,15 @@ export default function App() {
   // Update homepage SEO when on main route
   useEffect(() => {
     if (!currentPath.startsWith('/blog') && !activeServiceItem) {
-      const origin = typeof window !== 'undefined' ? window.location.origin : '';
-      updatePageSeo({
-        title: 'Prof. Dr. Basri Çakıroğlu | Üroloji & Robotik Cerrahi Uzmanı',
-        description: 'Prof. Dr. Basri Çakıroğlu - Üroloji ve Robotik Cerrahi Uzmanı. HoLEP lazer prostat tedavisi, daVinci robotik cerrahi, böbrek taşı ve ürolojik onkoloji.',
-        keywords: 'Prof Dr Basri Çakıroğlu, üroloji uzmanı istanbul, HoLEP lazer prostat ameliyatı, robotik cerrahi, böbrek taşı lazer, ürolojik onkoloji',
-        url: `${origin}/`
-      });
+      updatePageSeo(buildHomeMeta());
     }
   }, [currentPath, language]);
 
-  // Sync login status across events
+  // Sync login status across events (+ ilk okuma mount sonrası)
   useEffect(() => {
+    try {
+      setIsLoggedIn(localStorage.getItem('basri_logged_in') === 'true');
+    } catch { /* gizli sekme / SSR */ }
     const handleLoginState = (e: any) => {
       const loggedIn = e.detail?.isLoggedIn ?? (localStorage.getItem('basri_logged_in') === 'true');
       setIsLoggedIn(loggedIn);
@@ -97,16 +105,13 @@ export default function App() {
 
 
   // Persistence: Real-time synchronization of appointments from Firestore
-  const [appointments, setAppointments] = useState<Appointment[]>(() => {
-    try {
-      const stored = localStorage.getItem('dr_basri_appointments');
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   useEffect(() => {
+    try {
+      const stored = localStorage.getItem('dr_basri_appointments');
+      if (stored) setAppointments(JSON.parse(stored));
+    } catch { /* yok say */ }
     try {
       const q = query(
         collection(db, 'appointments'),
@@ -253,6 +258,14 @@ export default function App() {
     }
   }, [currentPath]);
 
+  // /#about, /#contact gibi bir hash ile gelindiğinde (vercel.json'daki
+  // /hakkimizda → /#about yönlendirmesi) ilgili bölüme kaydır.
+  useEffect(() => {
+    if (currentPath !== '/') return;
+    const hash = window.location.hash.replace('#', '');
+    if (hash) setTimeout(() => scrollToSection(hash), 150);
+  }, [currentPath]);
+
   const handleScrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -324,6 +337,7 @@ export default function App() {
           onNavigateHome={navigateToHome}
           onOpenAppointment={() => setIsAppointmentOpen(true)}
           initialSlug={slug}
+          initialDbPosts={ssrPosts}
           appointments={appointments}
           onCancelAppointment={handleCancelAppointment}
           onConfirmAppointment={handleConfirmAppointment}

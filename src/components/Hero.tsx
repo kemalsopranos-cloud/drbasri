@@ -105,21 +105,24 @@ export default function Hero({
             <div className="inline-flex self-start items-center space-x-2 bg-white/5 border border-gold/30 px-4 py-2 rounded-full mb-2">
               <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
               <span className="text-[11px] font-semibold tracking-wider text-gold uppercase font-sans">
-                {language === 'TR' ? 'Tıp Biliminde Akademik Liderlik' : 'Academic Leadership in Medical Science'}
+                {language === 'TR' ? 'Modern Üroloji · Akademik Vizyon · İstanbul' : 'Modern Urology · Academic Vision · Istanbul'}
               </span>
             </div>
 
             {/* Hero Main Bold Typography Heading */}
-            <h1 className="text-display text-5xl sm:text-6xl md:text-7xl font-bold text-white leading-none tracking-tight">
+            {/* SEO: <h1> sayfanın tek ana başlığıdır ve hastaların aradığı
+                ifadeyi (isim + "üroloji uzmanı") taşımalı. Eski "Modern
+                Üroloji ve Akademik Vizyon" sloganı rozete taşındı. */}
+            <h1 className="text-display text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-none tracking-tight">
               {language === 'TR' ? (
                 <>
-                  Modern Üroloji ve<br />
-                  <span className="text-gold italic font-display">Akademik Vizyon</span>
+                  Prof. Dr. Basri Çakıroğlu<br />
+                  <span className="text-gold italic font-display">Üroloji ve Robotik Cerrahi Uzmanı</span>
                 </>
               ) : (
                 <>
-                  Modern Urology &<br />
-                  <span className="text-gold italic font-display">Academic Vision</span>
+                  Prof. Dr. Basri Çakıroğlu<br />
+                  <span className="text-gold italic font-display">Urology & Robotic Surgery Specialist</span>
                 </>
               )}
             </h1>

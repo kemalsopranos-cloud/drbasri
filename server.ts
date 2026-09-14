@@ -3,196 +3,16 @@ import path from 'path';
 import fs from 'fs/promises';
 import { createServer as createViteServer } from 'vite';
 import nodemailer from 'nodemailer';
-import { getBlogPosts, getExpertiseItems, expertiseSlugs } from './src/data';
-import type { BlogPost, ExpertiseItem } from './src/types';
+import { getBlogPosts, expertiseSlugs } from './src/data';
+import { resolveSeoMeta, injectSeoIntoHtml } from './src/seo/meta';
+import { SITE_URL } from './src/seo/site';
 
 // ---------------------------------------------------------------------------
-// SEO: server-side <title>/meta/JSON-LD resolution per route.
-//
-// Why this exists: the app is a client-rendered SPA. Without this, every route
-// (the homepage, every blog article, every treatment page) is served the exact
-// same static index.html with the SAME <title>/meta description/JSON-LD, and the
-// correct per-page values are only patched in client-side, after React mounts
-// (see src/utils/seo.ts -> updatePageSeo). That's invisible to anything that
-// doesn't execute JavaScript on first request: link-preview bots (WhatsApp,
-// Instagram, Facebook, Twitter/X), and it also delays what Googlebot sees on
-// first crawl. This function computes the right meta for a given path so it can
-// be injected directly into the HTML response, server-side, before it ever
-// reaches the client.
+// SEO: rota başına <title>/meta/JSON-LD çözümü artık src/seo/meta.ts'te (TEK
+// KAYNAK) — aynı fonksiyonları build-time prerender (scripts/prerender.ts) de
+// kullanır. Bu sunucu yalnızca GELİŞTİRME ortamı ve isteğe bağlı Node
+// dağıtımı içindir; canlı site (Vercel) prerender edilmiş statik HTML sunar.
 // ---------------------------------------------------------------------------
-
-interface SeoMeta {
-  title: string;
-  description: string;
-  keywords: string;
-  canonical: string;
-  jsonLd: Record<string, unknown> | null;
-}
-
-function escapeHtml(str: string): string {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-function buildHomeMeta(baseUrl: string): SeoMeta {
-  return {
-    title: 'Prof. Dr. Basri Çakıroğlu | Üroloji & Robotik Cerrahi Uzmanı',
-    description: 'Prof. Dr. Basri Çakıroğlu - Üroloji ve Robotik Cerrahi Uzmanı. HoLEP lazer prostat tedavisi, daVinci robotik cerrahi, böbrek taşı ve ürolojik onkoloji.',
-    keywords: 'Prof Dr Basri Çakıroğlu, üroloji uzmanı istanbul, HoLEP lazer prostat ameliyatı, robotik cerrahi, böbrek taşı lazer, ürolojik onkoloji',
-    canonical: `${baseUrl}/`,
-    jsonLd: null, // homepage keeps the default Physician schema already in index.html
-  };
-}
-
-function buildBlogHubMeta(baseUrl: string): SeoMeta {
-  return {
-    title: 'Tıbbi Makaleler & Sağlık Rehberi | Prof. Dr. Basri Çakıroğlu',
-    description: 'Prof. Dr. Basri Çakıroğlu tarafından hazırlanan HoLEP lazer prostat cerrahisi, daVinci robotik cerrahi, böbrek taşı ve üroloji makaleleri.',
-    keywords: 'üroloji makaleleri, HoLEP lazer, robotik cerrahi, böbrek taşı, prostat kanseri erken teşhis, Basri Çakıroğlu',
-    canonical: `${baseUrl}/blog`,
-    jsonLd: null,
-  };
-}
-
-function buildArticleMeta(post: BlogPost, baseUrl: string): SeoMeta {
-  const description = post.metaDescription || post.excerpt;
-  return {
-    title: `${post.title} | Prof. Dr. Basri Çakıroğlu`,
-    description,
-    keywords: post.keywords || `${post.category}, Üroloji, Prof. Dr. Basri Çakıroğlu`,
-    canonical: `${baseUrl}/blog/${post.slug}`,
-    jsonLd: {
-      '@context': 'https://schema.org',
-      '@type': 'MedicalWebPage',
-      name: post.title,
-      headline: post.title,
-      description,
-      keywords: post.keywords || `${post.category}, Üroloji, Prof. Dr. Basri Çakıroğlu`,
-      url: `${baseUrl}/blog/${post.slug}`,
-      datePublished: post.date,
-      inLanguage: 'tr-TR',
-      author: {
-        '@type': 'Physician',
-        name: 'Prof. Dr. Basri Çakıroğlu',
-        jobTitle: 'Üroloji & Robotik Cerrahi Uzmanı',
-        medicalSpecialty: 'UrologicSurgery',
-        url: baseUrl,
-      },
-      publisher: {
-        '@type': 'MedicalOrganization',
-        name: 'Prof. Dr. Basri Çakıroğlu Kliniği',
-        url: baseUrl,
-      },
-    },
-  };
-}
-
-function buildServiceMeta(item: ExpertiseItem, slug: string, baseUrl: string): SeoMeta {
-  return {
-    title: `${item.title} | Prof. Dr. Basri Çakıroğlu`,
-    description: item.shortDesc,
-    keywords: `${item.title}, ${item.conditions.slice(0, 3).join(', ')}, Prof Dr Basri Çakıroğlu, Ümraniye Üroloji`,
-    canonical: `${baseUrl}/${slug}`,
-    jsonLd: {
-      '@context': 'https://schema.org',
-      '@type': 'MedicalWebPage',
-      name: item.title,
-      headline: item.title,
-      description: item.longDesc,
-      url: `${baseUrl}/${slug}`,
-      inLanguage: 'tr-TR',
-      about: {
-        '@type': 'MedicalProcedure',
-        name: item.title,
-        description: item.longDesc,
-      },
-      author: {
-        '@type': 'Physician',
-        name: 'Prof. Dr. Basri Çakıroğlu',
-        jobTitle: 'Üroloji & Robotik Cerrahi Uzmanı',
-        medicalSpecialty: 'UrologicSurgery',
-        url: baseUrl,
-      },
-      publisher: {
-        '@type': 'MedicalOrganization',
-        name: 'Prof. Dr. Basri Çakıroğlu Kliniği',
-        url: baseUrl,
-      },
-    },
-  };
-}
-
-async function resolveSeoMeta(pathname: string, baseUrl: string, customPosts: any[]): Promise<SeoMeta> {
-  // Blog article
-  if (pathname.startsWith('/blog/')) {
-    const slug = pathname.replace('/blog/', '').replace(/\/$/, '');
-    const defaultPosts = getBlogPosts('TR');
-    const post = customPosts.find((p: any) => p.slug === slug) || defaultPosts.find((p) => p.slug === slug);
-    if (post) return buildArticleMeta(post, baseUrl);
-    return buildBlogHubMeta(baseUrl); // unknown slug: fall back gracefully instead of leaking homepage meta
-  }
-  if (pathname === '/blog' || pathname === '/blog/') {
-    return buildBlogHubMeta(baseUrl);
-  }
-
-  // Dedicated treatment/service pages
-  const slug = pathname.replace(/^\//, '');
-  const expertiseId = Object.keys(expertiseSlugs).find((id) => expertiseSlugs[id] === slug);
-  if (expertiseId) {
-    const item = getExpertiseItems('TR').find((i) => i.id === expertiseId);
-    if (item) return buildServiceMeta(item, slug, baseUrl);
-  }
-
-  // Homepage, /hakkimizda, /iletisim (client-side redirected to homepage anchors), and anything unknown
-  return buildHomeMeta(baseUrl);
-}
-
-function injectSeoIntoHtml(html: string, meta: SeoMeta): string {
-  let out = html;
-
-  out = out.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(meta.title)}</title>`);
-  out = out.replace(
-    /<meta\s+name="description"\s+content="[^"]*"\s*\/>/,
-    `<meta name="description" content="${escapeHtml(meta.description)}" />`
-  );
-  out = out.replace(
-    /<meta\s+name="keywords"\s+content="[^"]*"\s*\/>/,
-    `<meta name="keywords" content="${escapeHtml(meta.keywords)}" />`
-  );
-  out = out.replace(
-    /<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/,
-    `<meta property="og:title" content="${escapeHtml(meta.title)}" />`
-  );
-  out = out.replace(
-    /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/,
-    `<meta property="og:description" content="${escapeHtml(meta.description)}" />`
-  );
-
-  if (/<link\s+rel="canonical"/.test(out)) {
-    out = out.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/, `<link rel="canonical" href="${meta.canonical}" />`);
-  } else {
-    out = out.replace('</head>', `    <link rel="canonical" href="${meta.canonical}" />\n  </head>`);
-  }
-
-  if (/<meta\s+property="og:url"/.test(out)) {
-    out = out.replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/, `<meta property="og:url" content="${meta.canonical}" />`);
-  } else {
-    out = out.replace('</head>', `    <meta property="og:url" content="${meta.canonical}" />\n  </head>`);
-  }
-
-  // Only override the default Physician JSON-LD when this route has a more specific one
-  if (meta.jsonLd) {
-    out = out.replace(
-      /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
-      `<script type="application/ld+json">${JSON.stringify(meta.jsonLd)}</script>`
-    );
-  }
-
-  return out;
-}
 
 async function startServer() {
   const app = express();
@@ -269,9 +89,7 @@ async function startServer() {
   // SEO: Dynamic XML Sitemap for Google Search Console
   app.get('/sitemap.xml', async (req, res) => {
     try {
-      const host = req.get('host') || 'basricakiroglu.com.tr';
-      const protocol = req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
-      const baseUrl = `${protocol}://${host}`;
+      const baseUrl = SITE_URL;
 
       const customPosts = await readPosts();
       // Derive default article slugs directly from the shared content module
@@ -476,11 +294,8 @@ async function startServer() {
         const rawHtml = await fs.readFile(path.resolve(process.cwd(), 'index.html'), 'utf-8');
         let html = await vite.transformIndexHtml(req.originalUrl, rawHtml);
 
-        const host = req.get('host') || 'basricakiroglu.com.tr';
-        const protocol = req.headers['x-forwarded-proto'] === 'https' ? 'https' : req.protocol;
-        const baseUrl = `${protocol}://${host}`;
         const customPosts = await readPosts();
-        const meta = await resolveSeoMeta(req.path, baseUrl, customPosts);
+        const meta = resolveSeoMeta(req.path, customPosts);
         html = injectSeoIntoHtml(html, meta);
 
         res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
@@ -498,11 +313,8 @@ async function startServer() {
       try {
         const rawHtml = await fs.readFile(path.join(distPath, 'index.html'), 'utf-8');
 
-        const host = req.get('host') || 'basricakiroglu.com.tr';
-        const protocol = req.headers['x-forwarded-proto'] === 'https' ? 'https' : req.protocol;
-        const baseUrl = `${protocol}://${host}`;
         const customPosts = await readPosts();
-        const meta = await resolveSeoMeta(req.path, baseUrl, customPosts);
+        const meta = resolveSeoMeta(req.path, customPosts);
         const html = injectSeoIntoHtml(rawHtml, meta);
 
         res.status(200).set({ 'Content-Type': 'text/html' }).end(html);

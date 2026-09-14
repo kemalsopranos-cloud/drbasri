@@ -24,7 +24,7 @@ export default function Blog({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('basri_logged_in') === 'true');
+  const [isLoggedIn, setIsLoggedIn] = useState(() => { try { return localStorage.getItem('basri_logged_in') === 'true'; } catch { return false; } });
   const [dbPosts, setDbPosts] = useState<BlogPost[]>([]);
   const [showAll, setShowAll] = useState(false);
 

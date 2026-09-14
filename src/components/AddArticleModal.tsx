@@ -32,7 +32,7 @@ export default function AddArticleModal({
   const [appointmentFilter, setAppointmentFilter] = useState<'all' | 'pending' | 'confirmed' | 'cancelled'>('all');
 
   // Auth states
-  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('basri_logged_in') === 'true');
+  const [isLoggedIn, setIsLoggedIn] = useState(() => { try { return localStorage.getItem('basri_logged_in') === 'true'; } catch { return false; } });
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');

@@ -3,33 +3,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- SEO Meta Tags -->
-    <title>Prof. Dr. Basri Çakıroğlu - Üroloji Uzmanı & Robotik Cerrahi</title>
-    <meta name="description" content="Prof. Dr. Basri Çakıroğlu resmi web sitesi. HoLEP Lazer Prostat Ameliyatı, daVinci Robotik Cerrahi, Böbrek Taşı kırma ve Ürolojik Kanser Tedavileri." />
+    <meta name="theme-color" content="#0b1a30" />
+
+    <!-- SEO Meta Tags — build sırasında her rota için scripts/prerender.ts
+         tarafından (src/seo/meta.ts üzerinden) doğru değerlerle değiştirilir.
+         Buradaki değerler yalnızca ana sayfa / geliştirme yedeğidir. -->
+    <title>Prof. Dr. Basri Çakıroğlu | Üroloji Uzmanı İstanbul – HoLEP & Robotik Cerrahi</title>
+    <meta name="description" content="Prof. Dr. Basri Çakıroğlu - İstanbul Ümraniye Üroloji ve Robotik Cerrahi Uzmanı. HoLEP lazer prostat tedavisi, daVinci robotik cerrahi, böbrek taşı ve ürolojik onkoloji." />
     <meta name="keywords" content="Basri Çakıroğlu, Üroloji Profesörü, HoLEP, Robotik Cerrahi, Prostat Kanseri, Böbrek Taşı, Ümraniye Ürolog, Hisar Hospital Üroloji, Rezum" />
     <meta name="author" content="Prof. Dr. Basri Çakıroğlu" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://www.basricakiroglu.com.tr/" />
 
-    <!-- Open Graph for Social Networks -->
-    <meta property="og:title" content="Prof. Dr. Basri Çakıroğlu - Üroloji & Robotik Cerrahi Uzmanı" />
-    <meta property="og:description" content="30 yılı aşkın tıp ve klinik cerrahi birikimiyle HoLEP, daVinci Robotik Prostat Ameliyatları ve İleri Seviye Üroloji Tedavileri." />
+    <!-- Open Graph / Twitter (WhatsApp, Instagram, Facebook, X önizlemeleri) -->
+    <meta property="og:site_name" content="Prof. Dr. Basri Çakıroğlu" />
+    <meta property="og:locale" content="tr_TR" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://basricakiroglu.com.tr/" />
-    <link rel="canonical" href="https://basricakiroglu.com.tr/" />
+    <meta property="og:url" content="https://www.basricakiroglu.com.tr/" />
+    <meta property="og:title" content="Prof. Dr. Basri Çakıroğlu | Üroloji Uzmanı İstanbul – HoLEP & Robotik Cerrahi" />
+    <meta property="og:description" content="30 yılı aşkın tıp ve klinik cerrahi birikimiyle HoLEP, daVinci Robotik Prostat Ameliyatları ve İleri Seviye Üroloji Tedavileri." />
+    <meta property="og:image" content="https://www.basricakiroglu.com.tr/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Prof. Dr. Basri Çakıroğlu – Üroloji ve Robotik Cerrahi Uzmanı" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Prof. Dr. Basri Çakıroğlu | Üroloji Uzmanı İstanbul – HoLEP & Robotik Cerrahi" />
+    <meta name="twitter:description" content="HoLEP lazer prostat tedavisi, daVinci robotik cerrahi, böbrek taşı ve ürolojik onkoloji." />
+    <meta name="twitter:image" content="https://www.basricakiroglu.com.tr/og-image.jpg" />
 
-    <!-- Favicon / Brand Asset -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>" />
+    <!-- Favicon: Google arama sonuçlarında göstermek için gerçek bir URL ve
+         48 px'in katı boyutlar ister (data: URI emoji gösterilmiyordu). -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
-    <!-- Google Structured Data (Physician & Medical Organization Schema) -->
+    <!-- Google Structured Data — prerender her rota için kendi bloklarıyla değiştirir -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Physician",
       "name": "Prof. Dr. Basri Çakıroğlu",
-      "jobTitle": "Üroloji ve Robotik Cerrahi Profesörü",
-      "medicalSpecialty": ["Urology", "SurgicalOncology"],
-      "description": "Prof. Dr. Basri Çakıroğlu - Üroloji ve Robotik Cerrahi Uzmanı. HoLEP lazer prostat ameliyatı, daVinci robotik prostatektomi, böbrek taşı tedavisi.",
+      "url": "https://www.basricakiroglu.com.tr",
+      "jobTitle": "Üroloji ve Robotik Cerrahi Uzmanı",
+      "medicalSpecialty": ["Urologic", "Oncologic"],
       "telephone": "+90 533 207 89 03",
       "address": {
         "@type": "PostalAddress",
@@ -38,16 +55,12 @@
         "addressRegion": "İstanbul",
         "addressCountry": "TR"
       },
-      "hospitalAffiliation": {
-        "@type": "Hospital",
-        "name": "Hisar Hospital Intercontinental"
-      }
+      "hospitalAffiliation": { "@type": "Hospital", "name": "Hisar Hospital Intercontinental" }
     }
     </script>
   </head>
   <body class="bg-slate-950 text-slate-100 antialiased selection:bg-amber-500 selection:text-slate-950">
-    <div id="root"></div>
+    <div id="root"><!--ssr-outlet--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

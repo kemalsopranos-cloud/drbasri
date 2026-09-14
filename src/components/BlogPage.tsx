@@ -10,7 +10,8 @@ import { getBlogPosts, contactDetails } from '../data';
 import AddArticleModal from './AddArticleModal';
 import { db } from '../firebase';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, query, where } from 'firebase/firestore';
-import { updatePageSeo, injectArticleJsonLd, removeArticleJsonLd } from '../utils/seo';
+import { updatePageSeo } from '../utils/seo';
+import { buildArticleMeta, buildBlogHubMeta } from '../seo/meta';
 
 interface BlogPageProps {
   language: Language;
@@ -18,6 +19,8 @@ interface BlogPageProps {
   onNavigateHome: () => void;
   onOpenAppointment: () => void;
   initialSlug?: string;
+  // Prerender'da Firestore'dan çekilen yazılar (hydration eşleşmesi için)
+  initialDbPosts?: BlogPost[];
   appointments: Appointment[];
   onCancelAppointment: (id: string) => Promise<void>;
   onConfirmAppointment: (id: string) => Promise<void>;
@@ -29,6 +32,7 @@ export default function BlogPage({
   onNavigateHome,
   onOpenAppointment,
   initialSlug,
+  initialDbPosts,
   appointments,
   onCancelAppointment,
   onConfirmAppointment,
@@ -36,8 +40,9 @@ export default function BlogPage({
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('basri_logged_in') === 'true');
-  const [dbPosts, setDbPosts] = useState<BlogPost[]>([]);
+  // HYDRATION: localStorage sunucuda yok — ilk render false, effect'te okunur
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [dbPosts, setDbPosts] = useState<BlogPost[]>(initialDbPosts ?? []);
   const [copiedLink, setCopiedLink] = useState(false);
   const [currentSlug, setCurrentSlug] = useState<string | null>(initialSlug || null);
 
@@ -45,6 +50,9 @@ export default function BlogPage({
 
   // Sync login status
   useEffect(() => {
+    try {
+      setIsLoggedIn(localStorage.getItem('basri_logged_in') === 'true');
+    } catch { /* yok say */ }
     const handleLoginState = (e: any) => {
       const loggedIn = e.detail?.isLoggedIn ?? (localStorage.getItem('basri_logged_in') === 'true');
       setIsLoggedIn(loggedIn);
@@ -106,42 +114,15 @@ export default function BlogPage({
     return allPosts.find((p) => p.slug === currentSlug || p.id === currentSlug) || null;
   }, [allPosts, currentSlug]);
 
-  // Handle URL change & SEO Meta Tag updates
+  // Handle URL change & SEO Meta Tag updates (tek kaynak: src/seo/meta.ts)
   useEffect(() => {
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
     if (activePost) {
-      // Update SEO for single article
-      const pageTitle = `${activePost.title} | Prof. Dr. Basri Çakıroğlu`;
-      const desc = activePost.metaDescription || activePost.excerpt;
-      const kw = activePost.keywords || `${activePost.category}, Üroloji, HoLEP, Robotik Cerrahi, Prof Dr Basri Çakıroğlu`;
-      updatePageSeo({
-        title: pageTitle,
-        description: desc,
-        keywords: kw,
-        url: `${origin}/blog/${activePost.slug}`
-      });
-      injectArticleJsonLd(activePost, origin);
-
-      // Update browser URL without reload if needed
+      updatePageSeo(buildArticleMeta(activePost));
       if (window.location.pathname !== `/blog/${activePost.slug}`) {
         window.history.pushState({ slug: activePost.slug }, '', `/blog/${activePost.slug}`);
       }
     } else {
-      // SEO for Blog Hub Index
-      removeArticleJsonLd();
-      const pageTitle = language === 'TR'
-        ? 'Tıbbi Makaleler & Sağlık Rehberi | Prof. Dr. Basri Çakıroğlu'
-        : 'Medical Articles & Health Guide | Prof. Dr. Basri Cakiroglu';
-      const desc = language === 'TR'
-        ? 'Prof. Dr. Basri Çakıroğlu tarafından hazırlanan HoLEP lazer prostat cerrahisi, daVinci robotik cerrahi, böbrek taşı ve üroloji makaleleri.'
-        : 'Medical articles and guides on HoLEP laser prostate surgery, robotic surgery, and urological treatments by Prof. Dr. Basri Cakiroglu.';
-      updatePageSeo({
-        title: pageTitle,
-        description: desc,
-        keywords: 'üroloji makaleleri, HoLEP lazer, robotik cerrahi, böbrek taşı, prostat kanseri erken teşhis, Basri Çakıroğlu',
-        url: `${origin}/blog`
-      });
-
+      updatePageSeo(buildBlogHubMeta());
       if (window.location.pathname !== '/blog') {
         window.history.pushState({}, '', '/blog');
       }
@@ -338,9 +319,10 @@ export default function BlogPage({
 
           {/* Center Brand Title */}
           <div className="text-center">
-            <h1 className="text-sm sm:text-base font-bold font-display text-white tracking-tight">
+            {/* SEO: sayfada tek <h1> olmalı — yazıda makale başlığı, listede bölüm başlığı */}
+            <p className="text-sm sm:text-base font-bold font-display text-white tracking-tight">
               {language === 'TR' ? 'Tıbbi Bilgi & Sağlık Rehberi' : 'Medical Knowledge Hub'}
-            </h1>
+            </p>
             <p className="text-[10px] text-gold tracking-wider uppercase font-medium">
               Prof. Dr. Basri Çakıroğlu
             </p>
@@ -613,11 +595,11 @@ export default function BlogPage({
                 <span>{language === 'TR' ? 'Tıbbi Bilgi Portalı & Sağlık Rehberi' : 'Clinical Health & Knowledge Guide'}</span>
               </div>
               
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display text-white tracking-tight leading-tight mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display text-white tracking-tight leading-tight mb-4">
                 {language === 'TR'
                   ? 'Üroloji & Robotik Cerrahi Makaleleri'
                   : 'Urology & Robotic Surgery Articles'}
-              </h2>
+              </h1>
               <p className="text-slate-400 text-sm sm:text-base font-light leading-relaxed max-w-2xl mx-auto">
                 {language === 'TR'
                   ? 'Prof. Dr. Basri Çakıroğlu tarafından kaleme alınan güncel tedavi yöntemleri, HoLEP lazer cerrahisi, prostat sağlığı ve klinik rehberler.'

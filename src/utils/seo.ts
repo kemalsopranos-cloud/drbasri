@@ -1,4 +1,5 @@
-import { BlogPost, ExpertiseItem } from '../types';
+import type { SeoMeta } from '../seo/meta';
+import { SITE_URL, OG_IMAGE_PATH } from '../seo/site';
 
 /**
  * Accurately transliterates Turkish and special characters into clean URL slugs
@@ -27,171 +28,69 @@ export function generateSlug(text: string): string {
     .replace(/^-|-$/g, '');
 }
 
-/**
- * Dynamically updates document title and SEO meta tags
- */
-export function updatePageSeo(options: {
-  title: string;
-  description: string;
-  keywords?: string;
-  url?: string;
-}) {
-  if (typeof document === 'undefined') return;
-
-  // Title
-  document.title = options.title;
-
-  // Description
-  let descMeta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-  if (!descMeta) {
-    descMeta = document.createElement('meta');
-    descMeta.name = 'description';
-    document.head.appendChild(descMeta);
+function setMeta(selector: string, create: () => HTMLMetaElement, content: string) {
+  let el = document.head.querySelector(selector) as HTMLMetaElement | null;
+  if (!el) {
+    el = create();
+    document.head.appendChild(el);
   }
-  descMeta.content = options.description;
-
-  // Keywords
-  if (options.keywords) {
-    let kwMeta = document.querySelector('meta[name="keywords"]') as HTMLMetaElement | null;
-    if (!kwMeta) {
-      kwMeta = document.createElement('meta');
-      kwMeta.name = 'keywords';
-      document.head.appendChild(kwMeta);
-    }
-    kwMeta.content = options.keywords;
-  }
-
-  // Open Graph Title
-  let ogTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement | null;
-  if (!ogTitle) {
-    ogTitle = document.createElement('meta');
-    ogTitle.setAttribute('property', 'og:title');
-    document.head.appendChild(ogTitle);
-  }
-  ogTitle.content = options.title;
-
-  // Open Graph Description
-  let ogDesc = document.querySelector('meta[property="og:description"]') as HTMLMetaElement | null;
-  if (!ogDesc) {
-    ogDesc = document.createElement('meta');
-    ogDesc.setAttribute('property', 'og:description');
-    document.head.appendChild(ogDesc);
-  }
-  ogDesc.content = options.description;
+  el.content = content;
 }
 
-/**
- * Injects structured schema.org JSON-LD for Medical Article
- */
-export function injectArticleJsonLd(post: BlogPost, originUrl: string) {
-  if (typeof document === 'undefined') return;
-
-  const scriptId = 'article-structured-data';
-  let existingScript = document.getElementById(scriptId);
-  if (existingScript) {
-    existingScript.remove();
-  }
-
-  const script = document.createElement('script');
-  script.id = scriptId;
-  script.type = 'application/ld+json';
-
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalWebPage',
-    'name': post.title,
-    'headline': post.title,
-    'description': post.metaDescription || post.excerpt,
-    'keywords': post.keywords || `${post.category}, Üroloji, Prof. Dr. Basri Çakıroğlu`,
-    'url': `${originUrl}/blog/${post.slug}`,
-    'datePublished': post.date,
-    'inLanguage': 'tr-TR',
-    'author': {
-      '@type': 'Physician',
-      'name': 'Prof. Dr. Basri Çakıroğlu',
-      'jobTitle': 'Üroloji & Robotik Cerrahi Uzmanı',
-      'medicalSpecialty': 'UrologicSurgery',
-      'url': originUrl
-    },
-    'publisher': {
-      '@type': 'MedicalOrganization',
-      'name': 'Prof. Dr. Basri Çakıroğlu Kliniği',
-      'url': originUrl
-    }
+function metaByName(name: string) {
+  return () => {
+    const m = document.createElement('meta');
+    m.name = name;
+    return m;
   };
-
-  script.text = JSON.stringify(schema);
-  document.head.appendChild(script);
 }
 
-/**
- * Removes custom structured data when leaving article
- */
-export function removeArticleJsonLd() {
-  if (typeof document === 'undefined') return;
-  const script = document.getElementById('article-structured-data');
-  if (script) {
-    script.remove();
-  }
-}
-
-/**
- * Injects structured schema.org JSON-LD for a dedicated treatment/service page
- * (MedicalWebPage wrapping a MedicalProcedure). This is what lets Google show
- * rich results for individual treatments (HoLEP, robotic surgery, etc.) instead
- * of only ever understanding the homepage.
- */
-export function injectServiceJsonLd(item: ExpertiseItem, slug: string, originUrl: string) {
-  if (typeof document === 'undefined') return;
-
-  const scriptId = 'service-structured-data';
-  const existingScript = document.getElementById(scriptId);
-  if (existingScript) {
-    existingScript.remove();
-  }
-
-  const script = document.createElement('script');
-  script.id = scriptId;
-  script.type = 'application/ld+json';
-
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalWebPage',
-    'name': item.title,
-    'headline': item.title,
-    'description': item.longDesc,
-    'url': `${originUrl}/${slug}`,
-    'inLanguage': 'tr-TR',
-    'about': {
-      '@type': 'MedicalProcedure',
-      'name': item.title,
-      'description': item.longDesc,
-    },
-    'author': {
-      '@type': 'Physician',
-      'name': 'Prof. Dr. Basri Çakıroğlu',
-      'jobTitle': 'Üroloji & Robotik Cerrahi Uzmanı',
-      'medicalSpecialty': 'UrologicSurgery',
-      'url': originUrl
-    },
-    'publisher': {
-      '@type': 'MedicalOrganization',
-      'name': 'Prof. Dr. Basri Çakıroğlu Kliniği',
-      'url': originUrl
-    }
+function metaByProperty(property: string) {
+  return () => {
+    const m = document.createElement('meta');
+    m.setAttribute('property', property);
+    return m;
   };
-
-  script.text = JSON.stringify(schema);
-  document.head.appendChild(script);
 }
 
 /**
- * Removes the service-page structured data when navigating away
+ * İstemci tarafı gezinmede <head>'i verilen meta ile günceller. Sunucuda
+ * (prerender) aynı meta injectSeoIntoHtml ile HTML'e basılır; burada yalnızca
+ * SPA içi geçişlerde (blog listesinden yazıya tıklamak gibi) tazelenir.
+ *
+ * KÖK NEDEN NOTU: Eski sürüm canonical ve og:url'yi güncellemiyordu — kullanıcı
+ * ana sayfadan bir yazıya geçince canonical hâlâ "/" kalıyordu.
  */
-export function removeServiceJsonLd() {
+export function updatePageSeo(meta: SeoMeta) {
   if (typeof document === 'undefined') return;
-  const script = document.getElementById('service-structured-data');
-  if (script) {
-    script.remove();
+
+  document.title = meta.title;
+  setMeta('meta[name="description"]', metaByName('description'), meta.description);
+  setMeta('meta[name="keywords"]', metaByName('keywords'), meta.keywords);
+  setMeta('meta[property="og:title"]', metaByProperty('og:title'), meta.title);
+  setMeta('meta[property="og:description"]', metaByProperty('og:description'), meta.description);
+  setMeta('meta[property="og:type"]', metaByProperty('og:type'), meta.ogType);
+  setMeta('meta[property="og:url"]', metaByProperty('og:url'), meta.canonical);
+  setMeta('meta[property="og:image"]', metaByProperty('og:image'), `${SITE_URL}${OG_IMAGE_PATH}`);
+  setMeta('meta[name="twitter:title"]', metaByName('twitter:title'), meta.title);
+  setMeta('meta[name="twitter:description"]', metaByName('twitter:description'), meta.description);
+
+  let canonical = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.rel = 'canonical';
+    document.head.appendChild(canonical);
   }
+  canonical.href = meta.canonical;
+
+  // JSON-LD: önceki rotanın blokları kaldırılır, yenileri eklenir
+  document.head
+    .querySelectorAll('script[type="application/ld+json"]')
+    .forEach((s) => s.remove());
+  meta.jsonLd.forEach((obj) => {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(obj);
+    document.head.appendChild(script);
+  });
 }

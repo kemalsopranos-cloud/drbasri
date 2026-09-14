@@ -1,8 +1,5 @@
 User-agent: *
 Allow: /
-
-# Disallow admin or private api endpoints
 Disallow: /api/
 
-# Sitemap reference
-Sitemap: https://basricakiroglu.com.tr/sitemap.xml
+Sitemap: https://www.basricakiroglu.com.tr/sitemap.xml
