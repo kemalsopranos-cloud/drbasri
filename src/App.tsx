@@ -491,7 +491,7 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
           language={language}
           onClose={() => setIsAddModalOpen(false)}
           onAdd={handleAddPost}
-          existingCategories={['Onkoloji', 'Lazer Cerrahi', 'Teknoloji', 'Taş Hastalıkları', 'Kadın Ürolojisi']}
+          existingCategories={['Onkoloji', 'Lazer Cerrahi', 'Prostat Sağlığı', 'Teknoloji', 'Taş Hastalıkları', 'Kadın Ürolojisi', 'Androloji']}
           appointments={appointments}
           onCancelAppointment={handleCancelAppointment}
           onConfirmAppointment={handleConfirmAppointment}

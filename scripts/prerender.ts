@@ -23,7 +23,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { getBlogPosts, expertiseSlugs } from '../src/data';
-import { resolveSeoMeta, injectSeoIntoHtml } from '../src/seo/meta';
+import { resolveSeoMeta, injectSeoIntoHtml, postDates } from '../src/seo/meta';
 import { SITE_URL } from '../src/seo/site';
 import type { BlogPost } from '../src/types';
 
@@ -136,7 +136,7 @@ async function main() {
     await fs.writeFile(file, html, 'utf-8');
 
     const post = isBlog ? allPosts.find((p) => `/blog/${p.slug}` === route) : undefined;
-    const lastmod = post?.date && /^\d{4}-\d{2}-\d{2}/.test(post.date) ? post.date.slice(0, 10) : today;
+    const lastmod = (post && postDates(post).modified) || today;
     const priority = route === '/' ? '1.0' : route === '/blog' ? '0.8' : isBlog ? '0.7' : '0.9';
     const changefreq = route === '/' || route === '/blog' ? 'weekly' : 'monthly';
     sitemapEntries.push(

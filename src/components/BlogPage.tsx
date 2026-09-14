@@ -2,11 +2,12 @@ import { useState, useMemo, useEffect, MouseEvent } from 'react';
 import {
   Search, Calendar, User, Clock, ArrowRight, ArrowLeft, ChevronRight,
   FileText, Plus, Trash2, Share2, Check, ExternalLink, Shield, BookOpen,
-  Phone, Stethoscope, Tag, Hash, Lock, ShieldCheck, LogOut
+  Phone, Stethoscope, Tag, Hash, Lock, ShieldCheck, LogOut, HelpCircle, Link2, GraduationCap
 } from 'lucide-react';
 import { Language, BlogPost, Appointment } from '../types';
 import { uiTranslations } from '../translations';
-import { getBlogPosts, contactDetails } from '../data';
+import { getBlogPosts, contactDetails, expertiseSlugs, getExpertiseItems } from '../data';
+import { generateSlug } from '../utils/seo';
 import AddArticleModal from './AddArticleModal';
 import { db } from '../firebase';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, query, where } from 'firebase/firestore';
@@ -236,6 +237,12 @@ export default function BlogPage({
       .slice(0, 3);
   }, [allPosts, activePost]);
 
+  // Makalenin bağlı olduğu tedavi sayfası (iç bağlantı)
+  const relatedServiceItem = useMemo(() => {
+    if (!activePost?.relatedService) return null;
+    return getExpertiseItems(language).find((i) => i.id === activePost.relatedService) ?? null;
+  }, [activePost, language]);
+
   // Generate Table of Contents from headings in article
   const tableOfContents = useMemo(() => {
     if (!activePost) return [];
@@ -257,12 +264,25 @@ export default function BlogPage({
     }
   };
 
+  // "**kalın**" işaretlerini <strong>'a çevirir. Eski sürüm yıldızları olduğu
+  // gibi basıyordu (makalelerde "**Ailesinde...**" görünüyordu).
+  const renderInline = (text: string) => {
+    const parts = text.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, i) =>
+      part.startsWith('**') && part.endsWith('**') ? (
+        <strong key={i} className="text-white font-semibold">{part.slice(2, -2)}</strong>
+      ) : (
+        <span key={i}>{part}</span>
+      )
+    );
+  };
+
   const renderArticleContent = (content: string) => {
     return content.split('\n').map((line, idx) => {
       const trimmed = line.trim();
       if (trimmed.startsWith('###')) {
         const text = trimmed.replace('###', '').trim();
-        const headingId = text.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        const headingId = generateSlug(text);
         return (
           <h2
             key={idx}
@@ -273,17 +293,18 @@ export default function BlogPage({
           </h2>
         );
       }
-      if (trimmed.startsWith('*')) {
+      // Madde: "* metin" (yıldız + boşluk). "**kalın**" ile başlayan satır madde DEĞİLDİR.
+      if (/^\*\s/.test(trimmed)) {
         return (
           <li key={idx} className="text-slate-300 ml-6 mb-2 list-disc pl-1 leading-relaxed text-sm sm:text-base font-light">
-            {trimmed.replace('*', '').trim()}
+            {renderInline(trimmed.replace(/^\*\s*/, ''))}
           </li>
         );
       }
       if (/^\d+\./.test(trimmed)) {
         return (
           <p key={idx} className="text-slate-200 text-sm sm:text-base leading-relaxed mb-3 pl-2 font-medium">
-            {trimmed}
+            {renderInline(trimmed)}
           </p>
         );
       }
@@ -292,7 +313,7 @@ export default function BlogPage({
       }
       return (
         <p key={idx} className="text-slate-300 text-sm sm:text-base leading-relaxed mb-4 font-light">
-          {trimmed}
+          {renderInline(trimmed)}
         </p>
       );
     });
@@ -424,6 +445,11 @@ export default function BlogPage({
                   <Calendar className="w-3.5 h-3.5 mr-1 text-slate-500" />
                   {activePost.date}
                 </span>
+                {activePost.dateModified && activePost.dateModified !== activePost.datePublished && (
+                  <span className="text-xs text-slate-500">
+                    {language === 'TR' ? 'Güncelleme: ' : 'Updated: '}{activePost.dateModified}
+                  </span>
+                )}
               </div>
 
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-white tracking-tight leading-snug mb-6">
@@ -465,7 +491,7 @@ export default function BlogPage({
                 </h3>
                 <ul className="space-y-1.5 text-xs sm:text-sm">
                   {tableOfContents.map((heading, i) => {
-                    const headingId = heading.toLowerCase().replace(/[^a-z0-9]/g, '-');
+                    const headingId = generateSlug(heading);
                     return (
                       <li key={i}>
                         <a
@@ -512,6 +538,92 @@ export default function BlogPage({
               )}
             </div>
 
+            {/* İlgili tedavi sayfası — iç bağlantı (SEO: makale → hizmet sayfası) */}
+            {relatedServiceItem && (
+              <a
+                href={`/${expertiseSlugs[relatedServiceItem.id]}`}
+                className="flex items-center justify-between gap-4 card-glass border border-gold/30 hover:border-gold/60 rounded-xl p-5 mb-8 transition-colors group"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <Link2 className="w-5 h-5 text-gold shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-[10px] uppercase tracking-widest text-gold font-bold">
+                      {language === 'TR' ? 'İlgili Tedavi Sayfası' : 'Related Treatment'}
+                    </p>
+                    <p className="text-sm font-bold text-white group-hover:text-gold transition-colors truncate">
+                      {relatedServiceItem.title}
+                    </p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-gold shrink-0" />
+              </a>
+            )}
+
+            {/* Sık Sorulan Sorular — görünür metin FAQPage JSON-LD ile birebir aynı */}
+            {activePost.faq && activePost.faq.length > 0 && (
+              <section className="card-glass p-6 sm:p-10 rounded-2xl mb-8 border border-white/10" aria-labelledby="faq-heading">
+                <h2 id="faq-heading" className="text-xl sm:text-2xl font-bold font-display text-white mb-6 flex items-center">
+                  <HelpCircle className="w-5 h-5 text-gold mr-2" />
+                  {language === 'TR' ? 'Sık Sorulan Sorular' : 'Frequently Asked Questions'}
+                </h2>
+                <dl className="space-y-5">
+                  {activePost.faq.map((f, i) => (
+                    <div key={i} className="border-l-2 border-gold/50 pl-4">
+                      <dt className="text-sm sm:text-base font-bold text-white mb-1.5">{f.q}</dt>
+                      <dd className="text-slate-300 text-sm leading-relaxed font-light">{f.a}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            )}
+
+            {/* Kaynaklar — E-E-A-T: kılavuz referansları */}
+            {activePost.sources && activePost.sources.length > 0 && (
+              <section className="card-glass p-6 rounded-2xl mb-8 border border-white/10">
+                <h2 className="text-xs uppercase tracking-widest text-gold font-bold mb-3 flex items-center">
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  {language === 'TR' ? 'Kaynaklar ve Kılavuzlar' : 'Sources & Guidelines'}
+                </h2>
+                <ul className="space-y-1.5 text-xs sm:text-sm">
+                  {activePost.sources.map((src, i) => (
+                    <li key={i}>
+                      <a
+                        href={src.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-slate-300 hover:text-gold transition-colors inline-flex items-center gap-1.5"
+                      >
+                        <ExternalLink className="w-3 h-3 text-gold/70 shrink-0" />
+                        <span>{src.title}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* Yazar kutusu — E-E-A-T: unvan, kurum, hakkında bağlantısı */}
+            <aside className="card-glass p-6 rounded-2xl mb-8 border border-white/10 flex flex-col sm:flex-row gap-5 sm:items-center">
+              <div className="w-14 h-14 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center text-gold font-bold text-lg shrink-0">
+                BÇ
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] uppercase tracking-widest text-gold font-bold mb-1 flex items-center gap-1.5">
+                  <GraduationCap className="w-3.5 h-3.5" />
+                  {language === 'TR' ? 'Yazar Hakkında' : 'About the Author'}
+                </p>
+                <p className="text-sm font-bold text-white">{activePost.author}</p>
+                <p className="text-xs text-slate-400 leading-relaxed mt-1">
+                  {language === 'TR'
+                    ? 'Üroloji Profesörü (Üsküdar Üniversitesi Tıp Fakültesi), Hisar Intercontinental Hospital Üroloji Kliniği Sorumlusu. HoLEP lazer prostat cerrahisi, daVinci robotik cerrahi ve endoürolojik taş tedavileri alanında 30 yılı aşkın klinik deneyim.'
+                    : 'Professor of Urology (Üsküdar University Faculty of Medicine), Head of Urology at Hisar Intercontinental Hospital. Over 30 years of clinical experience in HoLEP laser prostate surgery, daVinci robotic surgery and endourological stone treatment.'}
+                </p>
+                <a href="/#about" className="text-xs text-gold hover:underline mt-2 inline-flex items-center gap-1">
+                  {language === 'TR' ? 'Akademik özgeçmiş' : 'Academic profile'} <ChevronRight className="w-3 h-3" />
+                </a>
+              </div>
+            </aside>
+
             {/* Medical Consultation / CTA Box */}
             <div className="bg-gradient-to-br from-slate-900 to-navy border border-gold/30 rounded-2xl p-6 sm:p-8 mb-12 shadow-xl">
               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -555,9 +667,10 @@ export default function BlogPage({
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {relatedPosts.map((rel) => (
-                    <div
+                    <a
                       key={rel.id}
-                      onClick={() => handleSelectPost(rel)}
+                      href={`/blog/${rel.slug}`}
+                      onClick={(e) => { e.preventDefault(); handleSelectPost(rel); }}
                       className="card-glass p-5 rounded-xl border border-white/10 hover:border-gold/40 transition-all cursor-pointer group flex flex-col justify-between"
                     >
                       <div>
@@ -577,7 +690,7 @@ export default function BlogPage({
                           {t.blogReadMore} <ChevronRight className="w-3 h-3 ml-0.5" />
                         </span>
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -709,7 +822,10 @@ export default function BlogPage({
 
                       {/* Title */}
                       <h3 className="text-lg font-bold text-white group-hover:text-gold transition-colors mb-3 line-clamp-2 font-display leading-snug">
-                        {post.title}
+                        {/* SEO: gerçek <a href> — Googlebot onClick'i takip etmez */}
+                        <a href={`/blog/${post.slug}`} onClick={(e) => { e.preventDefault(); handleSelectPost(post); }}>
+                          {post.title}
+                        </a>
                       </h3>
 
                       {/* Excerpt */}

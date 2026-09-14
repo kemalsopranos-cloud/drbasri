@@ -1,4 +1,5 @@
 import { Milestone, ExpertiseItem, BlogPost, ContactInfo } from './types';
+import { ARTICLES_TR } from './content/articles';
 
 // Canonical, stable URL slugs for each expertise/treatment area.
 // These power dedicated, crawlable landing pages (see ServicePage.tsx) instead of
@@ -59,6 +60,13 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "Robotik Parsiyel Nefrektomi (Tümörün çıkartılıp böbreğin korunması)",
             "Laparoskopik ve Robotik Adrenalektomi (Sürrenal bezi)",
             "Robotik Rekonstrüktif Üroloji Ameliyatları"
+          ],
+          // SEO: sayfada SSS bölümü + FAQPage JSON-LD (src/seo/meta.ts)
+          faq: [
+            { q: 'Robotik cerrahi ile laparoskopik cerrahi arasındaki fark nedir?', a: 'Her ikisi de karına açılan küçük deliklerden yapılan kapalı ameliyatlardır. Robotik cerrahide cerrah, aletleri bir konsoldan 3 boyutlu ve 10-15 kat büyütülmüş görüntü altında yönetir; aletler bilek gibi hareket edebildiği için dar pelvis içinde daha hassas diseksiyon ve dikiş mümkün olur. Robot kendi başına hiçbir hareket yapmaz.' },
+            { q: 'Robotik ameliyat sonrası hastanede kaç gün kalınır?', a: 'Çoğu robotik üroloji ameliyatında hastanede kalış 1-2 gecedir. Hasta ameliyat günü akşamı yürütülür, ağrı genellikle basit ağrı kesicilerle kontrol edilir ve masa başı işe 2-3 hafta içinde dönülür.' },
+            { q: 'Robotik prostat ameliyatında sinirler korunur mu?', a: 'Tümör sinir demetlerine yakın değilse sinir koruyucu teknik uygulanır. Büyütmeli görüntü sayesinde sertleşme sinirleri ve idrar tutma kası daha hassas korunabilir; fonksiyonların geri dönüşü hastanın yaşına, ameliyat öncesi durumuna ve tümörün yaygınlığına bağlıdır.' },
+            { q: 'Robotik cerrahi hangi ürolojik kanserlerde uygulanır?', a: 'Prostat kanserinde radikal prostatektomi, böbrek tümörlerinde böbreği koruyan parsiyel nefrektomi, mesane kanserinde radikal sistektomi ve yapay mesane, böbrek üstü bezi tümörlerinde adrenalektomi ile üreter darlığı gibi rekonstrüktif ameliyatlarda uygulanır.' },
           ]
         },
         {
@@ -78,6 +86,14 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "ThuFLEP (Thulium Fiber Laser Enucleation)",
             "Rezum Su Buharı Terapisi (Günübirlik ameliyatsız tedavi)",
             "Yüksek Hassasiyetli MR Füzyon Prostat Biyopsisi"
+          ],
+          // SEO: sayfada SSS bölümü + FAQPage JSON-LD (src/seo/meta.ts)
+          faq: [
+            { q: 'HoLEP ile TUR-P arasındaki fark nedir?', a: 'TUR-P prostat dokusunu elektrik enerjisiyle parça parça keser ve genellikle 80 ml altındaki prostatlarda uygulanır. HoLEP’te büyüyen doku lazerle kapsülünden bütün olarak ayrılır; prostat boyutundan bağımsız uygulanabilir, kanama riski daha düşüktür ve tekrar büyüme ihtimali çok azdır.' },
+            { q: 'HoLEP ameliyatı ne kadar sürer, sonda kaç gün kalır?', a: 'Prostatın boyutuna göre 1-2 saat sürer. Hastalar genellikle 1 gece hastanede kalır; sonda çoğunlukla 24-48 saat içinde alınır.' },
+            { q: 'HoLEP sonrası cinsel fonksiyonlar etkilenir mi?', a: 'Sertleşme fonksiyonu genellikle korunur. Ancak hastaların büyük çoğunluğunda boşalma sırasında meni mesaneye geri kaçar (retrograd ejakülasyon); bu zararsızdır, orgazm hissi devam eder. Çocuk planlayan erkeklerde ameliyat öncesi konuşulmalıdır.' },
+            { q: 'Rezum tedavisi kimlere uygundur?', a: 'Küçük-orta boyutlu prostatı olan, ameliyat istemeyen veya boşalma fonksiyonunu korumayı öncelikli gören hastalarda düşünülür. Lokal anestezi ile günübirlik uygulanır; etkisi haftalar içinde ortaya çıkar.' },
+            { q: 'Prostat büyümesinde ne zaman ameliyat gerekir?', a: 'İlaçlara rağmen şikâyetlerin sürmesi, idrar retansiyonu (sonda takılması), tekrarlayan enfeksiyon, mesane taşı, kanama veya mesanede yüksek kalıntı idrar ve böbreklerde basınç bulguları cerrahi tedavi nedenleridir.' },
           ]
         },
         {
@@ -98,6 +114,13 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "Nefron Koruyucu (Parsiyel) Nefrektomi",
             "Radikal Sistektomi ve İleal Loop (Yapay İnce Bağırsak Mesanesi)",
             "Retroperitoneal Lenf Nodu Diseksiyonu (RPLND)"
+          ],
+          // SEO: sayfada SSS bölümü + FAQPage JSON-LD (src/seo/meta.ts)
+          faq: [
+            { q: 'Prostat kanseri erken evrede belirti verir mi?', a: 'Genellikle hayır. Erken evre prostat kanseri çoğunlukla hiçbir şikâyet yapmaz; bu yüzden 50 yaşından itibaren (ailede prostat kanseri varsa 45’ten itibaren) PSA testi ve muayene ile tarama önerilir.' },
+            { q: 'İdrarda ağrısız kan görülmesi kanser belirtisi midir?', a: 'Ağrısız, aralıklı ve gözle görülen kanama mesane kanserinin en tipik belirtisidir; özellikle sigara içen ve 50 yaş üstü kişilerde. Tek bir kez olsa ve kendiliğinden geçse bile sistoskopi ve görüntüleme ile araştırılmalıdır.' },
+            { q: 'Böbrek tümöründe böbrek tamamen alınır mı?', a: 'Uygun boyut ve yerleşimdeki tümörlerde yalnızca tümörlü kısım çıkarılıp böbreğin geri kalanı korunur (parsiyel nefrektomi). Robotik teknik bu ameliyatı daha az kanamayla ve böbrek dokusunu koruyarak yapmayı kolaylaştırır.' },
+            { q: 'Her prostat kanseri tedavi edilmeli midir?', a: 'Hayır. Düşük riskli, küçük hacimli tümörlerde düzenli PSA, MR ve biyopsi takibiyle aktif izlem yapılabilir ve tedavi gereksiz yan etkilerden kaçınmak için ertelenir. Karar hastayla birlikte, multidisipliner değerlendirmeyle verilir.' },
           ]
         },
         {
@@ -117,6 +140,14 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "URS (Üreteroskopi Lazer Taş Tedavisi)",
             "Mini-PNL (Minimal İnvaziv Perkütan Nefrolitotomi - Sırttan küçük delikle)",
             "Vücut Dışından Şok Dalgalarıyla Taş Kırma (ESWL)"
+          ],
+          // SEO: sayfada SSS bölümü + FAQPage JSON-LD (src/seo/meta.ts)
+          faq: [
+            { q: 'Kaç mm böbrek taşı kendiliğinden düşer?', a: '5 mm’nin altındaki taşların büyük çoğunluğu, 5-10 mm arasındakilerin yaklaşık yarısı kendiliğinden düşer; 10 mm üzerindeki taşlar için genellikle müdahale gerekir. Düşürme süreci 4-6 haftayla sınırlandırılır.' },
+            { q: 'RIRS (lazerle taş kırma) nasıl yapılır?', a: 'Genel anestezi altında, idrar kanalından bükülebilir ince bir endoskopla böbreğin içine girilir ve taş holmiyum lazerle toz hâline getirilir. Vücutta kesi yoktur; hastalar genellikle aynı gün veya ertesi gün taburcu olur.' },
+            { q: 'ESWL ile RIRS arasındaki fark nedir?', a: 'ESWL vücut dışından şok dalgasıyla, anestezisiz taş kırmadır ve 2 cm altı, çok sert olmayan taşlarda uygundur; birkaç seans gerekebilir. RIRS ise endoskopla taşa doğrudan ulaşıp lazerle kırar; tek seansta taşsızlık oranı daha yüksektir ve sert taşlarda, kan sulandırıcı kullananlarda tercih edilir.' },
+            { q: 'Böbrek taşı hangi durumda acildir?', a: 'Ağrıyla birlikte 38°C üzeri ateş, kontrol edilemeyen ağrı ve kusma, tek böbrekli hastada taş, idrar miktarında belirgin azalma veya böbrek fonksiyonlarında bozulma acil durumlardır; böbreğin stent ya da nefrostomi ile acilen boşaltılması gerekebilir.' },
+            { q: 'Taşın tekrarlaması nasıl önlenir?', a: 'Günde 2,5-3 litre su içmek, tuzu ve aşırı hayvansal proteini azaltmak, kalsiyumu kısıtlamamak, limon gibi sitrat kaynaklarını artırmak ve düşen taşın analizini yaptırmak temel önlemlerdir. Tekrarlayan taşta 24 saatlik idrarla metabolik değerlendirme ve gerekirse ilaç tedavisi planlanır.' },
           ]
         },
         {
@@ -136,6 +167,13 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "Penil Protez (Mutluluk Çubuğu) İmplantasyonu",
             "ESWT (Penise Düşük Yoğunluklu Şok Dalga Terapisi)",
             "Mikro-TESE (Mikroskobik Sperm Arama Ameliyatı)"
+          ],
+          // SEO: sayfada SSS bölümü + FAQPage JSON-LD (src/seo/meta.ts)
+          faq: [
+            { q: 'Varikosel ameliyatı sperm değerlerini düzeltir mi?', a: 'Muayenede saptanan varikoseli ve bozuk sperm parametreleri olan erkeklerin yaklaşık üçte ikisinde mikrocerrahi varikoselektomi sonrası sperm sayısı ve hareketliliği artar; ilk iyileşme 3. ayda görülür ve doğal gebelik şansı yükselir.' },
+            { q: 'Sertleşme sorunu için hangi tetkikler yapılır?', a: 'Ayrıntılı öykü ve muayenenin ardından kan şekeri, kolesterol ve sabah testosteronu ölçülür. Damarsal nedeni doğrulamak için gerektiğinde penil Doppler ultrason yapılır. Sertleşme sorunu olan her erkekte kalp damar riski de değerlendirilir.' },
+            { q: 'Penil protez ameliyatı sonrası cinsel his kaybolur mu?', a: 'Hayır. Protez yalnızca sertleşmeyi sağlar; duyu, orgazm ve boşalma etkilenmez. Şişirilebilir protezler dışarıdan fark edilmez ve cinsel yaşama 4-6 hafta sonra dönülür.' },
+            { q: 'Peyronie hastalığı (peniste eğrilik) tedavi edilebilir mi?', a: 'Evet. Erken (aktif) dönemde ilaç ve traksiyon tedavileri, plak stabilleştikten sonra ise eğriliğin derecesine ve sertleşme durumuna göre plikasyon, plak cerrahisi veya penil protez gibi cerrahi seçenekler uygulanır.' },
           ]
         },
         {
@@ -155,6 +193,13 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "Mesane Botoksu Uygulamaları (Aşırı Aktif Mesane için)",
             "Robotik Sakrokolpopeksi (Sarkma cerrahisi)",
             "Pelvik Taban Kas Rehabilitasyonu"
+          ],
+          // SEO: sayfada SSS bölümü + FAQPage JSON-LD (src/seo/meta.ts)
+          faq: [
+            { q: 'Stres tipi ve sıkışma tipi idrar kaçırma nasıl ayırt edilir?', a: 'Stres tipinde öksürme, gülme ve ağırlık kaldırma gibi hareketlerle idrar hissi olmadan kaçırma olur; sıkışma tipinde ise aniden gelen dayanılmaz idrar hissiyle tuvalete yetişemeden kaçırma olur. Mesane günlüğü ve muayene ile tip belirlenir; tedavileri farklıdır.' },
+            { q: 'TOT ameliyatı nasıl yapılır, hastanede kaç gün kalınır?', a: 'Vajinadan 1-2 cm’lik bir kesiyle idrar kanalının altına ince bir bant yerleştirilir; işlem 20-30 dakika sürer. Hasta genellikle aynı gün veya ertesi gün taburcu olur ve birkaç gün içinde günlük yaşamına döner.' },
+            { q: 'Kegel egzersizi ne kadar sürede etki eder?', a: 'Düzenli ve doğru yapıldığında genellikle 6-12 hafta içinde belirgin iyileşme başlar; en az 3 ay sürdürülmelidir. Doğru kasın çalıştırıldığından emin olmak için fizyoterapist ve biofeedback desteği alınabilir.' },
+            { q: 'Aşırı aktif mesane ilaçları ömür boyu kullanılır mı?', a: 'İlaçlar şikâyetleri kontrol altında tutar; birçok hastada mesane eğitimi ve yaşam tarzı değişiklikleriyle doz azaltılabilir veya kesilebilir. İlaca yanıt vermeyen hastalarda mesane içi botulinum toksin, tibial sinir stimülasyonu veya sakral nöromodülasyon seçenekleri vardır.' },
           ]
         }
       ]
@@ -281,6 +326,8 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
 export const getBlogPosts = (lang: 'TR' | 'EN'): BlogPost[] => {
   return lang === 'TR'
     ? [
+        // Faz 2 — hasta sorularına yönelik uzun makaleler (src/content/articles.ts)
+        ...ARTICLES_TR,
         {
           id: "prostate-early-diagnosis",
           title: "Prostat Sağlığında Erken Teşhisin Önemi ve PSA Taramaları",

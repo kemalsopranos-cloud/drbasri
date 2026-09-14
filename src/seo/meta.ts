@@ -1,4 +1,4 @@
-import type { BlogPost, ExpertiseItem } from '../types';
+import type { BlogPost, ExpertiseItem, FaqItem } from '../types';
 import { getBlogPosts, getExpertiseItems, expertiseSlugs } from '../data';
 import { SITE_URL, SITE_NAME, OG_IMAGE_PATH, DOCTOR } from './site';
 
@@ -69,6 +69,41 @@ export function physicianJsonLd(): Record<string, unknown> {
   };
 }
 
+// Türkçe uzun tarih ("10 Haziran 2026") → ISO. Repodaki eski yazılar ve
+// Firestore yazıları ISO alan taşımıyor; JSON-LD'ye geçersiz tarih basmamak için
+// dönüştürülür, çevrilemezse alan hiç yazılmaz.
+const TR_MONTHS: Record<string, string> = {
+  ocak: '01', şubat: '02', mart: '03', nisan: '04', mayıs: '05', haziran: '06',
+  temmuz: '07', ağustos: '08', eylül: '09', ekim: '10', kasım: '11', aralık: '12',
+};
+export function toIsoDate(value?: string): string | undefined {
+  if (!value) return undefined;
+  if (/^\d{4}-\d{2}-\d{2}/.test(value)) return value.slice(0, 10);
+  const m = value.trim().toLowerCase().match(/^(\d{1,2})\s+([a-zçğıöşü]+)\s+(\d{4})$/);
+  if (!m || !TR_MONTHS[m[2]]) return undefined;
+  return `${m[3]}-${TR_MONTHS[m[2]]}-${m[1].padStart(2, '0')}`;
+}
+
+export function postDates(post: BlogPost): { published?: string; modified?: string } {
+  const published = toIsoDate(post.datePublished) ?? toIsoDate(post.date);
+  const modified = toIsoDate(post.dateModified) ?? published;
+  return { published, modified };
+}
+
+// SSS bölümü → FAQPage. Sorular sayfada görünür metinle BİREBİR aynı olmalı
+// (Google, yapılandırılmış veri ile sayfa içeriğinin eşleşmesini ister).
+function faqJsonLd(faq: FaqItem[]): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
+}
+
 function websiteJsonLd(): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
@@ -125,6 +160,7 @@ export function buildBlogHubMeta(): SeoMeta {
 
 export function buildArticleMeta(post: BlogPost): SeoMeta {
   const description = post.metaDescription || post.excerpt;
+  const dates = postDates(post);
   const url = `${SITE_URL}/blog/${post.slug}`;
   const keywords = post.keywords || `${post.category}, Üroloji, ${DOCTOR.name}`;
   return {
@@ -142,19 +178,22 @@ export function buildArticleMeta(post: BlogPost): SeoMeta {
         description,
         keywords,
         url,
-        datePublished: post.date,
-        dateModified: post.date,
+        ...(dates.published ? { datePublished: dates.published } : {}),
+        ...(dates.modified ? { dateModified: dates.modified, lastReviewed: dates.modified } : {}),
         inLanguage: 'tr-TR',
         image: `${SITE_URL}${OG_IMAGE_PATH}`,
         author: physicianAuthor,
+        reviewedBy: physicianAuthor,
         publisher: organizationPublisher,
         mainEntityOfPage: url,
+        ...(post.sources?.length ? { citation: post.sources.map((c) => c.url) } : {}),
       },
       breadcrumbJsonLd([
         { name: 'Ana Sayfa', url: `${SITE_URL}/` },
         { name: 'Makaleler', url: `${SITE_URL}/blog` },
         { name: post.title, url },
       ]),
+      ...(post.faq?.length ? [faqJsonLd(post.faq)] : []),
     ],
   };
 }
@@ -183,6 +222,7 @@ export function buildServiceMeta(item: ExpertiseItem, slug: string): SeoMeta {
           description: item.longDesc,
         },
         author: physicianAuthor,
+        reviewedBy: physicianAuthor,
         publisher: organizationPublisher,
         mainEntityOfPage: url,
       },
@@ -190,6 +230,7 @@ export function buildServiceMeta(item: ExpertiseItem, slug: string): SeoMeta {
         { name: 'Ana Sayfa', url: `${SITE_URL}/` },
         { name: item.title, url },
       ]),
+      ...(item.faq?.length ? [faqJsonLd(item.faq)] : []),
     ],
   };
 }

@@ -1,11 +1,11 @@
 import { useEffect, useMemo } from 'react';
 import {
   Calendar, ChevronRight, ArrowLeft, Phone, HelpCircle, CheckCircle2,
-  Cpu, Activity, ShieldAlert, Sparkles, Heart, User, Instagram
+  Cpu, Activity, ShieldAlert, Sparkles, Heart, User, Instagram, BookOpen, Clock
 } from 'lucide-react';
 import { Language, ExpertiseItem } from '../types';
 import { uiTranslations } from '../translations';
-import { getExpertiseItems, expertiseSlugs, contactDetails } from '../data';
+import { getExpertiseItems, expertiseSlugs, contactDetails, getBlogPosts } from '../data';
 import { updatePageSeo } from '../utils/seo';
 import { buildServiceMeta } from '../seo/meta';
 
@@ -49,6 +49,11 @@ export default function ServicePage({
       window.history.pushState({}, '', `/${slug}`);
     }
   }, [item, slug]);
+
+  // Bu tedavi alanına bağlı makaleler (iç bağlantı: hizmet sayfası → makale)
+  const relatedArticles = useMemo(() => {
+    return getBlogPosts(language).filter((p) => p.relatedService === item.id).slice(0, 4);
+  }, [language, item.id]);
 
   // Related services: everything else in the same specialty list
   const relatedItems = useMemo(() => {
@@ -199,6 +204,63 @@ export default function ServicePage({
             </ul>
           </div>
         </div>
+
+        {/* Sık Sorulan Sorular — görünür metin FAQPage JSON-LD ile birebir aynı */}
+        {item.faq && item.faq.length > 0 && (
+          <section className="card-glass p-6 sm:p-8 rounded-xl border border-white/10 mb-10" aria-labelledby="service-faq">
+            <h2 id="service-faq" className="text-lg sm:text-xl font-bold font-display text-white mb-6 flex items-center">
+              <HelpCircle className="w-5 h-5 text-gold mr-2" />
+              {language === 'TR' ? 'Sık Sorulan Sorular' : 'Frequently Asked Questions'}
+            </h2>
+            <dl className="space-y-5">
+              {item.faq.map((f, i) => (
+                <div key={i} className="border-l-2 border-gold/50 pl-4">
+                  <dt className="text-sm sm:text-base font-bold text-white mb-1.5">{f.q}</dt>
+                  <dd className="text-slate-300 text-sm leading-relaxed font-light">{f.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+
+        {/* İlgili makaleler — gerçek <a href> (Googlebot onClick'i takip etmez) */}
+        {relatedArticles.length > 0 && (
+          <section className="mb-10">
+            <h2 className="text-lg font-bold font-display text-white mb-5 flex items-center">
+              <BookOpen className="w-4 h-4 text-gold mr-2" />
+              {language === 'TR' ? 'Bu Konuda Hazırladığımız Rehberler' : 'Related Patient Guides'}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {relatedArticles.map((post) => (
+                <a
+                  key={post.id}
+                  href={`/blog/${post.slug}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate(`/blog/${post.slug}`);
+                  }}
+                  className="card-glass p-5 rounded-xl border border-white/10 hover:border-gold/40 transition-all cursor-pointer group flex flex-col justify-between"
+                >
+                  <div>
+                    <span className="text-[10px] text-gold uppercase font-bold tracking-wider mb-2 block">
+                      {post.category}
+                    </span>
+                    <h3 className="text-sm font-bold text-white group-hover:text-gold transition-colors mb-2 font-display leading-snug">
+                      {post.title}
+                    </h3>
+                    <p className="text-xs text-slate-400 line-clamp-2 font-light">{post.excerpt}</p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-500">
+                    <span className="flex items-center"><Clock className="w-3 h-3 mr-1" />{post.readTime} {t.blogReadTime}</span>
+                    <span className="text-gold font-semibold flex items-center">
+                      {t.blogReadMore} <ChevronRight className="w-3 h-3 ml-0.5" />
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Medical Consultation / CTA Box */}
         <div className="bg-gradient-to-br from-slate-900 to-navy border border-gold/30 rounded-2xl p-6 sm:p-8 mb-12 shadow-xl">

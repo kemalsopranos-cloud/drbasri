@@ -6,6 +6,18 @@ export interface Milestone {
   institution: string;
 }
 
+// Sık sorulan soru — hem sayfada basılır hem FAQPage JSON-LD'ye girer.
+// Cevap düz metin olmalı (schema.org'a gider), markdown/HTML yazma.
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+
+export interface SourceRef {
+  title: string;
+  url: string;
+}
+
 export interface ExpertiseItem {
   id: string;
   title: string;
@@ -14,6 +26,7 @@ export interface ExpertiseItem {
   iconName: string;
   conditions: string[];
   treatments: string[];
+  faq?: FaqItem[];
 }
 
 export interface BlogPost {
@@ -29,6 +42,12 @@ export interface BlogPost {
   language?: Language;
   keywords?: string;
   metaDescription?: string;
+  // SEO/E-E-A-T alanları (repodaki yazılar için; Firestore yazılarında olmayabilir)
+  datePublished?: string;   // ISO (YYYY-MM-DD) — JSON-LD ve sitemap lastmod için
+  dateModified?: string;    // ISO
+  faq?: FaqItem[];
+  sources?: SourceRef[];
+  relatedService?: string;  // expertiseSlugs anahtarı → hizmet sayfasına iç bağlantı
 }
 
 export interface Appointment {
