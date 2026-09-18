@@ -48,6 +48,7 @@ export interface BlogPost {
   faq?: FaqItem[];
   sources?: SourceRef[];
   relatedService?: string;  // expertiseSlugs anahtarı → hizmet sayfasına iç bağlantı
+  translationOf?: string;   // diğer dildeki karşılığın slug'ı (hreflang + dil düğmesi)
 }
 
 export interface Appointment {

@@ -1,22 +1,16 @@
 import { Milestone, ExpertiseItem, BlogPost, ContactInfo } from './types';
 import { ARTICLES_TR } from './content/articles';
 import { DOCTOR } from './seo/site';
+import { SERVICE_SLUGS } from './routes';
+import { ARTICLES_EN } from './content/articles-en';
 
-// Canonical, stable URL slugs for each expertise/treatment area.
-// These power dedicated, crawlable landing pages (see ServicePage.tsx) instead of
-// having all treatment content locked inside a homepage-only modal.
-// IMPORTANT: keep these in sync with the <url> entries generated in server.ts's sitemap route.
-export const expertiseSlugs: Record<string, string> = {
-  'robotic-surgery': 'davinci-robotik-cerrahi',
-  'prostate-diseases': 'holep-lazer-prostat-tedavisi',
-  'urologic-oncology': 'urolojik-onkoloji',
-  'stone-disease': 'bobrek-tasi-tedavisi',
-  'andrology-infertility': 'androloji-erkek-sagligi-tedavisi',
-  'urogynecology': 'kadin-urolojisi-idrar-kacirma-tedavisi',
-};
+// Hizmet sayfası slug'ları artık src/routes.ts'te (TR + EN). Bu dışa aktarım
+// TR slug'lar için geriye dönük uyumluluk; yeni kodda servicePath(lang, id) kullan.
+export const expertiseSlugs: Record<string, string> = SERVICE_SLUGS.TR;
 
 export function getExpertiseItemBySlug(lang: 'TR' | 'EN', slug: string): ExpertiseItem | undefined {
-  const id = Object.keys(expertiseSlugs).find((key) => expertiseSlugs[key] === slug);
+  const table = SERVICE_SLUGS[lang];
+  const id = Object.keys(table).find((key) => table[key] === slug);
   if (!id) return undefined;
   return getExpertiseItems(lang).find((item) => item.id === id);
 }
@@ -222,6 +216,12 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "Robotic Partial Nephrectomy (Sparing the kidney tissue)",
             "Laparoscopic & Robotic Adrenalectomy (Adrenal gland)",
             "Robotic Reconstruction of the Urinary Tract"
+          ],
+          faq: [
+            { q: 'Is robotic surgery available for international patients in Istanbul?', a: 'Yes. Prof. Dr. Çakıroğlu performs daVinci robotic prostatectomy, partial nephrectomy and cystectomy at Hisar Intercontinental Hospital in Istanbul. International patients typically stay 5-7 days in Istanbul; consultation, surgery and the first follow-up are completed within that visit.' },
+            { q: 'How long is the hospital stay after robotic surgery?', a: 'Most robotic urologic procedures require 1-2 nights in hospital. Patients walk the same evening, pain is usually controlled with simple analgesics, and desk work can resume within 2-3 weeks.' },
+            { q: 'Does the robot operate on its own?', a: 'No. The surgeon controls every movement from a console; the system filters hand tremor and scales motion. 3D magnified vision and wristed instruments allow more precise nerve-sparing and suturing in the narrow pelvis.' },
+            { q: 'Can I send my reports before travelling?', a: 'Yes. MRI, biopsy, PSA and other reports can be sent via WhatsApp or e-mail for a preliminary review, so that the treatment plan and length of stay are clear before you book flights.' },
           ]
         },
         {
@@ -241,6 +241,13 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "ThuFLEP (Thulium Fiber Laser Enucleation)",
             "Rezum Water Vapor Therapy (Outpatient non-surgical option)",
             "High-Precision Multiparametric MRI-Fusion Biopsy"
+          ],
+          faq: [
+            { q: 'What is the difference between HoLEP and TURP?', a: 'TURP cuts prostate tissue piece by piece with electrical energy and is generally limited to prostates under 80 ml. HoLEP detaches the enlarged tissue from its capsule in one piece with a holmium laser: it works for any prostate size, bleeds less and has a very low re-treatment rate.' },
+            { q: 'How long do I need to stay in Istanbul for HoLEP?', a: 'Typically 4-5 days: consultation and tests on day 1, surgery on day 2, one night in hospital, catheter removal within 24-48 hours and a check-up before flying home. Long-haul flights are usually possible 3-4 days after surgery.' },
+            { q: 'Does HoLEP affect sexual function?', a: 'Erectile function is generally preserved because the nerves lie outside the prostate capsule. Most men, however, experience retrograde ejaculation (semen goes into the bladder). This is harmless and orgasm is unaffected, but men planning children should discuss it beforehand.' },
+            { q: 'Can HoLEP be done if I take blood thinners?', a: 'HoLEP is one of the safest options for patients on anticoagulants because the laser seals vessels as it cuts. Your medication plan is reviewed individually before surgery.' },
+            { q: 'Is Rezum available as an alternative?', a: 'Yes. Rezum water-vapour therapy is offered for small to medium prostates in men who want a day-case procedure under local anaesthesia and wish to preserve ejaculation.' },
           ]
         },
         {
@@ -261,6 +268,12 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "Nephron-Sparing (Partial) Nephrectomy",
             "Radical Cystectomy with Ileal Conduit or Orthotopic Neobladder",
             "Retroperitoneal Lymph Node Dissection (RPLND)"
+          ],
+          faq: [
+            { q: 'Can I get a second opinion on my prostate cancer diagnosis?', a: 'Yes. Send your PSA history, MRI and biopsy report; Prof. Dr. Çakıroğlu reviews them and explains whether active surveillance, robotic surgery or radiotherapy is the most appropriate option for your risk group.' },
+            { q: 'Is every prostate cancer treated with surgery?', a: 'No. Low-risk, low-volume tumours are often followed with active surveillance (regular PSA, MRI and biopsy). For intermediate and high-risk localised disease, robotic prostatectomy and radiotherapy are equivalent options chosen with the patient.' },
+            { q: 'Is kidney-sparing surgery possible for kidney tumours?', a: 'In suitable tumours only the tumour is removed and the rest of the kidney is preserved (partial nephrectomy). Robotic technique makes this possible with less bleeding and shorter recovery.' },
+            { q: 'Is painless blood in the urine a sign of cancer?', a: 'Painless, intermittent visible blood in the urine is the most typical sign of bladder cancer, especially in smokers over 50. It must be investigated with cystoscopy and imaging even if it happens once and stops.' },
           ]
         },
         {
@@ -280,6 +293,13 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "URS (Ureteroscopic Laser Stone Treatment)",
             "Mini-PCNL (Mini-Percutaneous Nephrolithotomy through a tiny back incision)",
             "Extracorporeal Shock Wave Lithotripsy (ESWL)"
+          ],
+          faq: [
+            { q: 'What is RIRS and why travel to Turkey for it?', a: 'RIRS (retrograde intrarenal surgery) reaches the kidney through the natural urinary tract with a flexible scope and pulverises the stone with a holmium laser, without any incision. Turkey offers this technology with short waiting times; most patients are treated and fly home within 3-4 days.' },
+            { q: 'Which stones pass on their own?', a: 'Most stones under 5 mm and about half of those between 5 and 10 mm pass spontaneously; stones over 10 mm usually need intervention. Waiting is generally limited to 4-6 weeks.' },
+            { q: 'How long is recovery after laser stone surgery?', a: 'RIRS is performed under general anaesthesia; patients are usually discharged the same or next day and return to normal activity within a few days. A temporary ureteral stent may cause frequency and mild burning until it is removed.' },
+            { q: 'When is a kidney stone an emergency?', a: 'Fever above 38°C with pain, uncontrolled pain and vomiting, a stone in a solitary kidney, or a sharp drop in urine output are emergencies: the kidney may need urgent drainage with a stent or nephrostomy before the stone is treated.' },
+            { q: 'How do I prevent stones from coming back?', a: 'Drink 2.5-3 litres of water daily, reduce salt and excessive animal protein, do not restrict calcium, add citrate sources such as lemon, and have your stone analysed. Recurrent stone formers should have a 24-hour urine metabolic work-up.' },
           ]
         },
         {
@@ -299,6 +319,12 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "Penile Prosthesis (Malleable or Inflatable) Implantation",
             "ESWT (Low-Intensity Extracorporeal Shockwave Therapy)",
             "Micro-TESE (Microscopic Testicular Sperm Extraction)"
+          ],
+          faq: [
+            { q: 'Does varicocele surgery improve sperm quality?', a: 'In men with a palpable varicocele and abnormal semen parameters, microsurgical varicocelectomy improves sperm count and motility in roughly two thirds of cases. First improvement is seen at 3 months and natural pregnancy rates rise.' },
+            { q: 'Which tests are done for erectile dysfunction?', a: 'After a detailed history and examination, blood glucose, lipids and morning testosterone are measured; penile Doppler ultrasound is used when a vascular cause needs confirmation. Cardiovascular risk is assessed in every man with ED.' },
+            { q: 'Does a penile implant affect sensation or orgasm?', a: 'No. The implant only provides rigidity; sensation, orgasm and ejaculation are unchanged. Inflatable implants are undetectable from outside and sexual activity resumes after 4-6 weeks.' },
+            { q: 'Can Peyronie’s disease (penile curvature) be treated?', a: 'Yes. In the early phase medical and traction treatments are used; once the plaque is stable, plication, plaque surgery or a penile implant is chosen according to the degree of curvature and erectile function.' },
           ]
         },
         {
@@ -318,6 +344,12 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
             "Intravesical Botox Injections (for stubborn OAB)",
             "Robotic Sacrocolpopexy (Advanced prolapse suspension)",
             "Pelvic Floor Muscle Training & Biofeedback"
+          ],
+          faq: [
+            { q: 'How is stress incontinence different from urge incontinence?', a: 'Stress incontinence is leakage with coughing, laughing or lifting, without the urge to void, caused by pelvic floor weakness. Urge incontinence is a sudden, uncontrollable need to void with leakage before reaching the toilet, caused by involuntary bladder contractions. Treatments differ.' },
+            { q: 'What is a TOT sling operation?', a: 'A 20-30 minute procedure in which a thin tape is placed under the urethra through a small vaginal incision. Patients usually go home the same or next day and resume daily life within days; long-term dry rates are high.' },
+            { q: 'How long until pelvic floor exercises work?', a: 'Done correctly and regularly, noticeable improvement usually begins within 6-12 weeks; exercises should be continued for at least 3 months. A physiotherapist and biofeedback help ensure the right muscles are trained.' },
+            { q: 'Are there options if bladder medication fails?', a: 'Yes: intravesical botulinum toxin injection, tibial nerve stimulation and sacral neuromodulation are effective for overactive bladder that does not respond to medication.' },
           ]
         }
       ];
@@ -333,6 +365,7 @@ export const getBlogPosts = (lang: 'TR' | 'EN'): BlogPost[] => {
           id: "prostate-early-diagnosis",
           title: "Prostat Sağlığında Erken Teşhisin Önemi ve PSA Taramaları",
           slug: "prostat-sagliginda-erken-teshis",
+          translationOf: "prostate-health-early-diagnosis",
           excerpt: "Prostat kanseri erkeklerde en sık görülen kanser türlerinden biridir. Hiçbir belirti vermeden ilerleyebilen bu hastalıkta erken tanı hayat kurtarır.",
           category: "Onkoloji",
           date: "10 Haziran 2026",
@@ -357,6 +390,7 @@ Eğer PSA testinde veya muayenede şüpheli bir bulguya rastlanırsa, günümüz
           id: "holep-prostate-treatment",
           title: "HoLEP: Büyük Prostatlarda Kesisiz ve Güvenli Lazer Çözümü",
           slug: "holep-lazer-prostat-tedavisi",
+          translationOf: "holep-laser-prostate-treatment",
           excerpt: "İyi huylu prostat büyümesi tedavisinde altın standart kabul edilen HoLEP yöntemi, her boyuttaki prostata kesi yapılmadan uygulanabilen modern bir teknolojidir.",
           category: "Lazer Cerrahi",
           date: "22 Mayıs 2026",
@@ -381,6 +415,7 @@ HoLEP (Holmium Laser Enucleation of the Prostate), yüksek güçlü Holmiyum laz
           id: "robotic-urology-oncology",
           title: "Robotik Cerrahi ile Ürolojik Kanser Tedavilerinde Yeni Dönem",
           slug: "robotik-cerrahi-uroloji",
+          translationOf: "robotic-surgery-urologic-cancer",
           excerpt: "daVinci robotik cerrahi sistemi, cerraha sunduğu 3 boyutlu yüksek çözünürlüklü görüntü ve hassas manevra kabiliyeti ile kanser ameliyatlarında başarıyı artırıyor.",
           category: "Teknoloji",
           date: "14 Nisan 2026",
@@ -456,8 +491,11 @@ Günümüzde stres tipi idrar kaçırmada altın standart cerrahi tedavi TOT ask
         }
       ]
     : [
+        // Faz 4 — yabancı hasta odaklı İngilizce makaleler (src/content/articles-en.ts)
+        ...ARTICLES_EN,
         {
           id: "prostate-early-diagnosis",
+          translationOf: "prostat-sagliginda-erken-teshis",
           title: "The Importance of Early Diagnosis in Prostate Health and PSA Screening",
           slug: "prostate-health-early-diagnosis",
           excerpt: "Prostate cancer is one of the most common cancers diagnosed in men. Early detection is a lifesaver for this silent disease.",
@@ -482,6 +520,7 @@ If an elevated PSA or suspicious physical examination is detected, a **Multipara
           id: "holep-prostate-treatment",
           title: "HoLEP: Incision-free and Safe Laser Solution for Enlarged Prostate",
           slug: "holep-laser-prostate-treatment",
+          translationOf: "holep-lazer-prostat-tedavisi",
           excerpt: "Recognized as the gold standard in benign prostatic hyperplasia (BPH) surgery, HoLEP utilizes state-of-the-art Holmium Laser to treat any prostate size with no incision.",
           category: "Laser Surgery",
           date: "May 22, 2026",
@@ -504,6 +543,7 @@ HoLEP (Holmium Laser Enucleation of the Prostate) uses a high-power Holmium lase
           id: "robotic-urology-oncology",
           title: "Robotic Surgery: A New Era in Treating Urologic Cancers",
           slug: "robotic-surgery-urologic-cancer",
+          translationOf: "robotik-cerrahi-uroloji",
           excerpt: "The daVinci robotic system enhances surgical accuracy with high-definition 3D imaging and micro-maneuverability, leading to superior oncological outcomes.",
           category: "Technology",
           date: "April 14, 2026",

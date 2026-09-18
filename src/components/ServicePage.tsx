@@ -5,7 +5,8 @@ import {
 } from 'lucide-react';
 import { Language, ExpertiseItem } from '../types';
 import { uiTranslations } from '../translations';
-import { getExpertiseItems, expertiseSlugs, contactDetails, getBlogPosts } from '../data';
+import { getExpertiseItems, contactDetails, getBlogPosts } from '../data';
+import { servicePath, articlePath } from '../routes';
 import { updatePageSeo } from '../utils/seo';
 import { buildServiceMeta } from '../seo/meta';
 
@@ -13,7 +14,6 @@ interface ServicePageProps {
   language: Language;
   setLanguage: (lang: Language) => void;
   item: ExpertiseItem;
-  slug: string;
   onNavigateHome: () => void;
   onNavigate: (path: string) => void;
   onOpenAppointment: () => void;
@@ -35,7 +35,6 @@ export default function ServicePage({
   language,
   setLanguage,
   item,
-  slug,
   onNavigateHome,
   onNavigate,
   onOpenAppointment,
@@ -44,11 +43,12 @@ export default function ServicePage({
 
   // SEO: title/description/JSON-LD tek kaynaktan (src/seo/meta.ts)
   useEffect(() => {
-    updatePageSeo(buildServiceMeta(item, slug));
-    if (typeof window !== 'undefined' && window.location.pathname !== `/${slug}`) {
-      window.history.pushState({}, '', `/${slug}`);
+    updatePageSeo(buildServiceMeta(item, language));
+    const target = servicePath(language, item.id);
+    if (typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '') !== target) {
+      window.history.pushState({}, '', target);
     }
-  }, [item, slug]);
+  }, [item, language]);
 
   // Bu tedavi alanına bağlı makaleler (iç bağlantı: hizmet sayfası → makale)
   const relatedArticles = useMemo(() => {
@@ -234,10 +234,10 @@ export default function ServicePage({
               {relatedArticles.map((post) => (
                 <a
                   key={post.id}
-                  href={`/blog/${post.slug}`}
+                  href={articlePath(language, post.slug)}
                   onClick={(e) => {
                     e.preventDefault();
-                    onNavigate(`/blog/${post.slug}`);
+                    onNavigate(articlePath(language, post.slug));
                   }}
                   className="card-glass p-5 rounded-xl border border-white/10 hover:border-gold/40 transition-all cursor-pointer group flex flex-col justify-between"
                 >
@@ -303,14 +303,14 @@ export default function ServicePage({
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedItems.map((rel) => {
-                const relSlug = expertiseSlugs[rel.id];
+                const relPath = servicePath(language, rel.id);
                 return (
                   <a
                     key={rel.id}
-                    href={`/${relSlug}`}
+                    href={relPath}
                     onClick={(e) => {
                       e.preventDefault();
-                      onNavigate(`/${relSlug}`);
+                      onNavigate(relPath);
                     }}
                     className="card-glass p-5 rounded-xl border border-white/10 hover:border-gold/40 transition-all cursor-pointer group flex flex-col justify-between"
                   >

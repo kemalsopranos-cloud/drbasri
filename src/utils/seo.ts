@@ -1,4 +1,4 @@
-import type { SeoMeta } from '../seo/meta';
+import { LOCALE, type SeoMeta } from '../seo/meta';
 import { SITE_URL, OG_IMAGE_PATH } from '../seo/site';
 
 /**
@@ -64,7 +64,9 @@ function metaByProperty(property: string) {
 export function updatePageSeo(meta: SeoMeta) {
   if (typeof document === 'undefined') return;
 
+  document.documentElement.lang = LOCALE[meta.lang].html;
   document.title = meta.title;
+  setMeta('meta[property="og:locale"]', metaByProperty('og:locale'), LOCALE[meta.lang].og);
   setMeta('meta[name="description"]', metaByName('description'), meta.description);
   setMeta('meta[name="keywords"]', metaByName('keywords'), meta.keywords);
   setMeta('meta[property="og:title"]', metaByProperty('og:title'), meta.title);
@@ -82,6 +84,20 @@ export function updatePageSeo(meta: SeoMeta) {
     document.head.appendChild(canonical);
   }
   canonical.href = meta.canonical;
+
+  // hreflang: önceki rotanınkiler kaldırılır, yenileri eklenir
+  document.head.querySelectorAll('link[rel="alternate"][hreflang]').forEach((l) => l.remove());
+  const addAlt = (hreflang: string, href: string) => {
+    const l = document.createElement('link');
+    l.rel = 'alternate';
+    l.hreflang = hreflang;
+    l.href = href;
+    document.head.appendChild(l);
+  };
+  if (meta.alternates.tr) addAlt('tr', meta.alternates.tr);
+  if (meta.alternates.en) addAlt('en', meta.alternates.en);
+  const xDefault = meta.alternates.tr ?? meta.alternates.en;
+  if (xDefault) addAlt('x-default', xDefault);
 
   // JSON-LD: önceki rotanın blokları kaldırılır, yenileri eklenir
   document.head

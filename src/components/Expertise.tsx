@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Language, ExpertiseItem } from '../types';
 import { uiTranslations } from '../translations';
+import { servicePath } from '../routes';
 import { getExpertiseItems, expertiseSlugs } from '../data';
 
 interface ExpertiseProps {
@@ -101,10 +102,10 @@ export default function Expertise({ language, onNavigate }: ExpertiseProps) {
                   <span>{t.expertiseCardMore}</span>
                 </button>
                 <a
-                  href={`/${expertiseSlugs[item.id]}`}
+                  href={servicePath(language, item.id)}
                   onClick={(e) => {
                     e.preventDefault();
-                    onNavigate(`/${expertiseSlugs[item.id]}`);
+                    onNavigate(servicePath(language, item.id));
                   }}
                   className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-300 hover:text-gold cursor-pointer focus:outline-none"
                   title={language === 'TR' ? 'Detaylı Sayfayı Görüntüle' : 'View Full Page'}
@@ -195,11 +196,11 @@ export default function Expertise({ language, onNavigate }: ExpertiseProps) {
             {/* Modal Footer actions */}
             <div className="border-t border-white/10 p-6 flex justify-between items-center bg-black/20">
               <a
-                href={`/${expertiseSlugs[selectedItem.id]}`}
+                href={servicePath(language, selectedItem.id)}
                 onClick={(e) => {
                   e.preventDefault();
                   setSelectedItem(null);
-                  onNavigate(`/${expertiseSlugs[selectedItem.id]}`);
+                  onNavigate(servicePath(language, selectedItem.id));
                 }}
                 className="text-gold hover:text-gold/80 font-bold text-xs uppercase tracking-widest transition-colors focus:outline-none"
               >

@@ -18,6 +18,10 @@
     {
       "source": "/blog/:slug",
       "destination": "/blog"
+    },
+    {
+      "source": "/en/blog/:slug",
+      "destination": "/en/blog"
     }
   ],
   "headers": [

@@ -22,10 +22,11 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { getBlogPosts, expertiseSlugs } from '../src/data';
-import { resolveSeoMeta, injectSeoIntoHtml, postDates } from '../src/seo/meta';
+import { getBlogPosts, getExpertiseItems } from '../src/data';
+import { resolveSeoMeta, injectSeoIntoHtml, postDates, hreflangLinks } from '../src/seo/meta';
 import { SITE_URL } from '../src/seo/site';
-import type { BlogPost } from '../src/types';
+import { homePath, blogPath, articlePath, servicePath, internationalPath, parseRoute } from '../src/routes';
+import type { BlogPost, Language } from '../src/types';
 
 const ROOT = process.cwd();
 const DIST = path.join(ROOT, 'dist');
@@ -36,7 +37,8 @@ async function fetchFirestorePosts(): Promise<BlogPost[]> {
   try {
     const { db } = await import('../src/firebase');
     const { collection, getDocs, query, where, terminate } = await import('firebase/firestore');
-    const q = query(collection(db, 'blog_posts'), where('language', '==', 'TR'));
+    // Faz 4: her iki dil de çekilir; language alanı rota eşlemesinde kullanılır
+    const q = query(collection(db, 'blog_posts'), where('language', 'in', ['TR', 'EN']));
 
     const snapshot = await Promise.race([
       getDocs(q),
@@ -62,7 +64,7 @@ async function fetchFirestorePosts(): Promise<BlogPost[]> {
           author: data.author || 'Prof. Dr. Basri Çakıroğlu',
           keywords: data.keywords || '',
           metaDescription: data.metaDescription || data.excerpt || '',
-          language: 'TR',
+          language: (data.language === 'EN' ? 'EN' : 'TR') as Language,
         },
         createdAt: data.createdAt || 0,
       });
@@ -100,31 +102,40 @@ async function main() {
   const { render } = (await import(serverEntry)) as { render: (p: string, posts: BlogPost[]) => string };
 
   const firestorePosts = await fetchFirestorePosts();
-  const defaultPosts = getBlogPosts('TR');
-  // Firestore'daki bir yazı varsayılanla aynı slug'a sahipse Firestore kazanır
-  const seen = new Set<string>();
-  const allPosts: BlogPost[] = [];
-  for (const p of [...firestorePosts, ...defaultPosts]) {
-    if (seen.has(p.slug)) continue;
-    seen.add(p.slug);
-    allPosts.push(p);
+  const postsByLang: Record<Language, BlogPost[]> = { TR: [], EN: [] };
+  const routes: string[] = [];
+  for (const lang of ['TR', 'EN'] as Language[]) {
+    const fromDb = firestorePosts.filter((p) => (p.language ?? 'TR') === lang);
+    // Firestore'daki bir yazı varsayılanla aynı slug'a sahipse Firestore kazanır
+    const seen = new Set<string>();
+    const all: BlogPost[] = [];
+    for (const p of [...fromDb, ...getBlogPosts(lang)]) {
+      if (seen.has(p.slug)) continue;
+      seen.add(p.slug);
+      all.push(p);
+    }
+    postsByLang[lang] = all;
+    routes.push(homePath(lang));
+    routes.push(...getExpertiseItems(lang).map((i) => servicePath(lang, i.id)));
+    if (lang === 'EN') routes.push(internationalPath());
+    routes.push(blogPath(lang));
+    routes.push(...all.map((p) => articlePath(lang, p.slug)));
   }
-
-  const serviceRoutes = Object.values(expertiseSlugs).map((slug) => `/${slug}`);
-  const blogRoutes = allPosts.map((p) => `/blog/${p.slug}`);
-  const routes = ['/', ...serviceRoutes, '/blog', ...blogRoutes];
 
   const today = new Date().toISOString().split('T')[0];
   const sitemapEntries: string[] = [];
 
   for (const route of routes) {
-    const isBlog = route.startsWith('/blog');
-    const appHtml = render(route, isBlog ? firestorePosts : []);
+    const parsed = parseRoute(route);
+    const lang = parsed.lang;
+    const isBlog = parsed.kind === 'blog' || parsed.kind === 'article';
+    const dbPosts = firestorePosts.filter((p) => (p.language ?? 'TR') === lang);
+    const appHtml = render(route, isBlog ? dbPosts : []);
     const meta = resolveSeoMeta(route, firestorePosts);
 
     const bootstrap =
       `<script>window.__SSR_PATH__=${escapeJsonForScript(route)};` +
-      (isBlog ? `window.__SSR_POSTS__=${escapeJsonForScript(firestorePosts)};` : '') +
+      (isBlog ? `window.__SSR_POSTS__=${escapeJsonForScript(dbPosts)};` : '') +
       `</script>`;
 
     let html = injectSeoIntoHtml(template, meta);
@@ -135,19 +146,24 @@ async function main() {
     await fs.mkdir(path.dirname(file), { recursive: true });
     await fs.writeFile(file, html, 'utf-8');
 
-    const post = isBlog ? allPosts.find((p) => `/blog/${p.slug}` === route) : undefined;
+    const post = parsed.kind === 'article' ? postsByLang[lang].find((p) => p.slug === parsed.slug) : undefined;
     const lastmod = (post && postDates(post).modified) || today;
-    const priority = route === '/' ? '1.0' : route === '/blog' ? '0.8' : isBlog ? '0.7' : '0.9';
-    const changefreq = route === '/' || route === '/blog' ? 'weekly' : 'monthly';
+    const priority = parsed.kind === 'home' ? '1.0' : parsed.kind === 'blog' ? '0.8' : isBlog ? '0.7' : '0.9';
+    const changefreq = parsed.kind === 'home' || parsed.kind === 'blog' ? 'weekly' : 'monthly';
+    // Sitemap'te hreflang: Google TR↔EN eşlemesini ikinci bir kanaldan da alır
+    const alts = hreflangLinks(meta)
+      .split('\n')
+      .map((l) => l.trim().replace('<link rel="alternate"', '<xhtml:link rel="alternate"'))
+      .join('\n    ');
     sitemapEntries.push(
-      `  <url>\n    <loc>${meta.canonical}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`
+      `  <url>\n    <loc>${meta.canonical}</loc>\n    ${alts}\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`
     );
     console.log(`[prerender] ${route} → ${path.relative(ROOT, file)} (${(html.length / 1024).toFixed(1)} KB)`);
   }
 
   const sitemap =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries.join('\n')}\n</urlset>\n`;
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sitemapEntries.join('\n')}\n</urlset>\n`;
   await fs.writeFile(path.join(DIST, 'sitemap.xml'), sitemap, 'utf-8');
 
   const robots = `User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X, Calendar, Globe, Clock, Phone, Instagram } from 'lucide-react';
 import { Language } from '../types';
 import { uiTranslations } from '../translations';
+import { internationalPath } from '../routes';
 import { contactDetails } from '../data';
 
 interface HeaderProps {
@@ -122,6 +123,16 @@ export default function Header({
                 {item.label}
               </button>
             ))}
+            {/* EN: yabancı hasta sayfası — ana sayfadan gerçek <a> ile bağlantı (SEO) */}
+            {language === 'EN' && (
+              <a
+                id="nav-international"
+                href={internationalPath()}
+                className="px-3 py-2 text-xs uppercase tracking-widest text-gold hover:text-white font-semibold transition-all rounded-sm hover:bg-white/5 border border-gold/30"
+              >
+                International Patients
+              </a>
+            )}
           </nav>
 
           {/* Right Action Controls */}

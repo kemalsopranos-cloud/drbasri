@@ -6,7 +6,8 @@ import {
 } from 'lucide-react';
 import { Language, BlogPost, Appointment } from '../types';
 import { uiTranslations } from '../translations';
-import { getBlogPosts, contactDetails, expertiseSlugs, getExpertiseItems } from '../data';
+import { getBlogPosts, contactDetails, getExpertiseItems } from '../data';
+import { blogPath, articlePath, servicePath } from '../routes';
 import { generateSlug } from '../utils/seo';
 import AddArticleModal from './AddArticleModal';
 import { db } from '../firebase';
@@ -22,6 +23,7 @@ interface BlogPageProps {
   initialSlug?: string;
   // Prerender'da Firestore'dan çekilen yazılar (hydration eşleşmesi için)
   initialDbPosts?: BlogPost[];
+  onNavigate?: (path: string) => void;
   appointments: Appointment[];
   onCancelAppointment: (id: string) => Promise<void>;
   onConfirmAppointment: (id: string) => Promise<void>;
@@ -34,6 +36,7 @@ export default function BlogPage({
   onOpenAppointment,
   initialSlug,
   initialDbPosts,
+  onNavigate,
   appointments,
   onCancelAppointment,
   onConfirmAppointment,
@@ -118,14 +121,16 @@ export default function BlogPage({
   // Handle URL change & SEO Meta Tag updates (tek kaynak: src/seo/meta.ts)
   useEffect(() => {
     if (activePost) {
-      updatePageSeo(buildArticleMeta(activePost));
-      if (window.location.pathname !== `/blog/${activePost.slug}`) {
-        window.history.pushState({ slug: activePost.slug }, '', `/blog/${activePost.slug}`);
+      updatePageSeo(buildArticleMeta(activePost, language));
+      const target = articlePath(language, activePost.slug);
+      if (window.location.pathname.replace(/\/+$/, '') !== target) {
+        window.history.pushState({ slug: activePost.slug }, '', target);
       }
     } else {
-      updatePageSeo(buildBlogHubMeta());
-      if (window.location.pathname !== '/blog') {
-        window.history.pushState({}, '', '/blog');
+      updatePageSeo(buildBlogHubMeta(language));
+      const target = blogPath(language);
+      if (window.location.pathname.replace(/\/+$/, '') !== target) {
+        window.history.pushState({}, '', target);
       }
     }
   }, [activePost, language]);
@@ -133,12 +138,12 @@ export default function BlogPage({
   // Handle browser back/forward buttons
   useEffect(() => {
     const handlePopState = () => {
-      const path = window.location.pathname;
-      if (path === '/blog' || path === '/blog/') {
+      const path = window.location.pathname.replace(/\/+$/, '');
+      const hub = blogPath(language);
+      if (path === hub) {
         setCurrentSlug(null);
-      } else if (path.startsWith('/blog/')) {
-        const slug = path.replace('/blog/', '').replace(/\/$/, '');
-        setCurrentSlug(slug);
+      } else if (path.startsWith(hub + '/')) {
+        setCurrentSlug(path.slice(hub.length + 1));
       }
     };
     window.addEventListener('popstate', handlePopState);
@@ -152,7 +157,7 @@ export default function BlogPage({
 
   const handleBackToAll = () => {
     setCurrentSlug(null);
-    window.history.pushState({}, '', '/blog');
+    window.history.pushState({}, '', blogPath(language));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -541,7 +546,8 @@ export default function BlogPage({
             {/* İlgili tedavi sayfası — iç bağlantı (SEO: makale → hizmet sayfası) */}
             {relatedServiceItem && (
               <a
-                href={`/${expertiseSlugs[relatedServiceItem.id]}`}
+                href={servicePath(language, relatedServiceItem.id)}
+                onClick={(e) => { if (onNavigate) { e.preventDefault(); onNavigate(servicePath(language, relatedServiceItem.id)); } }}
                 className="flex items-center justify-between gap-4 card-glass border border-gold/30 hover:border-gold/60 rounded-xl p-5 mb-8 transition-colors group"
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -618,7 +624,7 @@ export default function BlogPage({
                     ? 'Üroloji Profesörü (Üsküdar Üniversitesi Tıp Fakültesi), Hisar Intercontinental Hospital Üroloji Kliniği Sorumlusu. HoLEP lazer prostat cerrahisi, daVinci robotik cerrahi ve endoürolojik taş tedavileri alanında 30 yılı aşkın klinik deneyim.'
                     : 'Professor of Urology (Üsküdar University Faculty of Medicine), Head of Urology at Hisar Intercontinental Hospital. Over 30 years of clinical experience in HoLEP laser prostate surgery, daVinci robotic surgery and endourological stone treatment.'}
                 </p>
-                <a href="/#about" className="text-xs text-gold hover:underline mt-2 inline-flex items-center gap-1">
+                <a href={language === 'EN' ? '/en#about' : '/#about'} className="text-xs text-gold hover:underline mt-2 inline-flex items-center gap-1">
                   {language === 'TR' ? 'Akademik özgeçmiş' : 'Academic profile'} <ChevronRight className="w-3 h-3" />
                 </a>
               </div>
@@ -669,7 +675,7 @@ export default function BlogPage({
                   {relatedPosts.map((rel) => (
                     <a
                       key={rel.id}
-                      href={`/blog/${rel.slug}`}
+                      href={articlePath(language, rel.slug)}
                       onClick={(e) => { e.preventDefault(); handleSelectPost(rel); }}
                       className="card-glass p-5 rounded-xl border border-white/10 hover:border-gold/40 transition-all cursor-pointer group flex flex-col justify-between"
                     >
@@ -823,7 +829,7 @@ export default function BlogPage({
                       {/* Title */}
                       <h3 className="text-lg font-bold text-white group-hover:text-gold transition-colors mb-3 line-clamp-2 font-display leading-snug">
                         {/* SEO: gerçek <a href> — Googlebot onClick'i takip etmez */}
-                        <a href={`/blog/${post.slug}`} onClick={(e) => { e.preventDefault(); handleSelectPost(post); }}>
+                        <a href={articlePath(language, post.slug)} onClick={(e) => { e.preventDefault(); handleSelectPost(post); }}>
                           {post.title}
                         </a>
                       </h3>

@@ -1,10 +1,13 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Fragment } from 'react';
 import { Calendar, Clock, ChevronUp, Shield, Globe, FileText, Phone, Lock, Instagram } from 'lucide-react';
 import { Language, Appointment, BlogPost } from './types';
 import { uiTranslations } from './translations';
 import { db } from './firebase';
 import { collection, doc, setDoc, updateDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
-import { expertiseSlugs, getExpertiseItemBySlug, getExpertiseItems } from './data';
+import { getExpertiseItems, getBlogPosts } from './data';
+import { parseRoute, alternatePath, homePath, blogPath, servicePath, internationalPath, normalizePath } from './routes';
+import InternationalPage from './components/InternationalPage';
+import WhatsAppButton from './components/WhatsAppButton';
 
 // Import our modular components
 import Header from './components/Header';
@@ -29,7 +32,6 @@ interface AppProps {
 }
 
 export default function App({ initialPath, ssrPosts }: AppProps = {}) {
-  const [language, setLanguage] = useState<Language>('TR');
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -40,13 +42,39 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
     // Sondaki "/" atılır: "/blog/" ve "/blog" aynı rota (aksi hâlde hizmet
     // sayfası eşleşmez ve SSR HTML'i ile hydrate uyumsuz olur)
     const raw = initialPath ?? (typeof window !== 'undefined' ? window.location.pathname : '/');
-    return raw.replace(/\/+$/, '') || '/';
+    return normalizePath(raw);
   });
 
-  // Resolve the current path to a dedicated service/treatment page, if any
+  // Faz 4: DİL URL'DEN TÜRETİLİR (/en/... → EN). Ayrı bir language state'i
+  // YOK; dil düğmesi aynı sayfanın diğer dildeki URL'sine gider. Aksi hâlde
+  // Google İngilizce içeriğin varlığını göremez (tek URL = tek dil).
+  const route = useMemo(() => parseRoute(currentPath), [currentPath]);
+  const language: Language = route.lang;
+
   const activeServiceItem = useMemo(() => {
-    return getExpertiseItemBySlug(language, currentPath.replace(/^\//, ''));
-  }, [language, currentPath]);
+    if (route.kind !== 'service') return undefined;
+    return getExpertiseItems(language).find((i) => i.id === route.id);
+  }, [route, language]);
+
+  // Makale sayfasındaysak çeviri karşılığının slug'ı (dil düğmesi için)
+  const translationSlug = useMemo(() => {
+    if (route.kind !== 'article') return null;
+    const post = getBlogPosts(language).find((p) => p.slug === route.slug);
+    return post?.translationOf ?? null;
+  }, [route, language]);
+
+  const setLanguage = (lang: Language) => {
+    if (lang === language) return;
+    // BlogPage liste→yazı geçişini kendi state'iyle yapar ve currentPath'i
+    // güncellemez; bu yüzden GERÇEK adres window.location'dan okunur, aksi
+    // hâlde makaledeyken dil düğmesi çeviri yerine listeye götürür (yaşandı).
+    const liveRoute = typeof window !== 'undefined' ? parseRoute(window.location.pathname) : route;
+    let slug: string | null = translationSlug;
+    if (liveRoute.kind === 'article') {
+      slug = getBlogPosts(liveRoute.lang).find((p) => p.slug === liveRoute.slug)?.translationOf ?? null;
+    }
+    navigateToPath(alternatePath(liveRoute, lang, slug));
+  };
 
   // Listen to browser forward/back buttons
   useEffect(() => {
@@ -59,10 +87,10 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
 
   // Update homepage SEO when on main route
   useEffect(() => {
-    if (!currentPath.startsWith('/blog') && !activeServiceItem) {
-      updatePageSeo(buildHomeMeta());
+    if (route.kind === 'home') {
+      updatePageSeo(buildHomeMeta(language));
     }
-  }, [currentPath, language]);
+  }, [route, language]);
 
   // Sync login status across events (+ ilk okuma mount sonrası)
   useEffect(() => {
@@ -85,24 +113,16 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
   }, []);
 
   // Navigation helpers
-  const navigateToBlog = () => {
-    window.history.pushState({}, '', '/blog');
-    setCurrentPath('/blog');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const navigateToHome = () => {
-    window.history.pushState({}, '', '/');
-    setCurrentPath('/');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // Generic client-side navigation for dedicated service/treatment pages
+  // Generic client-side navigation (dil öneki çağıranın sorumluluğu — routes.ts yardımcılarını kullan)
   const navigateToPath = (path: string) => {
-    window.history.pushState({}, '', path);
-    setCurrentPath(path);
+    const clean = normalizePath(path);
+    window.history.pushState({}, '', clean);
+    setCurrentPath(clean);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const navigateToBlog = () => navigateToPath(blogPath(language));
+  const navigateToHome = () => navigateToPath(homePath(language));
 
 
   // Persistence: Real-time synchronization of appointments from Firestore
@@ -262,10 +282,10 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
   // /#about, /#contact gibi bir hash ile gelindiğinde (vercel.json'daki
   // /hakkimizda → /#about yönlendirmesi) ilgili bölüme kaydır.
   useEffect(() => {
-    if (currentPath !== '/') return;
+    if (route.kind !== 'home') return;
     const hash = window.location.hash.replace('#', '');
     if (hash) setTimeout(() => scrollToSection(hash), 150);
-  }, [currentPath]);
+  }, [route]);
 
   const handleScrollToTop = () => {
     window.scrollTo({
@@ -312,11 +332,11 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
           language={language}
           setLanguage={setLanguage}
           item={activeServiceItem}
-          slug={currentPath.replace(/^\//, '')}
           onNavigateHome={navigateToHome}
           onNavigate={navigateToPath}
           onOpenAppointment={() => setIsAppointmentOpen(true)}
         />
+        <WhatsAppButton language={language} />
         <AppointmentModal
           language={language}
           isOpen={isAppointmentOpen}
@@ -327,11 +347,34 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
     );
   }
 
-  // IF ON /blog OR /blog/:slug ROUTE, SERVE DEDICATED SEO BLOG HUB
-  if (currentPath.startsWith('/blog')) {
-    const slug = currentPath.replace('/blog', '').replace(/^\//, '') || undefined;
+  // /en/international-patients — yabancı hasta süreci (yalnızca EN)
+  if (route.kind === 'international') {
     return (
       <>
+        <InternationalPage
+          onNavigateHome={navigateToHome}
+          onNavigate={navigateToPath}
+          onOpenAppointment={() => setIsAppointmentOpen(true)}
+          setLanguage={setLanguage}
+        />
+        <WhatsAppButton language="EN" />
+        <AppointmentModal
+          language="EN"
+          isOpen={isAppointmentOpen}
+          onClose={() => setIsAppointmentOpen(false)}
+          onAppointmentCreated={handleAppointmentCreated}
+        />
+      </>
+    );
+  }
+
+  // IF ON /blog OR /blog/:slug ROUTE (her iki dil), SERVE DEDICATED SEO BLOG HUB
+  if (route.kind === 'blog' || route.kind === 'article') {
+    const slug = route.kind === 'article' ? route.slug : undefined;
+    return (
+      <>
+        {/* key: dil değişince BlogPage yeniden monte olsun (iç slug state'i sıfırlanır) */}
+        <Fragment key={language}>
         <BlogPage
           language={language}
           setLanguage={setLanguage}
@@ -342,7 +385,10 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
           appointments={appointments}
           onCancelAppointment={handleCancelAppointment}
           onConfirmAppointment={handleConfirmAppointment}
+          onNavigate={navigateToPath}
         />
+        </Fragment>
+        <WhatsAppButton language={language} />
         <AppointmentModal
           language={language}
           isOpen={isAppointmentOpen}
@@ -395,10 +441,10 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
             {getExpertiseItems(language).map((item) => (
               <a
                 key={item.id}
-                href={`/${expertiseSlugs[item.id]}`}
+                href={servicePath(language, item.id)}
                 onClick={(e) => {
                   e.preventDefault();
-                  navigateToPath(`/${expertiseSlugs[item.id]}`);
+                  navigateToPath(servicePath(language, item.id));
                 }}
                 className="text-slate-400 hover:text-gold transition-colors"
               >
@@ -445,13 +491,23 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
               >
                 {t.navExpertise}
               </button>
-              <button
+              <a
                 id="footer-nav-blog"
-                onClick={navigateToBlog}
+                href={blogPath(language)}
+                onClick={(e) => { e.preventDefault(); navigateToBlog(); }}
                 className="hover:text-gold transition-colors focus:outline-none cursor-pointer"
               >
                 {language === 'TR' ? 'Tıbbi Yayınlar (Blog)' : 'Medical Blog'}
-              </button>
+              </a>
+              {language === 'EN' && (
+                <a
+                  href={internationalPath()}
+                  onClick={(e) => { e.preventDefault(); navigateToPath(internationalPath()); }}
+                  className="hover:text-gold transition-colors focus:outline-none cursor-pointer"
+                >
+                  International Patients
+                </a>
+              )}
               <button
                 onClick={() => scrollToSection('contact')}
                 className="hover:text-gold transition-colors focus:outline-none cursor-pointer"
@@ -516,6 +572,9 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
         >
           <Instagram className="w-5 h-5" />
         </a>
+
+        {/* WhatsApp — yabancı hastanın ilk teması neredeyse her zaman WhatsApp */}
+        <WhatsAppButton language={language} inline />
 
         {/* Quick dial assistant button */}
         <a
