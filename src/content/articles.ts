@@ -15,7 +15,8 @@ import type { BlogPost } from '../types';
 // yazının sonunda.
 //
 // Biçim (BlogPage.renderArticleContent): "### Başlık", "* madde", "1. adım",
-// "**kalın**", boş satır = paragraf arası. Başka markdown KULLANMA.
+// "**kalın**", "[metin](/yol)" iç bağlantı, boş satır = paragraf arası.
+// Başka markdown KULLANMA.
 // ---------------------------------------------------------------------------
 
 const AUTHOR = 'Prof. Dr. Basri Çakıroğlu';
@@ -1005,6 +1006,111 @@ ${DISCLAIMER}`,
       { title: 'AUA/SUFU Guideline: Microhematuria', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/microhematuria' },
       { title: 'EAU Guidelines: Non-muscle-invasive Bladder Cancer', url: 'https://uroweb.org/guidelines/non-muscle-invasive-bladder-cancer' },
       { title: 'NIDDK: Hematuria (Blood in the Urine)', url: 'https://www.niddk.nih.gov/health-information/urologic-diseases/hematuria-blood-urine' },
+    ],
+  },
+
+  // =========================================================================
+  // 10. AMELİYATSIZ BÖBREK TAŞI TEDAVİSİ (ESWL)
+  // Kaynak esini: Hisar Hospital "böbrek taşı tedavisi" açılış sayfası
+  // (yalnızca konu/başlık seçimi; metin özgün — kopya içerik hem telif hem
+  // Google'da çift içerik sorunu). Mevcut "böbrek taşı nasıl düşer" yazısıyla
+  // çakışmasın diye yalnızca ESWL'e odaklanır ve ona iç bağlantı verir.
+  // =========================================================================
+  {
+    id: 'eswl-ameliyatsiz-bobrek-tasi',
+    title: 'Ameliyatsız Böbrek Taşı Tedavisi (ESWL): Kimlere Uygun, Nasıl Yapılır, Ne Kadar Başarılı?',
+    slug: 'ameliyatsiz-bobrek-tasi-tedavisi-eswl',
+    excerpt:
+      'ESWL, kesi ve anestezi olmadan vücut dışından gönderilen şok dalgalarıyla böbrek taşını kırma yöntemidir. Hangi taşlarda işe yarar, hangi durumlarda uygun değildir, işlem ve sonrası nasıl geçer, başarı oranı gerçekte nedir?',
+    category: 'Taş Hastalıkları',
+    date: '19 Eylül 2026',
+    datePublished: '2026-09-19',
+    dateModified: '2026-09-19',
+    readTime: '7',
+    author: AUTHOR,
+    keywords:
+      'ameliyatsız böbrek taşı tedavisi, ESWL, böbrek taşı kırdırma, şok dalgasıyla taş kırma, taş kırma seansı, ESWL başarı oranı, ESWL sonrası, böbrek taşı kırma istanbul',
+    metaDescription:
+      'Ameliyatsız böbrek taşı tedavisi (ESWL) nedir, hangi taşlarda uygundur, işlem nasıl yapılır, kaç seans gerekir, başarı oranı ve yan etkileri nelerdir? Prof. Dr. Basri Çakıroğlu anlatıyor.',
+    relatedService: 'stone-disease',
+    content: `### "Ameliyatsız" Ne Demek?
+Böbrek taşı tedavisinde "ameliyatsız" sözüyle kastedilen yöntem **ESWL**'dir (Extracorporeal Shock Wave Lithotripsy — vücut dışından şok dalgasıyla taş kırma). Cilde dokunan bir cihaz başlığından gönderilen yüksek enerjili ses dalgaları böbrekteki taşa odaklanır ve taşı idrarla atılabilecek küçük parçalara ayırır. Vücuda hiçbir kesi yapılmaz, idrar yolundan alet sokulmaz, çoğu hastada genel anestezi gerekmez.
+
+ESWL 1980'lerden beri kullanılan, iyi tanımlanmış bir yöntemdir. Ancak "ameliyatsız" olması her taş için doğru seçenek olduğu anlamına gelmez; hangi hastada işe yarayacağı taşın boyutuna, yerine, sertliğine ve hastanın özelliklerine bağlıdır. Bu yazı, ESWL'i abartmadan da küçümsemeden anlatmayı amaçlıyor.
+
+### ESWL Kimler İçin Uygundur?
+Kılavuzlar ESWL'i özellikle şu durumlarda önerir:
+* Böbrek içinde, **2 cm'den küçük** taşlar (en iyi sonuçlar 1 cm altında alınır)
+* Üreterin üst kısmındaki, **1 cm'den küçük** taşlar
+* Tomografide **düşük yoğunluklu** (yumuşak) görünen taşlar — sert taşlar (kalsiyum oksalat monohidrat, sistin, bazı brushit taşları) şok dalgasına dirençlidir
+* Böbreğin üst ve orta bölümündeki taşlar; alt kutup (alt kaliks) taşlarında kırılan parçaların düşmesi yerçekimine karşı olduğu için başarı daha düşüktür
+* Anestezi almak istemeyen veya anestezi riski yüksek olan, taşı uygun boyutta hastalar
+
+### ESWL Hangi Durumlarda Uygulanmaz?
+* **Gebelik** — kesin kontrendikasyon
+* Kontrol edilemeyen **kanama bozuklukları** ve kesilemeyen kan sulandırıcı kullanımı (böbrekte kanama riski)
+* Tedavi edilmemiş **idrar yolu enfeksiyonu**
+* Taşın altında idrar akımını engelleyen **darlık veya tıkanıklık** — parçalar düşemez
+* Taş bölgesinin yakınında **anevrizma**
+* Belirgin obezite — şok dalgası taşa odaklanamaz ve etkisi azalır
+* 2 cm'den büyük taşlar ve böbreği dolduran koraliform taşlar — bu grupta PNL ya da RIRS tercih edilir
+
+### İşlem Nasıl Yapılır?
+1. İşlem öncesi idrar tahlili, kültür, kan testleri ve taşın konumunu gösteren görüntüleme (kontrastsız BT tercih edilir) tamamlanır.
+2. Hasta özel bir masaya yatırılır; taş ultrason veya röntgen (floroskopi) ile bulunur ve cihaz taşa odaklanır.
+3. Ciltle cihaz arasına jel sürülür. 30-45 dakika boyunca genellikle 2.000-3.500 şok dalgası, düşük enerjiden başlayıp kademeli artırılarak gönderilir.
+4. Ağrı kişiden kişine değişir: çoğu hasta hafif-orta bir vurma hissi tarif eder ve **ağrı kesici ya da hafif sedasyon** ile rahat tamamlar. "Tamamen ağrısız" demek doğru değildir; ancak ağrı kontrol edilebilir düzeydedir.
+5. İşlemden sonra 1-2 saat gözlemin ardından hasta aynı gün evine döner.
+
+### ESWL Sonrası Neler Beklenir?
+* İlk 1-3 gün **idrarda kan** görülmesi normaldir.
+* Kırılan parçalar günler-haftalar içinde idrarla düşer; bu sırada **kolik tipi ağrı** olabilir. Ağrı kesici ve bol su içme (günde 2,5-3 litre) süreci kolaylaştırır; hekimin verdiği alfa bloker ilaç parçaların düşmesini hızlandırır.
+* Sırtta cihazın uygulandığı bölgede geçici morarma ve hassasiyet görülebilir.
+* Düşen parçaların **süzgeçle toplanıp analize** gönderilmesi, taşın türünü ve korunma planını belirlemek için önemlidir.
+* 2-4 hafta sonra kontrol görüntülemesiyle taşın tamamen temizlenip temizlenmediği değerlendirilir.
+
+### Kaç Seans Gerekir, Başarı Oranı Nedir?
+Tek seansla taşsızlık her hastada sağlanamaz. Kılavuz verilerine göre 1 cm altındaki böbrek taşlarında taşsızlık oranı yaklaşık **%70-90**, 1-2 cm arasında **%50-70** civarındadır; alt kutup taşlarında ve sert taşlarda bu oranlar düşer. Hastaların bir kısmında **2-3 seans** gerekir; seanslar arasında genellikle 1-2 hafta beklenir. Üç seansa rağmen kırılmayan taşta ısrar edilmez, RIRS veya PNL'ye geçilir.
+
+Karşılaştırma için: idrar yolundan bükülebilir endoskopla girilip lazerle kırma (RIRS) tek seansta daha yüksek taşsızlık sağlar, ancak genel anestezi gerektirir ve genellikle geçici bir stent bırakılır. ESWL'in gücü **anestezisiz, kesisiz ve günübirlik** olmasıdır; RIRS'in gücü ise **tek seansta kesin sonuç**tur. Hangi yöntemin seçileceği, taşın özellikleri kadar hastanın tercihine de bağlıdır.
+
+### Olası Yan Etkiler
+ESWL güvenli bir yöntemdir; yine de bilinmesi gereken riskler vardır:
+* **Taş yolu (steinstrasse):** Kırılan parçaların üreterde birikip tıkanıklık yapması; büyük taşlarda daha sık, bazen stent veya üreteroskopi gerektirir.
+* **Enfeksiyon** ve ateş — özellikle enfeksiyon taşlarında; işlem öncesi kültür bu yüzden önemlidir.
+* Nadiren böbrek çevresinde **kanama (hematom)** — kan sulandırıcı kullananlarda ve tansiyonu kontrolsüz olanlarda risk artar.
+* Tekrarlayan yüksek sayıda seansın böbrek dokusuna etkisi tartışmalıdır; bu nedenle seans sayısı sınırlı tutulur.
+
+### Taşın Tekrarlamasını Önlemek
+ESWL taşı kırar ama taş oluşturan nedeni ortadan kaldırmaz. Bir kez taş oluşturan kişide 5-10 yıl içinde yeniden taş görülme ihtimali yüksektir. Günde en az 2,5 litre su, tuzun ve aşırı hayvansal proteinin azaltılması, kalsiyumun **kısıtlanmaması**, limon gibi sitrat kaynakları ve düşen taşın analizine göre gerekirse ilaç tedavisi, korunmanın temelidir. Taş düşürme süreci, acil durumlar ve diğer tedavi yöntemleri için [böbrek taşı belirtileri ve tedavisi](/blog/bobrek-tasi-belirtileri-nasil-duser) yazımıza da göz atabilirsiniz.
+
+${DISCLAIMER}`,
+    faq: [
+      {
+        q: 'ESWL (taş kırma) ağrılı mıdır?',
+        a: 'Çoğu hasta işlem sırasında hafif-orta şiddette bir vurma hissi tarif eder; ağrı kesici veya hafif sedasyonla rahat tamamlanır. Tamamen ağrısız değildir, ancak kontrol edilebilir düzeydedir. Sonraki günlerde parçalar düşerken kolik tipi ağrı olabilir.',
+      },
+      {
+        q: 'ESWL hangi boyuttaki taşlarda uygulanır?',
+        a: 'Böbrekte 2 cm’den küçük (en iyi sonuç 1 cm altında) ve üst üreterde 1 cm’den küçük taşlarda uygulanır. Daha büyük taşlarda, çok sert taşlarda ve alt kutup taşlarında başarı düşer; bu durumlarda RIRS veya PNL tercih edilir.',
+      },
+      {
+        q: 'Taş kırma kaç seans sürer?',
+        a: 'Küçük ve yumuşak taşlar çoğunlukla tek seansta kırılır; hastaların bir kısmında 1-2 hafta arayla 2-3 seans gerekir. Üç seansa rağmen kırılmayan taşta ESWL’de ısrar edilmez, endoskopik yönteme geçilir.',
+      },
+      {
+        q: 'ESWL sonrası idrarda kan normal mi?',
+        a: 'Evet. İlk 1-3 gün idrarda kan görülmesi beklenen bir durumdur ve kendiliğinden geçer. Yoğun pıhtılı kanama, 38°C üzeri ateş veya geçmeyen şiddetli ağrı olursa hekime başvurulmalıdır.',
+      },
+      {
+        q: 'Kan sulandırıcı kullanıyorum, ESWL yaptırabilir miyim?',
+        a: 'Kesilemeyen kan sulandırıcı kullanımı ESWL için sakıncalıdır çünkü böbrekte kanama riski artar. Bu hastalarda idrar yolundan lazerle kırma (RIRS) daha güvenli seçenektir; karar hekiminizle birlikte, ilaçların kesilip kesilemeyeceğine göre verilir.',
+      },
+    ],
+    sources: [
+      { title: 'EAU Guidelines: Urolithiasis', url: 'https://uroweb.org/guidelines/urolithiasis' },
+      { title: 'AUA Guideline: Surgical Management of Stones', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/kidney-stones-surgical-management-guideline' },
+      { title: 'NIDDK: Kidney Stones — Treatment', url: 'https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/treatment' },
     ],
   },
 ];

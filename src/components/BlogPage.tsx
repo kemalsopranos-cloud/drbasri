@@ -271,15 +271,29 @@ export default function BlogPage({
 
   // "**kalın**" işaretlerini <strong>'a çevirir. Eski sürüm yıldızları olduğu
   // gibi basıyordu (makalelerde "**Ailesinde...**" görünüyordu).
+  // "**kalın**" → <strong>, "[metin](/yol)" → iç bağlantı (gerçek <a href>; SEO)
   const renderInline = (text: string) => {
-    const parts = text.split(/(\*\*[^*]+\*\*)/g);
-    return parts.map((part, i) =>
-      part.startsWith('**') && part.endsWith('**') ? (
-        <strong key={i} className="text-white font-semibold">{part.slice(2, -2)}</strong>
-      ) : (
-        <span key={i}>{part}</span>
-      )
-    );
+    const parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="text-white font-semibold">{part.slice(2, -2)}</strong>;
+      }
+      const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (link) {
+        const href = link[2].startsWith('/') && language === 'EN' && !link[2].startsWith('/en') ? `/en${link[2]}` : link[2];
+        return (
+          <a
+            key={i}
+            href={href}
+            onClick={(e) => { if (onNavigate && href.startsWith('/')) { e.preventDefault(); onNavigate(href); } }}
+            className="text-gold underline decoration-gold/40 hover:decoration-gold"
+          >
+            {link[1]}
+          </a>
+        );
+      }
+      return <span key={i}>{part}</span>;
+    });
   };
 
   const renderArticleContent = (content: string) => {
