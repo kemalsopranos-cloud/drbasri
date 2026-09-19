@@ -3,7 +3,9 @@ import { Award, ShieldCheck, Activity, ChevronRight, Calendar, User, Phone, Chec
 import { Language, Appointment } from '../types';
 import { uiTranslations } from '../translations';
 import { getExpertiseItems } from '../data';
-import surgeonImg from '../assets/images/surgeon_operating_1784075750341.jpg';
+// Doktorun kendi ameliyathane fotoğrafı (Instagram, Nisan 2025 — RIRS). Eski stok
+// görselde başka bir cerrah vardı (yaka kartında adı okunuyordu) — geri KOYMA.
+import surgeonImg from '../assets/images/prof-dr-basri-cakiroglu-endoskopik-cerrahi.jpg';
 
 interface HeroProps {
   language: Language;
@@ -173,9 +175,12 @@ export default function Hero({
             <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden shadow-2xl backdrop-blur-md flex flex-col animate-in slide-in-from-right duration-500">
               <div className="relative h-48 sm:h-52 w-full">
                 <img 
-                  src={surgeonImg} 
-                  alt="Dr. Basri Çakıroğlu" 
-                  className="w-full h-full object-cover object-center"
+                  src={surgeonImg}
+                  alt={language === 'TR' ? 'Prof. Dr. Basri Çakıroğlu ameliyathanede endoskopik böbrek taşı ameliyatı sırasında' : 'Prof. Dr. Basri Çakıroğlu during endoscopic kidney stone surgery'}
+                  width={1440}
+                  height={810}
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: 'center 18%' }}
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
