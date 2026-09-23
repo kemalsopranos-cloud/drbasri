@@ -4,6 +4,7 @@ import { Language, BlogPost, Appointment } from '../types';
 import { uiTranslations } from '../translations';
 import { getExpertiseItems } from '../data';
 import { generateSlug } from '../utils/seo';
+import { signInDoctor, signOutDoctor, authErrorMessage } from '../auth';
 
 interface AddArticleModalProps {
   language: Language;
@@ -36,6 +37,7 @@ export default function AddArticleModal({
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Form states
   const [title, setTitle] = useState('');
@@ -68,28 +70,37 @@ export default function AddArticleModal({
 
   const cleanCategories = existingCategories.filter((c) => c !== 'ALL');
 
-  const handleLoginSubmit = (e: FormEvent) => {
+  // GÜVENLİK: Giriş artık Firebase Authentication ile yapılır. Eski sürümde
+  // kullanıcı adı ve şifre istemci kodunda AÇIK YAZILIYDI ('drbasri'/'542582')
+  // ve yalnızca bir localStorage bayrağı set ediyordu; Firestore tarafında
+  // hiçbir karşılığı olmadığı için randevu okuması tamamen kapalı tutulmak
+  // zorundaydı. Kurulum adımları: src/auth.ts başındaki not.
+  const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoginError('');
-
-    if (username.trim() === 'drbasri' && password === '542582') {
+    setIsLoggingIn(true);
+    try {
+      await signInDoctor(username, password);
       setIsLoggedIn(true);
       localStorage.setItem('basri_logged_in', 'true');
-      // Dispatch event to let Blog component know we logged in (to update UI, e.g., show delete buttons)
+      // Diğer bileşenler (BlogPage, App) giriş durumunu bu olayla dinler
       window.dispatchEvent(new CustomEvent('basri-login-state-changed', { detail: { isLoggedIn: true } }));
-    } else {
-      setLoginError(
-        language === 'TR'
-          ? 'Kullanıcı adı veya şifre hatalı!'
-          : 'Invalid username or password!'
-      );
+    } catch (err) {
+      setLoginError(authErrorMessage(err, language));
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem('basri_logged_in');
     setIsLoggedIn(false);
     window.dispatchEvent(new CustomEvent('basri-login-state-changed', { detail: { isLoggedIn: false } }));
+    try {
+      await signOutDoctor();
+    } catch (err) {
+      console.error('Sign-out failed:', err);
+    }
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -229,13 +240,14 @@ export default function AddArticleModal({
               {/* Username Input */}
               <div className="space-y-2">
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                  {language === 'TR' ? 'Kullanıcı Adı' : 'Username'}
+                  {language === 'TR' ? 'E-posta' : 'E-mail'}
                 </label>
                 <input
-                  type="text"
+                  type="email"
+                  autoComplete="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="e.g. drbasri"
+                  placeholder="ornek@basricakiroglu.com.tr"
                   required
                   className="w-full px-4 py-3 bg-white/5 text-white rounded border border-white/10 focus:outline-none focus:border-gold transition-all text-xs"
                 />
@@ -248,6 +260,7 @@ export default function AddArticleModal({
                 </label>
                 <input
                   type="password"
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••"
@@ -259,7 +272,8 @@ export default function AddArticleModal({
               <button
                 type="submit"
                 id="btn-admin-login-submit"
-                className="w-full bg-gold hover:bg-gold/90 text-navy font-bold py-3.5 rounded-sm text-xs uppercase tracking-widest transition-colors flex items-center justify-center space-x-2 shadow-lg shadow-gold/5 cursor-pointer mt-4"
+                disabled={isLoggingIn}
+                className="w-full bg-gold hover:bg-gold/90 disabled:opacity-60 disabled:cursor-not-allowed text-navy font-bold py-3.5 rounded-sm text-xs uppercase tracking-widest transition-colors flex items-center justify-center space-x-2 shadow-lg shadow-gold/5 cursor-pointer mt-4"
               >
                 <ShieldCheck className="w-4 h-4" />
                 <span>{language === 'TR' ? 'Giriş Yap' : 'Sign In'}</span>

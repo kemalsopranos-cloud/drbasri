@@ -93,9 +93,28 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
 
   // Sync login status across events (+ ilk okuma mount sonrası)
   useEffect(() => {
+    let loggedInNow = false;
     try {
-      setIsLoggedIn(localStorage.getItem('basri_logged_in') === 'true');
+      loggedInNow = localStorage.getItem('basri_logged_in') === 'true';
+      setIsLoggedIn(loggedInNow);
     } catch { /* gizli sekme / SSR */ }
+
+    // localStorage bayrağı varsa GERÇEK Firebase oturumuyla doğrula: oturum
+    // süresi dolmuşsa bayrak temizlenir, aksi hâlde arayüz "giriş yapılmış"
+    // görünürken Firestore okuması izinsiz kalırdı. (firebase yalnızca bayrak
+    // varken indirilir — ziyaretçide paket şişmez.)
+    if (loggedInNow) {
+      import('./auth')
+        .then(({ watchDoctorAuth }) =>
+          watchDoctorAuth((user) => {
+            if (!user) {
+              try { localStorage.removeItem('basri_logged_in'); } catch { /* yok say */ }
+              setIsLoggedIn(false);
+            }
+          })
+        )
+        .catch((e) => console.error('Auth watch failed:', e));
+    }
     const handleLoginState = (e: any) => {
       const loggedIn = e.detail?.isLoggedIn ?? (localStorage.getItem('basri_logged_in') === 'true');
       setIsLoggedIn(loggedIn);
@@ -193,8 +212,12 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
 
   const t = uiTranslations[language];
 
-  // Callback to insert new scheduled session
-  const handleAppointmentCreated = async (newApt: Appointment) => {
+  // Randevu kaydı + bildirim.
+  // DÖNÜŞ DEĞERİ ÖNEMLİ: e-posta gerçekten gönderildi mi? Eskiden bu bilgi
+  // yutuluyordu ve /api/appointments 404 dönerken bile hastaya "Talebiniz
+  // alındı" gösteriliyordu (ölçüldü, 23 Eyl 2026). Artık arayüz bu sonuca
+  // göre ya onay ya da "telefonla ulaşın" uyarısı gösterir.
+  const handleAppointmentCreated = async (newApt: Appointment): Promise<boolean> => {
     // 1. Optimistic UI update
     setAppointments((prev) => [newApt, ...prev]);
 
@@ -218,15 +241,20 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
 
     // 3. Send email notification via our backend API
     try {
-      await fetch('/api/appointments', {
+      const res = await fetch('/api/appointments', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newApt)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newApt),
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.emailSent) {
+        console.error('Appointment notification failed:', res.status, data);
+        return false;
+      }
+      return true;
     } catch (e) {
       console.error("Failed to send appointment email notification:", e);
+      return false;
     }
   };
 

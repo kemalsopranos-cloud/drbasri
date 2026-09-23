@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Calendar, User, Phone, Mail, MessageSquare, Clock, X, CheckCircle, AlertCircle, FileText } from 'lucide-react';
+import { Calendar, User, Phone, Mail, MessageSquare, Clock, X, CheckCircle, AlertCircle, FileText, MessageCircle } from 'lucide-react';
 import { Language, Appointment, ExpertiseItem } from '../types';
 import { uiTranslations } from '../translations';
-import { getExpertiseItems } from '../data';
+import { getExpertiseItems, contactDetails } from '../data';
 
 interface AppointmentModalProps {
   language: Language;
   isOpen: boolean;
   onClose: () => void;
-  onAppointmentCreated: (appointment: Appointment) => void;
+  onAppointmentCreated: (appointment: Appointment) => void | Promise<boolean>;
 }
 
 export default function AppointmentModal({
@@ -34,6 +34,8 @@ export default function AppointmentModal({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  // Bildirim e-postası gönderilemediyse hastayı yanıltmayan bir ekran gösterilir
+  const [deliveryFailed, setDeliveryFailed] = useState(false);
 
   if (!isOpen) return null;
 
@@ -100,30 +102,35 @@ export default function AppointmentModal({
 
     setIsSubmitting(true);
 
-    // Simulate clinical network synchronization delay
-    setTimeout(() => {
-      const newAppointment: Appointment = {
-        id: `apt-${Date.now()}`,
-        fullName,
-        phone,
-        email,
-        preferredDate,
-        preferredTime,
-        topicId,
-        notes: notes.trim() || undefined,
-        status: 'pending',
-        createdAt: new Date().toISOString(),
-      };
+    const newAppointment: Appointment = {
+      id: `apt-${Date.now()}`,
+      fullName,
+      phone,
+      email,
+      preferredDate,
+      preferredTime,
+      topicId,
+      notes: notes.trim() || undefined,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    };
 
-      // Bubble up to update local state and save to local storage
-      onAppointmentCreated(newAppointment);
-      
+    // Sahte gecikme yerine GERÇEK gönderim beklenir; sonuç ekrana yansır
+    void (async () => {
+      let delivered = false;
+      try {
+        delivered = (await onAppointmentCreated(newAppointment)) === true;
+      } catch {
+        delivered = false;
+      }
+      setDeliveryFailed(!delivered);
       setIsSubmitting(false);
       setIsSuccess(true);
-    }, 1200);
+    })();
   };
 
   const handleReset = () => {
+    setDeliveryFailed(false);
     setFullName('');
     setPhone('');
     setEmail('');
@@ -172,16 +179,43 @@ export default function AppointmentModal({
           {isSuccess ? (
             /* SUCCESS FEEDBACK SCREEN */
             <div className="text-center py-8 space-y-6 animate-in zoom-in duration-200">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-2">
-                <CheckCircle className="w-10 h-10" />
+              <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-2 border ${deliveryFailed ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}>
+                {deliveryFailed ? <AlertCircle className="w-10 h-10" /> : <CheckCircle className="w-10 h-10" />}
               </div>
               
               <div className="space-y-2">
-                <h3 className="text-xl font-bold font-display text-white">{t.appointmentFormSuccess}</h3>
+                <h3 className="text-xl font-bold font-display text-white">
+                  {deliveryFailed
+                    ? (language === 'TR' ? 'Talebiniz kaydedildi, lütfen bizi arayın' : 'Request saved — please contact us')
+                    : t.appointmentFormSuccess}
+                </h3>
                 <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-md mx-auto font-light">
-                  {t.appointmentFormSuccessDesc}
+                  {deliveryFailed
+                    ? (language === 'TR'
+                        ? 'Talebiniz kaydedildi ancak bildirim gönderilemedi. Randevunuzun kesinleşmesi için lütfen telefon veya WhatsApp ile bize ulaşın.'
+                        : 'Your request was saved but the notification could not be delivered. Please call or message us on WhatsApp to confirm your appointment.')
+                    : t.appointmentFormSuccessDesc}
                 </p>
               </div>
+
+              {deliveryFailed && (
+                <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+                  <a
+                    href={`tel:${contactDetails.phone}`}
+                    className="px-5 py-3 bg-gold hover:bg-gold/90 text-navy font-bold text-xs uppercase tracking-wider rounded transition-all inline-flex items-center justify-center gap-2"
+                  >
+                    <Phone className="w-3.5 h-3.5" /> {contactDetails.phoneFormatted}
+                  </a>
+                  <a
+                    href={`https://wa.me/${contactDetails.phone.replace(/\D/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-3 bg-[#25D366] hover:bg-[#1ebe5b] text-white font-bold text-xs uppercase tracking-wider rounded transition-all inline-flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
+                  </a>
+                </div>
+              )}
 
               {/* Quick Summary card */}
               <div className="card-glass p-6 rounded-xl text-left max-w-md mx-auto space-y-3 font-sans">

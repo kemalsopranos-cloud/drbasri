@@ -1,8 +1,8 @@
 import { useState, FormEvent } from 'react';
-import { Award, ShieldCheck, Activity, ChevronRight, Calendar, User, Phone, CheckCircle, AlertCircle } from 'lucide-react';
+import { Award, ShieldCheck, Activity, ChevronRight, Calendar, User, Phone, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
 import { Language, Appointment } from '../types';
 import { uiTranslations } from '../translations';
-import { getExpertiseItems } from '../data';
+import { getExpertiseItems, contactDetails } from '../data';
 // Doktorun kendi ameliyathane fotoğrafı (Instagram, Nisan 2025 — RIRS). Eski stok
 // görselde başka bir cerrah vardı (yaka kartında adı okunuyordu) — geri KOYMA.
 import surgeonImg from '../assets/images/prof-dr-basri-cakiroglu-endoskopik-cerrahi.jpg';
@@ -11,7 +11,7 @@ interface HeroProps {
   language: Language;
   onOpenAppointment: () => void;
   onScrollToExpertise: () => void;
-  onAppointmentCreated: (appointment: Appointment) => void;
+  onAppointmentCreated: (appointment: Appointment) => void | Promise<boolean>;
 }
 
 export default function Hero({
@@ -30,6 +30,8 @@ export default function Hero({
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  // Bildirim gönderilemediyse hastaya sahte onay gösterilmez (bkz. App.handleAppointmentCreated)
+  const [deliveryFailed, setDeliveryFailed] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleFastSubmit = (e: FormEvent) => {
@@ -56,28 +58,36 @@ export default function Hero({
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      const todayStr = new Date().toISOString().split('T')[0];
-      const newAppointment: Appointment = {
-        id: `apt-fast-${Date.now()}`,
-        fullName: fullName.trim(),
-        phone: phone.trim(),
-        email: 'bcakiroglu@hisarhospital.com', // fallback for quick scheduling
-        preferredDate: todayStr,
-        preferredTime: '09:00',
-        topicId,
-        notes: notes.trim() || undefined,
-        status: 'pending',
-        createdAt: new Date().toISOString(),
-      };
+    const todayStr = new Date().toISOString().split('T')[0];
+    const newAppointment: Appointment = {
+      id: `apt-fast-${Date.now()}`,
+      fullName: fullName.trim(),
+      phone: phone.trim(),
+      email: '', // hızlı formda e-posta sorulmuyor
+      preferredDate: todayStr,
+      preferredTime: '09:00',
+      topicId,
+      notes: notes.trim() || undefined,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    };
 
-      onAppointmentCreated(newAppointment);
+    // Sahte gecikme yerine GERÇEK gönderim beklenir
+    void (async () => {
+      let delivered = false;
+      try {
+        delivered = (await onAppointmentCreated(newAppointment)) === true;
+      } catch {
+        delivered = false;
+      }
+      setDeliveryFailed(!delivered);
       setIsSubmitting(false);
       setIsSuccess(true);
-    }, 1000);
+    })();
   };
 
   const handleResetForm = () => {
+    setDeliveryFailed(false);
     setFullName('');
     setPhone('');
     setTopicId('');
@@ -197,20 +207,45 @@ export default function Hero({
               {isSuccess ? (
                 /* FAST SUCCESS SCREEN */
                 <div className="text-center py-8 space-y-5 animate-in zoom-in duration-200">
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-2">
-                    <CheckCircle className="w-8 h-8" />
+                  <div className={`inline-flex items-center justify-center w-14 h-14 rounded-full mb-2 border ${deliveryFailed ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}>
+                    {deliveryFailed ? <AlertCircle className="w-8 h-8" /> : <CheckCircle className="w-8 h-8" />}
                   </div>
                   
                   <div className="space-y-2">
                     <h3 className="text-xl font-bold font-display text-white">
-                      {language === 'TR' ? 'Talep Gönderildi!' : 'Request Received!'}
+                      {deliveryFailed
+                        ? (language === 'TR' ? 'Lütfen bizi arayın' : 'Please contact us')
+                        : (language === 'TR' ? 'Talep Gönderildi!' : 'Request Received!')}
                     </h3>
                     <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                      {language === 'TR'
-                        ? 'Randevu talebiniz başarıyla alınmıştır. Klinik asistanımız en kısa sürede sizinle iletişime geçecektir.'
-                        : 'Your fast request has been registered. Our assistant will contact you shortly.'}
+                      {deliveryFailed
+                        ? (language === 'TR'
+                            ? 'Talebiniz kaydedildi ancak bildirim gönderilemedi. Randevunuz için lütfen telefon veya WhatsApp ile ulaşın.'
+                            : 'Your request was saved but the notification could not be delivered. Please call or message us on WhatsApp.')
+                        : (language === 'TR'
+                            ? 'Randevu talebiniz başarıyla alınmıştır. Klinik asistanımız en kısa sürede sizinle iletişime geçecektir.'
+                            : 'Your fast request has been registered. Our assistant will contact you shortly.')}
                     </p>
                   </div>
+
+                  {deliveryFailed && (
+                    <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                      <a
+                        href={`tel:${contactDetails.phone}`}
+                        className="px-4 py-2.5 bg-gold hover:bg-gold/90 text-navy font-bold text-[11px] uppercase tracking-wider rounded inline-flex items-center justify-center gap-2"
+                      >
+                        <Phone className="w-3.5 h-3.5" /> {contactDetails.phoneFormatted}
+                      </a>
+                      <a
+                        href={`https://wa.me/${contactDetails.phone.replace(/\D/g, '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2.5 bg-[#25D366] hover:bg-[#1ebe5b] text-white font-bold text-[11px] uppercase tracking-wider rounded inline-flex items-center justify-center gap-2"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
+                      </a>
+                    </div>
+                  )}
 
                   <button
                     id="reset-fast-form"
