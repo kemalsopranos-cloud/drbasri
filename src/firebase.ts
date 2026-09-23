@@ -1,5 +1,19 @@
-import { initializeApp } from 'firebase/app';
-import { initializeFirestore } from 'firebase/firestore';
+import type { Firestore } from 'firebase/firestore';
+
+// ---------------------------------------------------------------------------
+// PERFORMANS (23 Eyl 2026): Firebase artık TEMBEL yüklenir.
+//
+// Eskiden `db` modül seviyesinde dışa aktarılıyordu ve App.tsx onu statik
+// import ettiği için firebase+firestore (~750 KB) ANA SAYFANIN ilk JS
+// paketine giriyordu. Mobilde ölçüldü: 1.1 MB paket ve ana sayfa hiç
+// ihtiyaç duymadığı hâlde firestore.googleapis.com'a istek.
+//
+// Artık yalnızca gerçekten gerekli olduğunda (randevu gönderimi, blog yazısı
+// ekleme, hekim paneli) indirilir. Çağrı biçimi (bkz. src/firestore.ts):
+//   const { db, doc, setDoc } = await firestore();
+//
+// ⚠️ Bu dosyadan STATİK `import { db }` geri EKLEME — paketi yeniden şişirir.
+// ---------------------------------------------------------------------------
 
 const firebaseConfig = {
   projectId: "gen-lang-client-0824204549",
@@ -14,5 +28,19 @@ const firebaseConfig = {
   recaptchaSiteKey: ""
 };
 
-const app = initializeApp(firebaseConfig);
-export const db = initializeFirestore(app, {}, firebaseConfig.firestoreDatabaseId || "(default)");
+let dbPromise: Promise<Firestore> | null = null;
+
+/** Firestore örneğini (gerekirse indirerek) döndürür; yalnızca bir kez başlatılır. */
+export function getDb(): Promise<Firestore> {
+  if (!dbPromise) {
+    dbPromise = (async () => {
+      const [{ initializeApp }, { initializeFirestore }] = await Promise.all([
+        import('firebase/app'),
+        import('firebase/firestore'),
+      ]);
+      const app = initializeApp(firebaseConfig);
+      return initializeFirestore(app, {}, firebaseConfig.firestoreDatabaseId || '(default)');
+    })();
+  }
+  return dbPromise;
+}

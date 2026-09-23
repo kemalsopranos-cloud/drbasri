@@ -179,6 +179,8 @@ export default function Hero({
                   alt={language === 'TR' ? 'Prof. Dr. Basri Çakıroğlu ameliyathanede endoskopik böbrek taşı ameliyatı sırasında' : 'Prof. Dr. Basri Çakıroğlu during endoscopic kidney stone surgery'}
                   width={1440}
                   height={810}
+                  fetchPriority="high"
+                  decoding="async"
                   className="w-full h-full object-cover"
                   style={{ objectPosition: 'center 18%' }}
                   referrerPolicy="no-referrer"

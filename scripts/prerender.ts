@@ -35,7 +35,8 @@ const FIRESTORE_TIMEOUT_MS = 20_000;
 
 async function fetchFirestorePosts(): Promise<BlogPost[]> {
   try {
-    const { db } = await import('../src/firebase');
+    const { getDb } = await import('../src/firebase');
+    const db = await getDb();
     const { collection, getDocs, query, where, terminate } = await import('firebase/firestore');
     // Faz 4: her iki dil de çekilir; language alanı rota eşlemesinde kullanılır
     const q = query(collection(db, 'blog_posts'), where('language', 'in', ['TR', 'EN']));

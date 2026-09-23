@@ -2,8 +2,7 @@ import { useState, useEffect, useMemo, Fragment } from 'react';
 import { Calendar, Clock, ChevronUp, Shield, Globe, FileText, Phone, Lock, Instagram } from 'lucide-react';
 import { Language, Appointment, BlogPost } from './types';
 import { uiTranslations } from './translations';
-import { db } from './firebase';
-import { collection, doc, setDoc, updateDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { firestore } from './firestore';
 import { getExpertiseItems, getBlogPosts } from './data';
 import { parseRoute, alternatePath, homePath, blogPath, servicePath, internationalPath, normalizePath } from './routes';
 import InternationalPage from './components/InternationalPage';
@@ -133,13 +132,26 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
       const stored = localStorage.getItem('dr_basri_appointments');
       if (stored) setAppointments(JSON.parse(stored));
     } catch { /* yok say */ }
-    try {
+
+    // PERFORMANS + GÜVENLİK: Randevu dinlemesi yalnızca hekim girişi
+    // yapıldığında başlar. Firestore kuralları zaten anonim okumayı
+    // kapatıyor (firestore.rules), yani ziyaretçide bu dinleme her zaman
+    // hata veriyor ve boşuna firebase paketini indiriyordu.
+    if (!isLoggedIn) return;
+
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
+
+    (async () => {
+      const { db, collection, doc, query, orderBy, onSnapshot } = await firestore();
+      if (cancelled) return;
+      void doc;
       const q = query(
         collection(db, 'appointments'),
         orderBy('createdAt', 'desc')
       );
 
-      const unsubscribe = onSnapshot(q, (snapshot) => {
+      unsubscribe = onSnapshot(q, (snapshot) => {
         const fetched: Appointment[] = [];
         snapshot.forEach((docSnap) => {
           const data = docSnap.data();
@@ -162,12 +174,13 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
       }, (error) => {
         console.error("Failed to load appointments from Firestore:", error);
       });
+    })().catch((e) => console.error("Firestore appointments init error:", e));
 
-      return () => unsubscribe();
-    } catch (e) {
-      console.error("Firestore appointments init error:", e);
-    }
-  }, []);
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
+  }, [isLoggedIn]);
 
   // Back to top scroll listener
   useEffect(() => {
@@ -187,6 +200,7 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
 
     // 2. Save to Firestore
     try {
+      const { db, doc, setDoc } = await firestore();
       await setDoc(doc(db, 'appointments', newApt.id), {
         fullName: newApt.fullName,
         phone: newApt.phone,
@@ -225,6 +239,7 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
 
     // 2. Update in Firestore
     try {
+      const { db, doc, updateDoc } = await firestore();
       await updateDoc(doc(db, 'appointments', id), {
         status: 'cancelled'
       });
@@ -242,6 +257,7 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
 
     // 2. Update in Firestore
     try {
+      const { db, doc, updateDoc } = await firestore();
       await updateDoc(doc(db, 'appointments', id), {
         status: 'confirmed'
       });
@@ -296,6 +312,7 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
 
   const handleAddPost = async (newPost: BlogPost) => {
     try {
+      const { db, doc, setDoc } = await firestore();
       await setDoc(doc(db, 'blog_posts', newPost.id), {
         title: newPost.title,
         slug: newPost.slug,

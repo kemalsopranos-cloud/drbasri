@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { Phone, Mail, MapPin, Clock, ExternalLink, Map } from 'lucide-react';
 import { Language } from '../types';
 import { uiTranslations } from '../translations';
@@ -11,6 +12,24 @@ interface ContactProps {
 export default function Contact({ language }: ContactProps) {
   const t = uiTranslations[language];
   const info = contactDetails;
+
+  // PERFORMANS: Google Maps iframe'i sayfanın en altında ama ilk açılışta
+  // yükleniyordu (ölçüldü: 300 ms'lik üçüncü taraf isteği). Artık ancak
+  // kullanıcı iletişim bölümüne yaklaşınca monte edilir. loading="lazy"
+  // tek başına yetmiyordu — Chrome'un eşiği çok geniş.
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [showMap, setShowMap] = useState(false);
+  useEffect(() => {
+    const el = mapRef.current;
+    if (!el || showMap) return;
+    if (typeof IntersectionObserver === 'undefined') { setShowMap(true); return; }
+    const io = new IntersectionObserver(
+      (entries) => { if (entries.some((e) => e.isIntersecting)) { setShowMap(true); io.disconnect(); } },
+      { rootMargin: '300px' }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [showMap]);
 
   return (
     <section id="contact" className="py-24 bg-navy relative overflow-hidden border-t border-white/10">
@@ -154,15 +173,17 @@ export default function Contact({ language }: ContactProps) {
               </div>
 
               {/* Standard Safe Map Iframe with styling adjustments */}
-              <div className="flex-1 w-full h-full min-h-[300px] relative bg-navy">
-                <iframe
-                  title="Dr. Basri Cakiroglu Clinic Location Map"
-                  src={info.mapEmbedUrl}
-                  className="absolute inset-0 w-full h-full border-0 filter grayscale invert contrast-125 opacity-75 hover:opacity-100 transition-opacity duration-300"
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
+              <div ref={mapRef} className="flex-1 w-full h-full min-h-[300px] relative bg-navy">
+                {showMap && (
+                  <iframe
+                    title="Dr. Basri Cakiroglu Clinic Location Map"
+                    src={info.mapEmbedUrl}
+                    className="absolute inset-0 w-full h-full border-0 filter grayscale invert contrast-125 opacity-75 hover:opacity-100 transition-opacity duration-300"
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                )}
               </div>
             </div>
           </div>

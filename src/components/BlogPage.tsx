@@ -10,8 +10,7 @@ import { getBlogPosts, contactDetails, getExpertiseItems } from '../data';
 import { blogPath, articlePath, servicePath } from '../routes';
 import { generateSlug } from '../utils/seo';
 import AddArticleModal from './AddArticleModal';
-import { db } from '../firebase';
-import { collection, doc, setDoc, deleteDoc, onSnapshot, query, where } from 'firebase/firestore';
+import { firestore } from '../firestore';
 import { updatePageSeo } from '../utils/seo';
 import { buildArticleMeta, buildBlogHubMeta } from '../seo/meta';
 
@@ -65,15 +64,22 @@ export default function BlogPage({
     return () => window.removeEventListener('basri-login-state-changed', handleLoginState);
   }, []);
 
-  // Fetch Firestore posts in real time
+  // Fetch Firestore posts in real time.
+  // PERFORMANS: firebase paketi tembel yüklenir; prerender edilmiş yazılar
+  // (initialDbPosts) zaten ekranda olduğu için gecikme görünmez.
   useEffect(() => {
-    try {
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
+
+    (async () => {
+      const { db, collection, query, where, onSnapshot } = await firestore();
+      if (cancelled) return;
       const q = query(
         collection(db, 'blog_posts'),
         where('language', '==', language)
       );
 
-      const unsubscribe = onSnapshot(q, (snapshot) => {
+      unsubscribe = onSnapshot(q, (snapshot) => {
         const fetched: { post: BlogPost; createdAt: number }[] = [];
         snapshot.forEach((docSnap) => {
           const data = docSnap.data();
@@ -99,11 +105,12 @@ export default function BlogPage({
       }, (error) => {
         console.error("Failed to load blog posts from Firestore:", error);
       });
+    })().catch((e) => console.error("Firestore setup error:", e));
 
-      return () => unsubscribe();
-    } catch (e) {
-      console.error("Firestore setup error:", e);
-    }
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
   }, [language]);
 
   // Combine Firestore database posts with default high-quality articles
@@ -164,6 +171,7 @@ export default function BlogPage({
   const handleAddPost = async (newPost: BlogPost) => {
     try {
       // 1. Save to Firestore
+      const { db, doc, setDoc } = await firestore();
       await setDoc(doc(db, 'blog_posts', newPost.id), {
         title: newPost.title,
         slug: newPost.slug,
@@ -200,6 +208,7 @@ export default function BlogPage({
       return;
     }
     try {
+      const { db, doc, deleteDoc } = await firestore();
       await deleteDoc(doc(db, 'blog_posts', postId));
       try {
         await fetch(`/api/posts/${postId}`, { method: 'DELETE' });
