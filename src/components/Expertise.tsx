@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { L } from '../i18n';
 import {
   Cpu,
   Activity,
@@ -79,7 +80,7 @@ export default function Expertise({ language, onNavigate }: ExpertiseProps) {
                     {getIconComponent(item.iconName)}
                   </div>
                   <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold font-sans">
-                    {language === 'TR' ? 'ÜROLOJİ' : 'UROLOGY'}
+                    {L(language, { TR: 'ÜROLOJİ', EN: 'UROLOGY' })}
                   </span>
                 </div>
 
@@ -108,9 +109,9 @@ export default function Expertise({ language, onNavigate }: ExpertiseProps) {
                     onNavigate(servicePath(language, item.id));
                   }}
                   className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-300 hover:text-gold cursor-pointer focus:outline-none"
-                  title={language === 'TR' ? 'Detaylı Sayfayı Görüntüle' : 'View Full Page'}
+                  title={L(language, { TR: 'Detaylı Sayfayı Görüntüle', EN: 'View Full Page' })}
                 >
-                  <span>{language === 'TR' ? 'Sayfayı Aç' : 'Open Page'}</span>
+                  <span>{L(language, { TR: 'Sayfayı Aç', EN: 'Open Page' })}</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
@@ -204,7 +205,7 @@ export default function Expertise({ language, onNavigate }: ExpertiseProps) {
                 }}
                 className="text-gold hover:text-gold/80 font-bold text-xs uppercase tracking-widest transition-colors focus:outline-none"
               >
-                {language === 'TR' ? 'Tam Sayfayı Görüntüle →' : 'View Full Page →'}
+                {L(language, { TR: 'Tam Sayfayı Görüntüle →', EN: 'View Full Page →' })}
               </a>
               <button
                 id="close-expertise-modal-footer"

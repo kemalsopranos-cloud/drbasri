@@ -1,6 +1,7 @@
 import { MessageCircle } from 'lucide-react';
 import { Language } from '../types';
 import { DOCTOR } from '../seo/site';
+import { L } from '../i18n';
 
 interface WhatsAppButtonProps {
   language: Language;
@@ -15,12 +16,13 @@ interface WhatsAppButtonProps {
  * uluslararası hat açılırsa YALNIZCA orayı değiştir.
  */
 export default function WhatsAppButton({ language, inline = false }: WhatsAppButtonProps) {
-  const text =
-    language === 'EN'
-      ? 'Hello, I am an international patient and would like information about treatment with Prof. Dr. Basri Çakıroğlu.'
-      : 'Merhaba, Prof. Dr. Basri Çakıroğlu ile randevu ve tedavi hakkında bilgi almak istiyorum.';
+  const text = L(language, {
+    TR: 'Merhaba, Prof. Dr. Basri Çakıroğlu ile randevu ve tedavi hakkında bilgi almak istiyorum.',
+    EN: 'Hello, I am an international patient and would like information about treatment with Prof. Dr. Basri Çakıroğlu.',
+    RU: 'Здравствуйте! Хочу получить информацию о лечении и записи на приём к проф. д-ру Басри Чакыроглу.',
+  });
   const href = `https://wa.me/${DOCTOR.telephoneRaw.replace(/\D/g, '')}?text=${encodeURIComponent(text)}`;
-  const label = language === 'EN' ? 'WhatsApp' : 'WhatsApp ile yazın';
+  const label = L(language, { TR: 'WhatsApp ile yazın', EN: 'WhatsApp', RU: 'Написать в WhatsApp' });
 
   const button = (
     <a

@@ -1,5 +1,6 @@
 import { getDb } from './firebase';
 import type { Auth, User } from 'firebase/auth';
+import type { Language } from './types';
 
 // ---------------------------------------------------------------------------
 // Hekim girişi — Firebase Authentication (e-posta + şifre).
@@ -60,7 +61,7 @@ export async function watchDoctorAuth(cb: (user: User | null) => void): Promise<
 }
 
 /** Firebase hata kodlarını hastanın/doktorun anlayacağı metne çevirir. */
-export function authErrorMessage(err: unknown, language: 'TR' | 'EN'): string {
+export function authErrorMessage(err: unknown, language: Language): string {
   const code = (err as { code?: string })?.code ?? '';
   const tr: Record<string, string> = {
     'auth/invalid-email': 'Geçersiz e-posta adresi.',
@@ -80,6 +81,6 @@ export function authErrorMessage(err: unknown, language: 'TR' | 'EN'): string {
     'auth/network-request-failed': 'Network error. Check your connection.',
     'auth/operation-not-allowed': 'E-mail/password sign-in is not enabled in the Firebase Console.',
   };
-  const table = language === 'TR' ? tr : en;
+  const table = language === 'TR' ? tr : en; // RU: İngilizce mesaj (yalnızca hekim paneli)
   return table[code] ?? (language === 'TR' ? 'Giriş yapılamadı.' : 'Sign-in failed.');
 }

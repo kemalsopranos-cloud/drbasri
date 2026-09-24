@@ -1,10 +1,12 @@
 import { useEffect, useMemo } from 'react';
+import { L } from '../i18n';
 import {
   Calendar, ChevronRight, ArrowLeft, Phone, HelpCircle, CheckCircle2,
   Cpu, Activity, ShieldAlert, Sparkles, Heart, User, Instagram, BookOpen, Clock
 } from 'lucide-react';
 import { Language, ExpertiseItem } from '../types';
 import { uiTranslations } from '../translations';
+import LanguageSwitcher from './LanguageSwitcher';
 import { getExpertiseItems, contactDetails, getBlogPosts } from '../data';
 import { servicePath, articlePath } from '../routes';
 import { updatePageSeo } from '../utils/seo';
@@ -79,7 +81,7 @@ export default function ServicePage({
           <div className="text-center">
             {/* SEO: sayfada tek <h1> olmalı — o da içerik başlığı (aşağıda) */}
             <p className="text-sm sm:text-base font-bold font-display text-white tracking-tight">
-              {language === 'TR' ? 'Uzmanlık Alanı' : 'Medical Specialty'}
+              {L(language, { TR: 'Uzmanlık Alanı', EN: 'Medical Specialty' })}
             </p>
             <p className="text-[10px] text-gold tracking-wider uppercase font-medium">
               Prof. Dr. Basri Çakıroğlu
@@ -87,12 +89,7 @@ export default function ServicePage({
           </div>
 
           <div className="flex items-center space-x-3">
-            <button
-              onClick={() => setLanguage(language === 'TR' ? 'EN' : 'TR')}
-              className="px-2.5 py-1 text-[11px] font-bold uppercase rounded border border-white/20 hover:border-gold text-slate-300 hover:text-gold transition-colors"
-            >
-              {language === 'TR' ? 'EN' : 'TR'}
-            </button>
+            <LanguageSwitcher language={language} setLanguage={setLanguage} compact />
             <button
               onClick={onOpenAppointment}
               className="hidden md:inline-flex items-center space-x-2 px-4 py-2 bg-gold hover:bg-gold/90 text-navy font-bold text-xs rounded uppercase tracking-wider transition-all shadow-md cursor-pointer"
@@ -135,7 +132,7 @@ export default function ServicePage({
               {getIconComponent(item.iconName)}
             </div>
             <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">
-              {language === 'TR' ? 'ÜROLOJİ · İSTANBUL / ÜMRANİYE' : 'UROLOGY · ISTANBUL / ÜMRANİYE'}
+              {L(language, { TR: 'ÜROLOJİ · İSTANBUL / ÜMRANİYE', EN: 'UROLOGY · ISTANBUL / ÜMRANİYE' })}
             </span>
           </div>
 
@@ -210,7 +207,7 @@ export default function ServicePage({
           <section className="card-glass p-6 sm:p-8 rounded-xl border border-white/10 mb-10" aria-labelledby="service-faq">
             <h2 id="service-faq" className="text-lg sm:text-xl font-bold font-display text-white mb-6 flex items-center">
               <HelpCircle className="w-5 h-5 text-gold mr-2" />
-              {language === 'TR' ? 'Sık Sorulan Sorular' : 'Frequently Asked Questions'}
+              {L(language, { TR: 'Sık Sorulan Sorular', EN: 'Frequently Asked Questions' })}
             </h2>
             <dl className="space-y-5">
               {item.faq.map((f, i) => (
@@ -228,7 +225,7 @@ export default function ServicePage({
           <section className="mb-10">
             <h2 className="text-lg font-bold font-display text-white mb-5 flex items-center">
               <BookOpen className="w-4 h-4 text-gold mr-2" />
-              {language === 'TR' ? 'Bu Konuda Hazırladığımız Rehberler' : 'Related Patient Guides'}
+              {L(language, { TR: 'Bu Konuda Hazırladığımız Rehberler', EN: 'Related Patient Guides' })}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {relatedArticles.map((post) => (
@@ -267,14 +264,10 @@ export default function ServicePage({
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center md:text-left">
               <h3 className="text-lg sm:text-xl font-bold font-display text-white">
-                {language === 'TR'
-                  ? 'Bu Konuda Uzman Görüşü veya Randevu mu Almak İstiyorsunuz?'
-                  : 'Looking for an Expert Opinion or Consultation?'}
+                {L(language, { TR: 'Bu Konuda Uzman Görüşü veya Randevu mu Almak İstiyorsunuz?', EN: 'Looking for an Expert Opinion or Consultation?' })}
               </h3>
               <p className="text-slate-300 text-xs sm:text-sm max-w-xl font-light">
-                {language === 'TR'
-                  ? 'Prof. Dr. Basri Çakıroğlu ile muayene planlamak veya ameliyat süreçleri hakkında bilgi almak için iletişime geçebilirsiniz.'
-                  : 'You can schedule an appointment or get a second opinion on surgical options with Prof. Dr. Basri Cakiroglu.'}
+                {L(language, { TR: 'Prof. Dr. Basri Çakıroğlu ile muayene planlamak veya ameliyat süreçleri hakkında bilgi almak için iletişime geçebilirsiniz.', EN: 'You can schedule an appointment or get a second opinion on surgical options with Prof. Dr. Basri Cakiroglu.' })}
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
@@ -282,7 +275,7 @@ export default function ServicePage({
                 onClick={onOpenAppointment}
                 className="px-6 py-3 bg-gold hover:bg-gold/90 text-navy font-bold text-xs uppercase tracking-wider rounded transition-all text-center shadow-lg cursor-pointer"
               >
-                {language === 'TR' ? 'Randevu Oluştur' : 'Schedule Visit'}
+                {L(language, { TR: 'Randevu Oluştur', EN: 'Schedule Visit' })}
               </button>
               <a
                 href={`tel:${contactDetails.phone}`}
@@ -299,7 +292,7 @@ export default function ServicePage({
         {relatedItems.length > 0 && (
           <div className="mb-12">
             <h3 className="text-lg font-bold font-display text-white mb-6">
-              {language === 'TR' ? 'İlgili Diğer Uzmanlık Alanları' : 'Other Related Specialties'}
+              {L(language, { TR: 'İlgili Diğer Uzmanlık Alanları', EN: 'Other Related Specialties' })}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedItems.map((rel) => {

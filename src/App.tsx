@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, Fragment } from 'react';
+import { L } from './i18n';
 import { Calendar, Clock, ChevronUp, Shield, Globe, FileText, Phone, Lock, Instagram } from 'lucide-react';
 import { Language, Appointment, BlogPost } from './types';
 import { uiTranslations } from './translations';
@@ -397,14 +398,15 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
     return (
       <>
         <InternationalPage
+          lang={route.lang}
           onNavigateHome={navigateToHome}
           onNavigate={navigateToPath}
           onOpenAppointment={() => setIsAppointmentOpen(true)}
           setLanguage={setLanguage}
         />
-        <WhatsAppButton language="EN" />
+        <WhatsAppButton language={route.lang} />
         <AppointmentModal
-          language="EN"
+          language={route.lang}
           isOpen={isAppointmentOpen}
           onClose={() => setIsAppointmentOpen(false)}
           onAppointmentCreated={handleAppointmentCreated}
@@ -480,7 +482,7 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
       <footer className="bg-black/30 border-t border-white/5 py-12 px-6 relative z-10 text-slate-400">
         <div className="max-w-7xl mx-auto pb-8 mb-8 border-b border-white/5">
           <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-3 text-center md:text-left">
-            {language === 'TR' ? 'Uzmanlık Alanlarımız' : 'Our Specialties'}
+            {L(language, { TR: 'Uzmanlık Alanlarımız', EN: 'Our Specialties' })}
           </p>
           <nav className="flex flex-wrap justify-center md:justify-start gap-x-5 gap-y-2 text-xs">
             {getExpertiseItems(language).map((item) => (
@@ -542,15 +544,15 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
                 onClick={(e) => { e.preventDefault(); navigateToBlog(); }}
                 className="hover:text-gold transition-colors focus:outline-none cursor-pointer"
               >
-                {language === 'TR' ? 'Tıbbi Yayınlar (Blog)' : 'Medical Blog'}
+                {L(language, { TR: 'Tıbbi Yayınlar (Blog)', EN: 'Medical Blog' })}
               </a>
-              {language === 'EN' && (
+              {language !== 'TR' && (
                 <a
-                  href={internationalPath()}
-                  onClick={(e) => { e.preventDefault(); navigateToPath(internationalPath()); }}
+                  href={internationalPath(language)}
+                  onClick={(e) => { e.preventDefault(); navigateToPath(internationalPath(language)); }}
                   className="hover:text-gold transition-colors focus:outline-none cursor-pointer"
                 >
-                  International Patients
+                  {language === 'RU' ? 'Лечение в Турции' : 'International Patients'}
                 </a>
               )}
               <button
@@ -566,17 +568,17 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
               id="footer-doctor-login"
               onClick={() => setIsAddModalOpen(true)}
               className="flex items-center space-x-2 px-5 py-2.5 bg-gold/10 hover:bg-gold/20 active:bg-gold/30 border border-gold/30 hover:border-gold/50 text-gold rounded-sm text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer focus:outline-none shrink-0"
-              title={language === 'TR' ? 'Hekim & Yazar Giriş Paneli' : 'Doctor & Author Login Portal'}
+              title={L(language, { TR: 'Hekim & Yazar Giriş Paneli', EN: 'Doctor & Author Login Portal' })}
             >
               {isLoggedIn ? (
                 <>
                   <Shield className="w-3.5 h-3.5" />
-                  <span>{language === 'TR' ? 'Yazar Paneli' : 'Author Panel'}</span>
+                  <span>{L(language, { TR: 'Yazar Paneli', EN: 'Author Panel' })}</span>
                 </>
               ) : (
                 <>
                   <Lock className="w-3.5 h-3.5" />
-                  <span>{language === 'TR' ? 'Hekim Girişi' : 'Doctor Login'}</span>
+                  <span>{L(language, { TR: 'Hekim Girişi', EN: 'Doctor Login' })}</span>
                 </>
               )}
             </button>
@@ -626,7 +628,7 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
           id="floating-dial-btn"
           href="tel:+905332078903"
           className="bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 p-4 rounded-full shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center border border-emerald-400/20"
-          title={language === 'TR' ? 'Hemen Arayın' : 'Call Assistant Now'}
+          title={L(language, { TR: 'Hemen Arayın', EN: 'Call Assistant Now' })}
         >
           <Phone className="w-5 h-5 fill-slate-950" />
         </a>

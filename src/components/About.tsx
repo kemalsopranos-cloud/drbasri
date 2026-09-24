@@ -1,4 +1,5 @@
 import { GraduationCap, Award, CheckCircle } from 'lucide-react';
+import { L } from '../i18n';
 import { Language } from '../types';
 import { uiTranslations } from '../translations';
 import { getMilestones } from '../data';
@@ -12,9 +13,9 @@ export default function About({ language }: AboutProps) {
   const milestones = getMilestones(language);
 
   const stats = [
-    { value: "30+", label: t.aboutStatsExperience, sub: language === 'TR' ? 'Tıp & Üroloji Pratiği' : 'Medical & Urology Practice' },
-    { value: "5.000+", label: t.aboutStatsSurgeries, sub: language === 'TR' ? 'Mikro & Lazer Cerrahi' : 'Micro & Laser Cases' },
-    { value: "80+", label: t.aboutStatsPapers, sub: language === 'TR' ? 'Uluslararası Yayın' : 'Peer-Reviewed Articles' }
+    { value: "30+", label: t.aboutStatsExperience, sub: L(language, { TR: 'Tıp & Üroloji Pratiği', EN: 'Medical & Urology Practice' })},
+    { value: "5.000+", label: t.aboutStatsSurgeries, sub: L(language, { TR: 'Mikro & Lazer Cerrahi', EN: 'Micro & Laser Cases' })},
+    { value: "80+", label: t.aboutStatsPapers, sub: L(language, { TR: 'Uluslararası Yayın', EN: 'Peer-Reviewed Articles' })}
   ];
 
   return (
@@ -48,7 +49,28 @@ export default function About({ language }: AboutProps) {
               </h3>
               
               <div className="space-y-4 text-slate-300 text-sm leading-relaxed font-light text-justify">
-                {language === 'TR' ? (
+                {language === 'RU' ? (
+                  <>
+                    <p>
+                      <strong>Проф. д-р Басри Чакыроглу</strong> родился в 1969 году в Самсуне. В 1994 году окончил
+                      <strong> медицинский факультет Университета Ондокуз Майыс</strong>, а в 2002 году завершил
+                      ординатуру по урологии в <strong>учебно-исследовательской больнице Таксим</strong>. Работал
+                      главным врачом и урологом в государственной больнице Шебинкарахисар, а с 2010 года руководит
+                      урологической клиникой <strong>Hisar Intercontinental Hospital</strong>.
+                    </p>
+                    <p>
+                      В 2020 году получил звание <strong>доцента урологии</strong>, преподавал в университетах Атлас и
+                      Стамбульском университете Галата. С 12 июня 2025 года — <strong>профессор</strong> кафедры урологии
+                      <strong> медицинского факультета Университета Ускюдар</strong>, где преподаёт с 2023 года.
+                    </p>
+                    <p>
+                      Автор более 30 научных статей в национальных и международных рецензируемых журналах. Член
+                      Турецкой урологической ассоциации, Европейской ассоциации урологов (EAU), Общества эндоурологии,
+                      Евразийской ассоциации онкоурологии и Ассоциации андрологии. Основные научные интересы:
+                      онкоурология, андрология и малоинвазивная урологическая хирургия.
+                    </p>
+                  </>
+                ) : language === 'TR' ? (
                   <>
                     <p>
                       <strong>Prof. Dr. Basri Çakıroğlu</strong>, 1969 yılında Samsun’da doğmuştur. 1994 yılında <strong>Ondokuz Mayıs Üniversitesi Tıp Fakültesi</strong>’nden mezun olmuş, 2002 yılında <strong>Taksim Eğitim ve Araştırma Hastanesi</strong>’nde Üroloji ihtisasını tamamlamıştır. Kariyeri boyunca Şebinkarahisar Devlet Hastanesi’nde Başhekim ve Üroloji Uzmanı olarak görev almış, 2010 yılından itibaren <strong>Hisar Intercontinental Hospital</strong>’da Üroloji Kliniği Sorumlusu olarak çalışmaktadır.
@@ -79,19 +101,19 @@ export default function About({ language }: AboutProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 pt-8 border-t border-white/10">
                 <div className="flex items-center space-x-3 text-slate-300 text-xs">
                   <CheckCircle className="w-4 h-4 text-gold shrink-0" />
-                  <span>{language === 'TR' ? 'Kişiselleştirilmiş Cerrahi Plan' : 'Customized Surgical Mapping'}</span>
+                  <span>{L(language, { TR: 'Kişiselleştirilmiş Cerrahi Plan', EN: 'Customized Surgical Mapping' })}</span>
                 </div>
                 <div className="flex items-center space-x-3 text-slate-300 text-xs">
                   <CheckCircle className="w-4 h-4 text-gold shrink-0" />
-                  <span>{language === 'TR' ? 'Multidisipliner Onkoloji' : 'Multidisciplinary Cancer Board'}</span>
+                  <span>{L(language, { TR: 'Multidisipliner Onkoloji', EN: 'Multidisciplinary Cancer Board' })}</span>
                 </div>
                 <div className="flex items-center space-x-3 text-slate-300 text-xs">
                   <CheckCircle className="w-4 h-4 text-gold shrink-0" />
-                  <span>{language === 'TR' ? 'Minimal İnvaziv Yaklaşımlar' : 'Minimally Invasive Focus'}</span>
+                  <span>{L(language, { TR: 'Minimal İnvaziv Yaklaşımlar', EN: 'Minimally Invasive Focus' })}</span>
                 </div>
                 <div className="flex items-center space-x-3 text-slate-300 text-xs">
                   <CheckCircle className="w-4 h-4 text-gold shrink-0" />
-                  <span>{language === 'TR' ? 'Hızlı İyileşme Protokolleri' : 'Rapid-Recovery Protocols'}</span>
+                  <span>{L(language, { TR: 'Hızlı İyileşme Protokolleri', EN: 'Rapid-Recovery Protocols' })}</span>
                 </div>
               </div>
             </div>

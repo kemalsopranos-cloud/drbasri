@@ -1,14 +1,16 @@
-import { Milestone, ExpertiseItem, BlogPost, ContactInfo } from './types';
+import { Milestone, ExpertiseItem, BlogPost, ContactInfo, Language } from './types';
 import { ARTICLES_TR } from './content/articles';
 import { DOCTOR } from './seo/site';
 import { SERVICE_SLUGS } from './routes';
+import { MILESTONES_RU, EXPERTISE_RU } from './data-ru';
+import { ARTICLES_RU } from './content/articles-ru';
 import { ARTICLES_EN } from './content/articles-en';
 
 // Hizmet sayfası slug'ları artık src/routes.ts'te (TR + EN). Bu dışa aktarım
 // TR slug'lar için geriye dönük uyumluluk; yeni kodda servicePath(lang, id) kullan.
 export const expertiseSlugs: Record<string, string> = SERVICE_SLUGS.TR;
 
-export function getExpertiseItemBySlug(lang: 'TR' | 'EN', slug: string): ExpertiseItem | undefined {
+export function getExpertiseItemBySlug(lang: Language, slug: string): ExpertiseItem | undefined {
   const table = SERVICE_SLUGS[lang];
   const id = Object.keys(table).find((key) => table[key] === slug);
   if (!id) return undefined;
@@ -16,7 +18,8 @@ export function getExpertiseItemBySlug(lang: 'TR' | 'EN', slug: string): Experti
 }
 
 // Academic Milestones Timeline
-export const getMilestones = (lang: 'TR' | 'EN'): Milestone[] => {
+export const getMilestones = (lang: Language): Milestone[] => {
+  if (lang === 'RU') return MILESTONES_RU;
   return lang === 'TR'
     ? [
         { year: "2025 - Günümüz", title: "Üroloji Profesörü", institution: "Üsküdar Üniversitesi Tıp Fakültesi" },
@@ -35,7 +38,8 @@ export const getMilestones = (lang: 'TR' | 'EN'): Milestone[] => {
 };
 
 // Medical Specialties Data
-export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
+export const getExpertiseItems = (lang: Language): ExpertiseItem[] => {
+  if (lang === 'RU') return EXPERTISE_RU;
   return lang === 'TR'
     ? [
         {
@@ -356,7 +360,8 @@ export const getExpertiseItems = (lang: 'TR' | 'EN'): ExpertiseItem[] => {
 };
 
 // High-Quality Clinical & SEO Blog Posts
-export const getBlogPosts = (lang: 'TR' | 'EN'): BlogPost[] => {
+export const getBlogPosts = (lang: Language): BlogPost[] => {
+  if (lang === 'RU') return ARTICLES_RU;
   return lang === 'TR'
     ? [
         // Faz 2 — hasta sorularına yönelik uzun makaleler (src/content/articles.ts)

@@ -1,4 +1,8 @@
-export type Language = 'TR' | 'EN';
+// RU (24 Eyl 2026): Rusça, Türkiye'ye hasta gönderen ilk pazarlardan biri.
+// Yeni dil eklerken dokunulacak yerler: src/routes.ts (önek + slug tablosu),
+// src/translations.ts (uiTranslations), src/i18n.ts (RU_TEXT), src/data.ts
+// (hizmetler + makaleler), src/seo/meta.ts (LOCALE + meta metinleri).
+export type Language = 'TR' | 'EN' | 'RU';
 
 export interface Milestone {
   year: string;
@@ -49,6 +53,7 @@ export interface BlogPost {
   sources?: SourceRef[];
   relatedService?: string;  // expertiseSlugs anahtarı → hizmet sayfasına iç bağlantı
   translationOf?: string;   // diğer dildeki karşılığın slug'ı (hreflang + dil düğmesi)
+  translationLang?: Language; // karşılığın dili (TR yazılarında; varsayılan EN)
 }
 
 export interface Appointment {

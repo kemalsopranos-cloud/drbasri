@@ -39,7 +39,7 @@ async function fetchFirestorePosts(): Promise<BlogPost[]> {
     const db = await getDb();
     const { collection, getDocs, query, where, terminate } = await import('firebase/firestore');
     // Faz 4: her iki dil de çekilir; language alanı rota eşlemesinde kullanılır
-    const q = query(collection(db, 'blog_posts'), where('language', 'in', ['TR', 'EN']));
+    const q = query(collection(db, 'blog_posts'), where('language', 'in', ['TR', 'EN', 'RU']));
 
     const snapshot = await Promise.race([
       getDocs(q),
@@ -65,7 +65,7 @@ async function fetchFirestorePosts(): Promise<BlogPost[]> {
           author: data.author || 'Prof. Dr. Basri Çakıroğlu',
           keywords: data.keywords || '',
           metaDescription: data.metaDescription || data.excerpt || '',
-          language: (data.language === 'EN' ? 'EN' : 'TR') as Language,
+          language: (['EN', 'RU'].includes(data.language) ? data.language : 'TR') as Language,
         },
         createdAt: data.createdAt || 0,
       });
@@ -103,9 +103,9 @@ async function main() {
   const { render } = (await import(serverEntry)) as { render: (p: string, posts: BlogPost[]) => string };
 
   const firestorePosts = await fetchFirestorePosts();
-  const postsByLang: Record<Language, BlogPost[]> = { TR: [], EN: [] };
+  const postsByLang: Record<Language, BlogPost[]> = { TR: [], EN: [], RU: [] };
   const routes: string[] = [];
-  for (const lang of ['TR', 'EN'] as Language[]) {
+  for (const lang of ['TR', 'EN', 'RU'] as Language[]) {
     const fromDb = firestorePosts.filter((p) => (p.language ?? 'TR') === lang);
     // Firestore'daki bir yazı varsayılanla aynı slug'a sahipse Firestore kazanır
     const seen = new Set<string>();
@@ -118,7 +118,7 @@ async function main() {
     postsByLang[lang] = all;
     routes.push(homePath(lang));
     routes.push(...getExpertiseItems(lang).map((i) => servicePath(lang, i.id)));
-    if (lang === 'EN') routes.push(internationalPath());
+    if (lang !== 'TR') routes.push(internationalPath(lang));
     routes.push(blogPath(lang));
     routes.push(...all.map((p) => articlePath(lang, p.slug)));
   }

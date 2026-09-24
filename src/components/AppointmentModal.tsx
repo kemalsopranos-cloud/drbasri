@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { L } from '../i18n';
 import { Calendar, User, Phone, Mail, MessageSquare, Clock, X, CheckCircle, AlertCircle, FileText, MessageCircle } from 'lucide-react';
 import { Language, Appointment, ExpertiseItem } from '../types';
 import { uiTranslations } from '../translations';
@@ -46,23 +47,19 @@ export default function AppointmentModal({
     if (!fullName.trim()) {
       tempErrors.fullName = t.appointmentFormRequired;
     } else if (fullName.trim().split(' ').length < 2) {
-      tempErrors.fullName = language === 'TR'
-        ? 'Lütfen adınızı ve soyadınızı tam giriniz.'
-        : 'Please enter your full name (first and last name).';
+      tempErrors.fullName = L(language, { TR: 'Lütfen adınızı ve soyadınızı tam giriniz.', EN: 'Please enter your full name (first and last name).' });
     }
 
     if (!phone.trim()) {
       tempErrors.phone = t.appointmentFormRequired;
     } else if (phone.replace(/\D/g, '').length < 9) {
-      tempErrors.phone = language === 'TR'
-        ? 'Geçerli bir telefon numarası giriniz (En az 10 hane).'
-        : 'Please enter a valid phone number.';
+      tempErrors.phone = L(language, { TR: 'Geçerli bir telefon numarası giriniz (En az 10 hane).', EN: 'Please enter a valid phone number.' });
     }
 
     if (!email.trim()) {
       tempErrors.email = t.appointmentFormRequired;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      tempErrors.email = language === 'TR' ? 'E-posta formatı geçersizdir.' : 'Invalid email format.';
+      tempErrors.email = L(language, { TR: 'E-posta formatı geçersizdir.', EN: 'Invalid email format.' });
     }
 
     if (!preferredDate) {
@@ -73,7 +70,7 @@ export default function AppointmentModal({
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       if (selected < today) {
-        tempErrors.preferredDate = language === 'TR' ? 'Geçmiş bir tarih seçemezsiniz.' : 'Cannot select a past date.';
+        tempErrors.preferredDate = L(language, { TR: 'Geçmiş bir tarih seçemezsiniz.', EN: 'Cannot select a past date.' });
       }
     }
 
@@ -86,9 +83,7 @@ export default function AppointmentModal({
     }
 
     if (!privacyConsent) {
-      tempErrors.privacyConsent = language === 'TR'
-        ? 'Randevu için aydınlatma metnini onaylamanız gerekmektedir.'
-        : 'You must accept the privacy terms to request an appointment.';
+      tempErrors.privacyConsent = L(language, { TR: 'Randevu için aydınlatma metnini onaylamanız gerekmektedir.', EN: 'You must accept the privacy terms to request an appointment.' });
     }
 
     setErrors(tempErrors);
@@ -186,14 +181,12 @@ export default function AppointmentModal({
               <div className="space-y-2">
                 <h3 className="text-xl font-bold font-display text-white">
                   {deliveryFailed
-                    ? (language === 'TR' ? 'Talebiniz kaydedildi, lütfen bizi arayın' : 'Request saved — please contact us')
+                    ? (L(language, { TR: 'Talebiniz kaydedildi, lütfen bizi arayın', EN: 'Request saved — please contact us' }))
                     : t.appointmentFormSuccess}
                 </h3>
                 <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-md mx-auto font-light">
                   {deliveryFailed
-                    ? (language === 'TR'
-                        ? 'Talebiniz kaydedildi ancak bildirim gönderilemedi. Randevunuzun kesinleşmesi için lütfen telefon veya WhatsApp ile bize ulaşın.'
-                        : 'Your request was saved but the notification could not be delivered. Please call or message us on WhatsApp to confirm your appointment.')
+                    ? (L(language, { TR: 'Talebiniz kaydedildi ancak bildirim gönderilemedi. Randevunuzun kesinleşmesi için lütfen telefon veya WhatsApp ile bize ulaşın.', EN: 'Your request was saved but the notification could not be delivered. Please call or message us on WhatsApp to confirm your appointment.' }))
                     : t.appointmentFormSuccessDesc}
                 </p>
               </div>
@@ -267,7 +260,7 @@ export default function AppointmentModal({
                     id="input-fullname"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder={language === 'TR' ? 'Örn: Ahmet Yılmaz' : 'e.g. John Doe'}
+                    placeholder={L(language, { TR: 'Örn: Ahmet Yılmaz', EN: 'e.g. John Doe' })}
                     className={`w-full pl-10 pr-4 py-3 bg-white/5 text-white rounded border ${
                       errors.fullName ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-gold'
                     } focus:outline-none transition-all text-xs font-sans`}
@@ -414,7 +407,7 @@ export default function AppointmentModal({
                         errors.preferredTime ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-gold'
                       } focus:outline-none transition-all text-xs cursor-pointer appearance-none`}
                     >
-                      <option value="" className="bg-navy text-slate-400">{language === 'TR' ? 'Saat seçiniz...' : 'Select a time...'}</option>
+                      <option value="" className="bg-navy text-slate-400">{L(language, { TR: 'Saat seçiniz...', EN: 'Select a time...' })}</option>
                       {availableSlots.map((slot) => (
                         <option key={slot} value={slot} className="bg-navy text-white">
                           {slot}
@@ -448,7 +441,7 @@ export default function AppointmentModal({
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     rows={3}
-                    placeholder={language === 'TR' ? 'Şikayetinizi kısaca açıklayabilirsiniz...' : 'Describe your concerns or health symptoms...'}
+                    placeholder={L(language, { TR: 'Şikayetinizi kısaca açıklayabilirsiniz...', EN: 'Describe your concerns or health symptoms...' })}
                     className="w-full pl-10 pr-4 py-3 bg-white/5 text-white rounded border border-white/10 focus:border-gold focus:outline-none transition-all text-xs resize-none font-light"
                   />
                 </div>

@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, MouseEvent } from 'react';
+import { L } from '../i18n';
 import {
   Search, Calendar, User, Clock, ArrowRight, ArrowLeft, ChevronRight,
   FileText, Plus, Trash2, Share2, Check, ExternalLink, Shield, BookOpen,
@@ -6,8 +7,9 @@ import {
 } from 'lucide-react';
 import { Language, BlogPost, Appointment } from '../types';
 import { uiTranslations } from '../translations';
+import LanguageSwitcher from './LanguageSwitcher';
 import { getBlogPosts, contactDetails, getExpertiseItems } from '../data';
-import { blogPath, articlePath, servicePath } from '../routes';
+import { blogPath, articlePath, servicePath, LANG_PREFIX } from '../routes';
 import { generateSlug } from '../utils/seo';
 import AddArticleModal from './AddArticleModal';
 import { firestore } from '../firestore';
@@ -204,7 +206,7 @@ export default function BlogPage({
 
   const handleDeletePost = async (postId: string, e: MouseEvent) => {
     e.stopPropagation();
-    if (!confirm(language === 'TR' ? 'Bu makaleyi silmek istediğinize emin misiniz?' : 'Are you sure you want to delete this article?')) {
+    if (!confirm(L(language, { TR: 'Bu makaleyi silmek istediğinize emin misiniz?', EN: 'Are you sure you want to delete this article?' }))) {
       return;
     }
     try {
@@ -289,7 +291,9 @@ export default function BlogPage({
       }
       const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
       if (link) {
-        const href = link[2].startsWith('/') && language === 'EN' && !link[2].startsWith('/en') ? `/en${link[2]}` : link[2];
+        // Makale içi "/blog/..." bağlantısına sayfanın dil önekini ekle
+        const pre = LANG_PREFIX[language];
+        const href = link[2].startsWith('/') && pre && !link[2].startsWith(pre) ? `${pre}${link[2]}` : link[2];
         return (
           <a
             key={i}
@@ -370,7 +374,7 @@ export default function BlogPage({
           <div className="text-center">
             {/* SEO: sayfada tek <h1> olmalı — yazıda makale başlığı, listede bölüm başlığı */}
             <p className="text-sm sm:text-base font-bold font-display text-white tracking-tight">
-              {language === 'TR' ? 'Tıbbi Bilgi & Sağlık Rehberi' : 'Medical Knowledge Hub'}
+              {L(language, { TR: 'Tıbbi Bilgi & Sağlık Rehberi', EN: 'Medical Knowledge Hub' })}
             </p>
             <p className="text-[10px] text-gold tracking-wider uppercase font-medium">
               Prof. Dr. Basri Çakıroğlu
@@ -379,12 +383,7 @@ export default function BlogPage({
 
           {/* Right Action: Language and Appointment CTA */}
           <div className="flex items-center space-x-3">
-            <button
-              onClick={() => setLanguage(language === 'TR' ? 'EN' : 'TR')}
-              className="px-2.5 py-1 text-[11px] font-bold uppercase rounded border border-white/20 hover:border-gold text-slate-300 hover:text-gold transition-colors"
-            >
-              {language === 'TR' ? 'EN' : 'TR'}
-            </button>
+            <LanguageSwitcher language={language} setLanguage={setLanguage} compact />
 
             <button
               onClick={onOpenAppointment}
@@ -434,7 +433,7 @@ export default function BlogPage({
                 className="inline-flex items-center space-x-2 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>{language === 'TR' ? 'Tüm Makalelere Dön' : 'Back to all articles'}</span>
+                <span>{L(language, { TR: 'Tüm Makalelere Dön', EN: 'Back to all articles' })}</span>
               </button>
 
               <div className="flex items-center space-x-2">
@@ -444,14 +443,14 @@ export default function BlogPage({
                   title="Bağlantıyı Kopyala"
                 >
                   {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5 text-gold" />}
-                  <span>{copiedLink ? (language === 'TR' ? 'Kopyalandı!' : 'Copied!') : (language === 'TR' ? 'Paylaş' : 'Share')}</span>
+                  <span>{copiedLink ? (L(language, { TR: 'Kopyalandı!', EN: 'Copied!' })) : (L(language, { TR: 'Paylaş', EN: 'Share' }))}</span>
                 </button>
 
                 {isLoggedIn && activePost.id.startsWith('custom-article-') && (
                   <button
                     onClick={(e) => handleDeletePost(activePost.id, e)}
                     className="p-1.5 text-slate-500 hover:text-red-400 bg-white/5 hover:bg-white/10 rounded border border-white/5 hover:border-red-500/20 transition-all cursor-pointer"
-                    title={language === 'TR' ? 'Makaleyi Sil' : 'Delete Article'}
+                    title={L(language, { TR: 'Makaleyi Sil', EN: 'Delete Article' })}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -475,7 +474,7 @@ export default function BlogPage({
                 </span>
                 {activePost.dateModified && activePost.dateModified !== activePost.datePublished && (
                   <span className="text-xs text-slate-500">
-                    {language === 'TR' ? 'Güncelleme: ' : 'Updated: '}{activePost.dateModified}
+                    {L(language, { TR: 'Güncelleme: ', EN: 'Updated: ' })}{activePost.dateModified}
                   </span>
                 )}
               </div>
@@ -515,7 +514,7 @@ export default function BlogPage({
               <div className="card-glass p-5 rounded-xl mb-8 border border-white/10">
                 <h3 className="text-xs uppercase tracking-widest text-gold font-bold mb-3 flex items-center">
                   <BookOpen className="w-4 h-4 mr-2" />
-                  {language === 'TR' ? 'İçindekiler' : 'Table of Contents'}
+                  {L(language, { TR: 'İçindekiler', EN: 'Table of Contents' })}
                 </h3>
                 <ul className="space-y-1.5 text-xs sm:text-sm">
                   {tableOfContents.map((heading, i) => {
@@ -548,7 +547,7 @@ export default function BlogPage({
                   <div className="flex items-center space-x-2 text-xs text-slate-400 mb-3">
                     <Tag className="w-3.5 h-3.5 text-gold" />
                     <span className="font-semibold uppercase tracking-wider text-[11px]">
-                      {language === 'TR' ? 'İlgili Konu Etiketleri' : 'Topic Tags'}:
+                      {L(language, { TR: 'İlgili Konu Etiketleri', EN: 'Topic Tags' })}:
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -577,7 +576,7 @@ export default function BlogPage({
                   <Link2 className="w-5 h-5 text-gold shrink-0" />
                   <div className="min-w-0">
                     <p className="text-[10px] uppercase tracking-widest text-gold font-bold">
-                      {language === 'TR' ? 'İlgili Tedavi Sayfası' : 'Related Treatment'}
+                      {L(language, { TR: 'İlgili Tedavi Sayfası', EN: 'Related Treatment' })}
                     </p>
                     <p className="text-sm font-bold text-white group-hover:text-gold transition-colors truncate">
                       {relatedServiceItem.title}
@@ -593,7 +592,7 @@ export default function BlogPage({
               <section className="card-glass p-6 sm:p-10 rounded-2xl mb-8 border border-white/10" aria-labelledby="faq-heading">
                 <h2 id="faq-heading" className="text-xl sm:text-2xl font-bold font-display text-white mb-6 flex items-center">
                   <HelpCircle className="w-5 h-5 text-gold mr-2" />
-                  {language === 'TR' ? 'Sık Sorulan Sorular' : 'Frequently Asked Questions'}
+                  {L(language, { TR: 'Sık Sorulan Sorular', EN: 'Frequently Asked Questions' })}
                 </h2>
                 <dl className="space-y-5">
                   {activePost.faq.map((f, i) => (
@@ -611,7 +610,7 @@ export default function BlogPage({
               <section className="card-glass p-6 rounded-2xl mb-8 border border-white/10">
                 <h2 className="text-xs uppercase tracking-widest text-gold font-bold mb-3 flex items-center">
                   <BookOpen className="w-4 h-4 mr-2" />
-                  {language === 'TR' ? 'Kaynaklar ve Kılavuzlar' : 'Sources & Guidelines'}
+                  {L(language, { TR: 'Kaynaklar ve Kılavuzlar', EN: 'Sources & Guidelines' })}
                 </h2>
                 <ul className="space-y-1.5 text-xs sm:text-sm">
                   {activePost.sources.map((src, i) => (
@@ -639,16 +638,14 @@ export default function BlogPage({
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] uppercase tracking-widest text-gold font-bold mb-1 flex items-center gap-1.5">
                   <GraduationCap className="w-3.5 h-3.5" />
-                  {language === 'TR' ? 'Yazar Hakkında' : 'About the Author'}
+                  {L(language, { TR: 'Yazar Hakkında', EN: 'About the Author' })}
                 </p>
                 <p className="text-sm font-bold text-white">{activePost.author}</p>
                 <p className="text-xs text-slate-400 leading-relaxed mt-1">
-                  {language === 'TR'
-                    ? 'Üroloji Profesörü (Üsküdar Üniversitesi Tıp Fakültesi), Hisar Intercontinental Hospital Üroloji Kliniği Sorumlusu. HoLEP lazer prostat cerrahisi, daVinci robotik cerrahi ve endoürolojik taş tedavileri alanında 30 yılı aşkın klinik deneyim.'
-                    : 'Professor of Urology (Üsküdar University Faculty of Medicine), Head of Urology at Hisar Intercontinental Hospital. Over 30 years of clinical experience in HoLEP laser prostate surgery, daVinci robotic surgery and endourological stone treatment.'}
+                  {L(language, { TR: 'Üroloji Profesörü (Üsküdar Üniversitesi Tıp Fakültesi), Hisar Intercontinental Hospital Üroloji Kliniği Sorumlusu. HoLEP lazer prostat cerrahisi, daVinci robotik cerrahi ve endoürolojik taş tedavileri alanında 30 yılı aşkın klinik deneyim.', EN: 'Professor of Urology (Üsküdar University Faculty of Medicine), Head of Urology at Hisar Intercontinental Hospital. Over 30 years of clinical experience in HoLEP laser prostate surgery, daVinci robotic surgery and endourological stone treatment.' })}
                 </p>
-                <a href={language === 'EN' ? '/en#about' : '/#about'} className="text-xs text-gold hover:underline mt-2 inline-flex items-center gap-1">
-                  {language === 'TR' ? 'Akademik özgeçmiş' : 'Academic profile'} <ChevronRight className="w-3 h-3" />
+                <a href={`${LANG_PREFIX[language]}/#about`} className="text-xs text-gold hover:underline mt-2 inline-flex items-center gap-1">
+                  {L(language, { TR: 'Akademik özgeçmiş', EN: 'Academic profile' })} <ChevronRight className="w-3 h-3" />
                 </a>
               </div>
             </aside>
@@ -658,14 +655,10 @@ export default function BlogPage({
               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="space-y-2 text-center md:text-left">
                   <h3 className="text-lg sm:text-xl font-bold font-display text-white">
-                    {language === 'TR'
-                      ? 'Bu Konuda Uzman Görüşü veya Randevu mu Almak İstiyorsunuz?'
-                      : 'Looking for an Expert Opinion or Consultation?'}
+                    {L(language, { TR: 'Bu Konuda Uzman Görüşü veya Randevu mu Almak İstiyorsunuz?', EN: 'Looking for an Expert Opinion or Consultation?' })}
                   </h3>
                   <p className="text-slate-300 text-xs sm:text-sm max-w-xl font-light">
-                    {language === 'TR'
-                      ? 'Prof. Dr. Basri Çakıroğlu ile muayene planlamak veya ameliyat süreçleri hakkında bilgi almak için iletişime geçebilirsiniz.'
-                      : 'You can schedule an appointment or get second opinion on surgical options with Prof. Dr. Basri Cakiroglu.'}
+                    {L(language, { TR: 'Prof. Dr. Basri Çakıroğlu ile muayene planlamak veya ameliyat süreçleri hakkında bilgi almak için iletişime geçebilirsiniz.', EN: 'You can schedule an appointment or get second opinion on surgical options with Prof. Dr. Basri Cakiroglu.' })}
                   </p>
                 </div>
 
@@ -674,7 +667,7 @@ export default function BlogPage({
                     onClick={onOpenAppointment}
                     className="px-6 py-3 bg-gold hover:bg-gold/90 text-navy font-bold text-xs uppercase tracking-wider rounded transition-all text-center shadow-lg cursor-pointer"
                   >
-                    {language === 'TR' ? 'Randevu Oluştur' : 'Schedule Visit'}
+                    {L(language, { TR: 'Randevu Oluştur', EN: 'Schedule Visit' })}
                   </button>
                   <a
                     href={`tel:${contactDetails.phone}`}
@@ -692,7 +685,7 @@ export default function BlogPage({
               <div className="mb-12">
                 <h3 className="text-lg font-bold font-display text-white mb-6 flex items-center">
                   <Stethoscope className="w-4 h-4 text-gold mr-2" />
-                  {language === 'TR' ? 'Önerilen Diğer Tıbbi Makaleler' : 'Related Clinical Articles'}
+                  {L(language, { TR: 'Önerilen Diğer Tıbbi Makaleler', EN: 'Related Clinical Articles' })}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {relatedPosts.map((rel) => (
@@ -734,18 +727,14 @@ export default function BlogPage({
             <div className="text-center max-w-3xl mx-auto mb-12">
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-bold uppercase tracking-wider mb-4">
                 <BookOpen className="w-3.5 h-3.5" />
-                <span>{language === 'TR' ? 'Tıbbi Bilgi Portalı & Sağlık Rehberi' : 'Clinical Health & Knowledge Guide'}</span>
+                <span>{L(language, { TR: 'Tıbbi Bilgi Portalı & Sağlık Rehberi', EN: 'Clinical Health & Knowledge Guide' })}</span>
               </div>
               
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display text-white tracking-tight leading-tight mb-4">
-                {language === 'TR'
-                  ? 'Üroloji & Robotik Cerrahi Makaleleri'
-                  : 'Urology & Robotic Surgery Articles'}
+                {L(language, { TR: 'Üroloji & Robotik Cerrahi Makaleleri', EN: 'Urology & Robotic Surgery Articles' })}
               </h1>
               <p className="text-slate-400 text-sm sm:text-base font-light leading-relaxed max-w-2xl mx-auto">
-                {language === 'TR'
-                  ? 'Prof. Dr. Basri Çakıroğlu tarafından kaleme alınan güncel tedavi yöntemleri, HoLEP lazer cerrahisi, prostat sağlığı ve klinik rehberler.'
-                  : 'Authoritative clinical insights, treatment protocols, HoLEP laser surgery, and urologic oncology guides by Prof. Dr. Basri Cakiroglu.'}
+                {L(language, { TR: 'Prof. Dr. Basri Çakıroğlu tarafından kaleme alınan güncel tedavi yöntemleri, HoLEP lazer cerrahisi, prostat sağlığı ve klinik rehberler.', EN: 'Authoritative clinical insights, treatment protocols, HoLEP laser surgery, and urologic oncology guides by Prof. Dr. Basri Cakiroglu.' })}
               </p>
 
               {/* Sadece yazar paneli aktifken görünen hekim yönetim alanı */}
@@ -753,17 +742,17 @@ export default function BlogPage({
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-3 animate-in fade-in duration-200">
                   <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-semibold">
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>{language === 'TR' ? 'Yazar Paneli Aktif' : 'Author Panel Active'}</span>
+                    <span>{L(language, { TR: 'Yazar Paneli Aktif', EN: 'Author Panel Active' })}</span>
                   </div>
 
                   <button
                     id="btn-publish-seo-article"
                     onClick={() => setIsAddModalOpen(true)}
                     className="inline-flex items-center space-x-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-bold text-xs rounded-full uppercase tracking-wider transition-all shadow-md hover:shadow-lg cursor-pointer"
-                    title={language === 'TR' ? 'Yeni SEO Makalesi Yayınla' : 'Publish New SEO Article'}
+                    title={L(language, { TR: 'Yeni SEO Makalesi Yayınla', EN: 'Publish New SEO Article' })}
                   >
                     <Plus className="w-4 h-4" />
-                    <span>{language === 'TR' ? 'Yeni Makale Yayınla' : 'Publish New Article'}</span>
+                    <span>{L(language, { TR: 'Yeni Makale Yayınla', EN: 'Publish New Article' })}</span>
                   </button>
 
                   <button
@@ -774,10 +763,10 @@ export default function BlogPage({
                       window.dispatchEvent(new CustomEvent('basri-login-state-changed', { detail: { isLoggedIn: false } }));
                     }}
                     className="inline-flex items-center space-x-1.5 text-xs text-slate-400 hover:text-red-400 px-3 py-1.5 rounded-full bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/20 transition-all cursor-pointer"
-                    title={language === 'TR' ? 'Yazar Panelini Kapat ve Çıkış Yap' : 'Exit Author Mode & Logout'}
+                    title={L(language, { TR: 'Yazar Panelini Kapat ve Çıkış Yap', EN: 'Exit Author Mode & Logout' })}
                   >
                     <LogOut className="w-3.5 h-3.5" />
-                    <span>{language === 'TR' ? 'Paneli Kapat' : 'Exit Panel'}</span>
+                    <span>{L(language, { TR: 'Paneli Kapat', EN: 'Exit Panel' })}</span>
                   </button>
                 </div>
               )}
@@ -810,7 +799,7 @@ export default function BlogPage({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={language === 'TR' ? 'Makalelerde veya konularda ara...' : 'Search clinical topics...'}
+                  placeholder={L(language, { TR: 'Makalelerde veya konularda ara...', EN: 'Search clinical topics...' })}
                   className="w-full pl-10 pr-4 py-2 bg-white/5 text-white rounded border border-white/10 focus:outline-none focus:border-gold transition-all text-xs"
                 />
               </div>
@@ -880,7 +869,7 @@ export default function BlogPage({
             ) : (
               <div className="text-center py-16 card-glass rounded-xl border border-dashed border-white/10">
                 <p className="text-slate-400 text-sm">
-                  {language === 'TR' ? 'Aranan kriterlere uygun makale bulunamadı.' : 'No articles matched your criteria.'}
+                  {L(language, { TR: 'Aranan kriterlere uygun makale bulunamadı.', EN: 'No articles matched your criteria.' })}
                 </p>
               </div>
             )}

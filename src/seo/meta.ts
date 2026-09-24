@@ -24,14 +24,15 @@ export interface SeoMeta {
   keywords: string;
   canonical: string;
   ogType: 'website' | 'article';
-  /** hreflang hedefleri (mutlak URL). x-default = TR ana sayfa. */
-  alternates: { tr?: string; en?: string };
+  /** hreflang hedefleri (mutlak URL). x-default = TR karşılığı. */
+  alternates: Partial<Record<Language, string>>;
   jsonLd: Record<string, unknown>[];
 }
 
 export const LOCALE: Record<Language, { html: string; og: string; schema: string }> = {
   TR: { html: 'tr', og: 'tr_TR', schema: 'tr-TR' },
   EN: { html: 'en', og: 'en_US', schema: 'en' },
+  RU: { html: 'ru', og: 'ru_RU', schema: 'ru' },
 };
 
 export function escapeHtml(str: string): string {
@@ -47,14 +48,14 @@ const abs = (path: string) => `${SITE_URL}${path === '/' ? '/' : path}`;
 const physicianAuthor = (lang: Language) => ({
   '@type': 'Physician',
   name: DOCTOR.name,
-  jobTitle: lang === 'EN' ? 'Urologist & Robotic Surgeon' : DOCTOR.jobTitle,
+  jobTitle: lang === 'TR' ? DOCTOR.jobTitle : lang === 'RU' ? 'Уролог, роботический хирург' : 'Urologist & Robotic Surgeon',
   medicalSpecialty: 'Urologic',
   url: SITE_URL,
 });
 
 const organizationPublisher = (lang: Language) => ({
   '@type': 'MedicalOrganization',
-  name: lang === 'EN' ? `${DOCTOR.name} Urology Clinic` : `${DOCTOR.name} Kliniği`,
+  name: lang === 'TR' ? `${DOCTOR.name} Kliniği` : lang === 'RU' ? 'Урологическая клиника проф. д-ра Басри Чакыроглу' : `${DOCTOR.name} Urology Clinic`,
   url: SITE_URL,
   logo: `${SITE_URL}/favicon-512.png`,
 });
@@ -70,10 +71,12 @@ export function physicianJsonLd(lang: Language = 'TR'): Record<string, unknown> 
     name: DOCTOR.name,
     url: abs(homePath(lang)),
     image: `${SITE_URL}${OG_IMAGE_PATH}`,
-    jobTitle: lang === 'EN' ? 'Urologist & Robotic Surgeon' : DOCTOR.jobTitle,
+    jobTitle: lang === 'TR' ? DOCTOR.jobTitle : lang === 'RU' ? 'Уролог, роботический хирург' : 'Urologist & Robotic Surgeon',
     medicalSpecialty: ['Urologic', 'Oncologic'],
     description:
-      lang === 'EN'
+      lang === 'RU'
+        ? 'Проф. д-р Басри Чакыроглу — уролог и роботический хирург в Стамбуле. Лазерная операция простаты HoLEP, роботическая простатэктомия daVinci, лазерное лечение камней в почках.'
+        : lang === 'EN'
         ? 'Prof. Dr. Basri Çakıroğlu - Urologist and robotic surgeon in Istanbul, Turkey. HoLEP laser prostate surgery, daVinci robotic prostatectomy, laser kidney stone treatment for local and international patients.'
         : 'Prof. Dr. Basri Çakıroğlu - Üroloji ve Robotik Cerrahi Uzmanı. HoLEP lazer prostat ameliyatı, daVinci robotik prostatektomi, böbrek taşı tedavisi.',
     telephone: DOCTOR.telephone,
@@ -91,9 +94,9 @@ export function physicianJsonLd(lang: Language = 'TR'): Record<string, unknown> 
       closes: h.closes,
     })),
     areaServed:
-      lang === 'EN'
-        ? [{ '@type': 'City', name: 'Istanbul' }, { '@type': 'Country', name: 'Turkey' }]
-        : DOCTOR.areaServed.map((name) => ({ '@type': 'City', name })),
+      lang === 'TR'
+        ? DOCTOR.areaServed.map((name) => ({ '@type': 'City', name }))
+        : [{ '@type': 'City', name: lang === 'RU' ? 'Стамбул' : 'Istanbul' }, { '@type': 'Country', name: lang === 'RU' ? 'Турция' : 'Turkey' }],
     hospitalAffiliation: {
       '@type': 'Hospital',
       name: DOCTOR.hospital.name,
@@ -105,7 +108,7 @@ export function physicianJsonLd(lang: Language = 'TR'): Record<string, unknown> 
       '@type': 'ContactPoint',
       telephone: DOCTOR.telephone,
       contactType: 'appointments',
-      availableLanguage: ['tr', 'en'],
+      availableLanguage: ['tr', 'en', 'ru'],
     },
     sameAs: DOCTOR.sameAs,
     availableService: getExpertiseItems(lang).map((item) => ({
@@ -179,14 +182,16 @@ function breadcrumbJsonLd(items: { name: string; url: string }[]): Record<string
   };
 }
 
-const HOME_LABEL: Record<Language, string> = { TR: 'Ana Sayfa', EN: 'Home' };
-const BLOG_LABEL: Record<Language, string> = { TR: 'Makaleler', EN: 'Articles' };
+const HOME_LABEL: Record<Language, string> = { TR: 'Ana Sayfa', EN: 'Home', RU: 'Главная' };
+const BLOG_LABEL: Record<Language, string> = { TR: 'Makaleler', EN: 'Articles', RU: 'Статьи' };
 
-function bothLangs(route: Route, translationSlug?: string | null): { tr: string; en: string } {
-  return {
-    tr: abs(alternatePath(route, 'TR', translationSlug)),
-    en: abs(alternatePath(route, 'EN', translationSlug)),
-  };
+/** Tüm dillerin karşılıkları (hreflang için). */
+function allLangs(route: Route, translationSlug?: string | null): Partial<Record<Language, string>> {
+  const out: Partial<Record<Language, string>> = {};
+  (['TR', 'EN', 'RU'] as Language[]).forEach((l) => {
+    out[l] = abs(alternatePath(route, l, translationSlug));
+  });
+  return out;
 }
 
 // ---------------------------------------------------------------------------
@@ -195,6 +200,20 @@ function bothLangs(route: Route, translationSlug?: string | null): { tr: string;
 
 export function buildHomeMeta(lang: Language = 'TR'): SeoMeta {
   const route: Route = { lang, kind: 'home' };
+  if (lang === 'RU') {
+    return {
+      lang,
+      title: 'Проф. д-р Басри Чакыроглу | Уролог в Стамбуле — HoLEP и роботическая хирургия',
+      description:
+        'Профессор урологии и роботический хирург в Стамбуле. Лазерная операция простаты HoLEP, роботическая простатэктомия daVinci, лазерное лечение камней в почках и мужское бесплодие — для пациентов из стран СНГ.',
+      keywords:
+        'уролог Стамбул, лечение в Турции урология, HoLEP Турция, роботическая простатэктомия Стамбул, лечение камней в почках Турция, проф Басри Чакыроглу',
+      canonical: abs(homePath('RU')),
+      ogType: 'website',
+      alternates: allLangs(route),
+      jsonLd: [physicianJsonLd('RU'), websiteJsonLd('RU')],
+    };
+  }
   return lang === 'EN'
     ? {
         lang,
@@ -205,7 +224,7 @@ export function buildHomeMeta(lang: Language = 'TR'): SeoMeta {
           'urologist Istanbul, urologist Turkey international patients, HoLEP surgery Turkey, robotic prostatectomy Istanbul, kidney stone treatment Turkey, Prof Dr Basri Cakiroglu',
         canonical: abs(homePath('EN')),
         ogType: 'website',
-        alternates: bothLangs(route),
+        alternates: allLangs(route),
         jsonLd: [physicianJsonLd('EN'), websiteJsonLd('EN')],
       }
     : {
@@ -217,7 +236,7 @@ export function buildHomeMeta(lang: Language = 'TR'): SeoMeta {
           'Prof Dr Basri Çakıroğlu, üroloji uzmanı istanbul, ürolog ümraniye, HoLEP lazer prostat ameliyatı, robotik cerrahi, böbrek taşı lazer, ürolojik onkoloji',
         canonical: abs(homePath('TR')),
         ogType: 'website',
-        alternates: bothLangs(route),
+        alternates: allLangs(route),
         jsonLd: [physicianJsonLd('TR'), websiteJsonLd('TR')],
       };
 }
@@ -228,20 +247,26 @@ export function buildBlogHubMeta(lang: Language = 'TR'): SeoMeta {
   return {
     lang,
     title:
-      lang === 'EN'
+      lang === 'RU'
+        ? 'Статьи об урологии и материалы для пациентов | Проф. д-р Басри Чакыроглу'
+        : lang === 'EN'
         ? 'Urology Articles & Patient Guides | Prof. Dr. Basri Çakıroğlu'
         : 'Üroloji Makaleleri & Sağlık Rehberi | Prof. Dr. Basri Çakıroğlu',
     description:
-      lang === 'EN'
+      lang === 'RU'
+        ? 'Материалы для пациентов: лазерная операция простаты HoLEP, роботическая простатэктомия, лазерное лечение камней в почках и мужское здоровье. Проф. д-р Басри Чакыроглу, Стамбул.'
+        : lang === 'EN'
         ? 'Patient guides on HoLEP laser prostate surgery, robotic prostatectomy, kidney stone laser treatment and male fertility by Prof. Dr. Basri Çakıroğlu, Istanbul.'
         : 'Prof. Dr. Basri Çakıroğlu tarafından hazırlanan HoLEP lazer prostat cerrahisi, daVinci robotik cerrahi, böbrek taşı ve üroloji makaleleri.',
     keywords:
-      lang === 'EN'
+      lang === 'RU'
+        ? 'урология статьи, HoLEP Турция, роботическая простатэктомия Стамбул, лечение камней в почках за рубежом, второе мнение рак простаты'
+        : lang === 'EN'
         ? 'urology articles, HoLEP Turkey, robotic prostatectomy Istanbul, kidney stone treatment abroad, prostate cancer second opinion'
         : 'üroloji makaleleri, HoLEP lazer, robotik cerrahi, böbrek taşı, prostat kanseri erken teşhis, Basri Çakıroğlu',
     canonical: url,
     ogType: 'website',
-    alternates: bothLangs(route),
+    alternates: allLangs(route),
     jsonLd: [
       breadcrumbJsonLd([
         { name: HOME_LABEL[lang], url: abs(homePath(lang)) },
@@ -259,11 +284,11 @@ export function buildArticleMeta(post: BlogPost, lang: Language = post.language 
   const route: Route = { lang, kind: 'article', slug: post.slug };
   // Çeviri karşılığı varsa iki dil de bildirilir; yoksa yalnızca kendi dili
   // (diğer dilde blog listesine işaret etmek yanlış hreflang olur).
-  const alternates: SeoMeta['alternates'] = {};
-  alternates[lang === 'EN' ? 'en' : 'tr'] = url;
+  const alternates: SeoMeta['alternates'] = { [lang]: url };
   if (post.translationOf) {
-    const other: Language = lang === 'EN' ? 'TR' : 'EN';
-    alternates[other === 'EN' ? 'en' : 'tr'] = abs(alternatePath(route, other, post.translationOf));
+    // Karşılık yalnızca TR ↔ (EN|RU) arasında tanımlı; üçüncü dil bildirilmez.
+    const other: Language = lang === 'TR' ? (post.translationLang ?? 'EN') : 'TR';
+    alternates[other] = abs(alternatePath(route, other, post.translationOf));
   }
   return {
     lang,
@@ -306,7 +331,12 @@ export function buildServiceMeta(item: ExpertiseItem, lang: Language = 'TR'): Se
   const route: Route = { lang, kind: 'service', id: item.id, slug: '' };
   const url = abs(servicePath(lang, item.id));
   // EN başlık yabancı hastanın sorgusuna göre ("... in Istanbul, Turkey")
-  const title = lang === 'EN' ? `${item.title} in Istanbul, Turkey | ${DOCTOR.name}` : `${item.title} | ${DOCTOR.name}`;
+  const title =
+    lang === 'EN'
+      ? `${item.title} in Istanbul, Turkey | ${DOCTOR.name}`
+      : lang === 'RU'
+      ? `${item.title} в Стамбуле (Турция) | ${DOCTOR.name}`
+      : `${item.title} | ${DOCTOR.name}`;
   return {
     lang,
     title,
@@ -314,10 +344,12 @@ export function buildServiceMeta(item: ExpertiseItem, lang: Language = 'TR'): Se
     keywords:
       lang === 'EN'
         ? `${item.title} Turkey, ${item.title} Istanbul, ${item.conditions.slice(0, 3).join(', ')}, urologist Istanbul international patients`
+        : lang === 'RU'
+        ? `${item.title} Турция, ${item.title} Стамбул, ${item.conditions.slice(0, 3).join(', ')}, уролог Стамбул лечение за рубежом`
         : `${item.title}, ${item.conditions.slice(0, 3).join(', ')}, Prof Dr Basri Çakıroğlu, Ümraniye Üroloji`,
     canonical: url,
     ogType: 'website',
-    alternates: bothLangs(route),
+    alternates: allLangs(route),
     jsonLd: [
       {
         '@context': 'https://schema.org',
@@ -347,8 +379,39 @@ export function buildServiceMeta(item: ExpertiseItem, lang: Language = 'TR'): Se
   };
 }
 
-export function buildInternationalMeta(): SeoMeta {
-  const url = abs(internationalPath());
+export function buildInternationalMeta(lang: 'EN' | 'RU' = 'EN'): SeoMeta {
+  const url = abs(internationalPath(lang));
+  if (lang === 'RU') {
+    return {
+      lang: 'RU',
+      title: 'Лечение в Турции — урология в Стамбуле для иностранных пациентов | Проф. д-р Басри Чакыроглу',
+      description:
+        'Как проходит лечение урологических заболеваний в Стамбуле для пациентов из стран СНГ: дистанционная оценка документов, план лечения, госпитализация в Hisar Intercontinental Hospital, сроки поездки и наблюдение после возвращения.',
+      keywords:
+        'лечение в Турции урология, уролог Стамбул для иностранцев, операция простаты за рубежом, HoLEP Турция, роботическая простатэктомия Турция, камни в почках лечение Стамбул',
+      canonical: url,
+      ogType: 'website',
+      alternates: { RU: url },
+      jsonLd: [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'MedicalWebPage',
+          name: 'Лечение в Турции',
+          url,
+          inLanguage: 'ru',
+          description:
+            'Пошаговый порядок лечения в Стамбуле у проф. д-ра Басри Чакыроглу для пациентов из-за рубежа.',
+          author: physicianAuthor('RU'),
+          publisher: organizationPublisher('RU'),
+          mainEntityOfPage: url,
+        },
+        breadcrumbJsonLd([
+          { name: 'Главная', url: abs(homePath('RU')) },
+          { name: 'Лечение в Турции', url },
+        ]),
+      ],
+    };
+  }
   return {
     lang: 'EN',
     title: 'International Patients – Urology Treatment in Istanbul | Prof. Dr. Basri Çakıroğlu',
@@ -358,7 +421,7 @@ export function buildInternationalMeta(): SeoMeta {
       'urology treatment Turkey international patients, medical tourism urology Istanbul, prostate surgery abroad, HoLEP Turkey, robotic prostatectomy Turkey, kidney stone surgery Istanbul',
     canonical: url,
     ogType: 'website',
-    alternates: { en: url },
+    alternates: { EN: url },
     jsonLd: [
       {
         '@context': 'https://schema.org',
@@ -402,16 +465,18 @@ export function resolveSeoMeta(pathname: string, extraPosts: BlogPost[] = []): S
       return item ? buildServiceMeta(item, route.lang) : buildHomeMeta(route.lang);
     }
     case 'international':
-      return buildInternationalMeta();
+      return buildInternationalMeta(route.lang);
   }
 }
 
 /** hreflang link etiketleri (x-default → TR ana sayfa / TR karşılık). */
 export function hreflangLinks(meta: SeoMeta): string {
   const links: string[] = [];
-  if (meta.alternates.tr) links.push(`<link rel="alternate" hreflang="tr" href="${meta.alternates.tr}" />`);
-  if (meta.alternates.en) links.push(`<link rel="alternate" hreflang="en" href="${meta.alternates.en}" />`);
-  const xDefault = meta.alternates.tr ?? meta.alternates.en;
+  (['TR', 'EN', 'RU'] as Language[]).forEach((l) => {
+    const href = meta.alternates[l];
+    if (href) links.push(`<link rel="alternate" hreflang="${LOCALE[l].html}" href="${href}" />`);
+  });
+  const xDefault = meta.alternates.TR ?? meta.alternates.EN ?? meta.alternates.RU;
   if (xDefault) links.push(`<link rel="alternate" hreflang="x-default" href="${xDefault}" />`);
   return links.join('\n    ');
 }

@@ -94,9 +94,11 @@ export function updatePageSeo(meta: SeoMeta) {
     l.href = href;
     document.head.appendChild(l);
   };
-  if (meta.alternates.tr) addAlt('tr', meta.alternates.tr);
-  if (meta.alternates.en) addAlt('en', meta.alternates.en);
-  const xDefault = meta.alternates.tr ?? meta.alternates.en;
+  (['TR', 'EN', 'RU'] as const).forEach((l) => {
+    const href = meta.alternates[l];
+    if (href) addAlt(LOCALE[l].html, href);
+  });
+  const xDefault = meta.alternates.TR ?? meta.alternates.EN ?? meta.alternates.RU;
   if (xDefault) addAlt('x-default', xDefault);
 
   // JSON-LD: önceki rotanın blokları kaldırılır, yenileri eklenir

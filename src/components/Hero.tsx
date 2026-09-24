@@ -1,4 +1,5 @@
 import { useState, FormEvent } from 'react';
+import { L } from '../i18n';
 import { Award, ShieldCheck, Activity, ChevronRight, Calendar, User, Phone, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
 import { Language, Appointment } from '../types';
 import { uiTranslations } from '../translations';
@@ -40,19 +41,13 @@ export default function Hero({
 
     if (!fullName.trim() || !phone.trim() || !topicId) {
       setErrorMsg(
-        language === 'TR'
-          ? 'Lütfen tüm zorunlu alanları doldurunuz.'
-          : 'Please fill in all required fields.'
-      );
+        L(language, { TR: 'Lütfen tüm zorunlu alanları doldurunuz.', EN: 'Please fill in all required fields.' }));
       return;
     }
 
     if (phone.replace(/\D/g, '').length < 9) {
       setErrorMsg(
-        language === 'TR'
-          ? 'Geçerli bir telefon numarası giriniz.'
-          : 'Please enter a valid phone number.'
-      );
+        L(language, { TR: 'Geçerli bir telefon numarası giriniz.', EN: 'Please enter a valid phone number.' }));
       return;
     }
 
@@ -117,7 +112,7 @@ export default function Hero({
             <div className="inline-flex self-start items-center space-x-2 bg-white/5 border border-gold/30 px-4 py-2 rounded-full mb-2">
               <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
               <span className="text-[11px] font-semibold tracking-wider text-gold uppercase font-sans">
-                {language === 'TR' ? 'Modern Üroloji · Akademik Vizyon · İstanbul' : 'Modern Urology · Academic Vision · Istanbul'}
+                {L(language, { TR: 'Modern Üroloji · Akademik Vizyon · İstanbul', EN: 'Modern Urology · Academic Vision · Istanbul' })}
               </span>
             </div>
 
@@ -126,15 +121,19 @@ export default function Hero({
                 ifadeyi (isim + "üroloji uzmanı") taşımalı. Eski "Modern
                 Üroloji ve Akademik Vizyon" sloganı rozete taşındı. */}
             <h1 className="text-display text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-none tracking-tight">
-              {language === 'TR' ? (
+              {/* RU'da ad Kiril yazımıyla: Rusça arama "Басри Чакыроглу"
+                  sorgusunu da yakalar; Latin yazım alt başlıkta kalır. */}
+              {language === 'RU' ? (
                 <>
-                  Prof. Dr. Basri Çakıroğlu<br />
-                  <span className="text-gold italic font-display">Üroloji ve Robotik Cerrahi Uzmanı</span>
+                  Проф. д-р Басри Чакыроглу<br />
+                  <span className="text-gold italic font-display">Уролог и роботический хирург</span>
                 </>
               ) : (
                 <>
                   Prof. Dr. Basri Çakıroğlu<br />
-                  <span className="text-gold italic font-display">Urology & Robotic Surgery Specialist</span>
+                  <span className="text-gold italic font-display">
+                    {L(language, { TR: 'Üroloji ve Robotik Cerrahi Uzmanı', EN: 'Urology & Robotic Surgery Specialist' })}
+                  </span>
                 </>
               )}
             </h1>
@@ -161,19 +160,19 @@ export default function Hero({
               <div className="card-glass p-4 rounded-lg flex flex-col gap-1 w-32">
                 <span className="text-gold font-bold text-2xl font-display">30+</span>
                 <span className="text-[9px] uppercase opacity-60 tracking-wider font-semibold">
-                  {language === 'TR' ? 'Yıllık Deneyim' : 'Years Experience'}
+                  {L(language, { TR: 'Yıllık Deneyim', EN: 'Years Experience' })}
                 </span>
               </div>
               <div className="card-glass p-4 rounded-lg flex flex-col gap-1 w-32">
                 <span className="text-gold font-bold text-2xl font-display">10k+</span>
                 <span className="text-[9px] uppercase opacity-60 tracking-wider font-semibold">
-                  {language === 'TR' ? 'Başarılı Ameliyat' : 'Successful Cases'}
+                  {L(language, { TR: 'Başarılı Ameliyat', EN: 'Successful Cases' })}
                 </span>
               </div>
               <div className="card-glass p-4 rounded-lg flex flex-col gap-1 w-32">
                 <span className="text-gold font-bold text-2xl font-display">80+</span>
                 <span className="text-[9px] uppercase opacity-60 tracking-wider font-semibold">
-                  {language === 'TR' ? 'Bilimsel Yayın' : 'Scientific Papers'}
+                  {L(language, { TR: 'Bilimsel Yayın', EN: 'Scientific Papers' })}
                 </span>
               </div>
             </div>
@@ -186,7 +185,7 @@ export default function Hero({
               <div className="relative h-48 sm:h-52 w-full">
                 <img 
                   src={surgeonImg}
-                  alt={language === 'TR' ? 'Prof. Dr. Basri Çakıroğlu ameliyathanede endoskopik böbrek taşı ameliyatı sırasında' : 'Prof. Dr. Basri Çakıroğlu during endoscopic kidney stone surgery'}
+                  alt={L(language, { TR: 'Prof. Dr. Basri Çakıroğlu ameliyathanede endoskopik böbrek taşı ameliyatı sırasında', EN: 'Prof. Dr. Basri Çakıroğlu during endoscopic kidney stone surgery' })}
                   width={1440}
                   height={810}
                   fetchPriority="high"
@@ -198,7 +197,7 @@ export default function Hero({
                 <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
                 <div className="absolute bottom-4 left-6">
                   <span className="bg-gold text-navy text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm">
-                    {language === 'TR' ? 'PROF. DR. BASRİ ÇAKIROĞLU' : 'PROF. DR. BASRI CAKIROGLU'}
+                    {L(language, { TR: 'PROF. DR. BASRİ ÇAKIROĞLU', EN: 'PROF. DR. BASRI CAKIROGLU' })}
                   </span>
                 </div>
               </div>
@@ -214,17 +213,13 @@ export default function Hero({
                   <div className="space-y-2">
                     <h3 className="text-xl font-bold font-display text-white">
                       {deliveryFailed
-                        ? (language === 'TR' ? 'Lütfen bizi arayın' : 'Please contact us')
-                        : (language === 'TR' ? 'Talep Gönderildi!' : 'Request Received!')}
+                        ? (L(language, { TR: 'Lütfen bizi arayın', EN: 'Please contact us' }))
+                        : (L(language, { TR: 'Talep Gönderildi!', EN: 'Request Received!' }))}
                     </h3>
                     <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
                       {deliveryFailed
-                        ? (language === 'TR'
-                            ? 'Talebiniz kaydedildi ancak bildirim gönderilemedi. Randevunuz için lütfen telefon veya WhatsApp ile ulaşın.'
-                            : 'Your request was saved but the notification could not be delivered. Please call or message us on WhatsApp.')
-                        : (language === 'TR'
-                            ? 'Randevu talebiniz başarıyla alınmıştır. Klinik asistanımız en kısa sürede sizinle iletişime geçecektir.'
-                            : 'Your fast request has been registered. Our assistant will contact you shortly.')}
+                        ? (L(language, { TR: 'Talebiniz kaydedildi ancak bildirim gönderilemedi. Randevunuz için lütfen telefon veya WhatsApp ile ulaşın.', EN: 'Your request was saved but the notification could not be delivered. Please call or message us on WhatsApp.' }))
+                        : (L(language, { TR: 'Randevu talebiniz başarıyla alınmıştır. Klinik asistanımız en kısa sürede sizinle iletişime geçecektir.', EN: 'Your fast request has been registered. Our assistant will contact you shortly.' }))}
                     </p>
                   </div>
 
@@ -252,7 +247,7 @@ export default function Hero({
                     onClick={handleResetForm}
                     className="bg-gold text-navy font-bold px-6 py-2 rounded-sm text-xs uppercase tracking-widest mt-2 hover:bg-gold/90 transition-all"
                   >
-                    {language === 'TR' ? 'Yeni Talep' : 'New Request'}
+                    {L(language, { TR: 'Yeni Talep', EN: 'New Request' })}
                   </button>
                 </div>
               ) : (
@@ -260,12 +255,10 @@ export default function Hero({
                 <>
                   <div className="flex flex-col gap-1">
                     <h3 className="text-xs uppercase tracking-[0.2em] text-gold font-bold">
-                      {language === 'TR' ? 'Hızlı Randevu Formu' : 'Quick Booking Form'}
+                      {L(language, { TR: 'Hızlı Randevu Formu', EN: 'Quick Booking Form' })}
                     </h3>
                     <p className="text-xs text-slate-400">
-                      {language === 'TR'
-                        ? 'Klinik asistanımız sizi arayarak randevuyu teyit edecektir.'
-                        : 'Our assistant will call you back to confirm your session.'}
+                      {L(language, { TR: 'Klinik asistanımız sizi arayarak randevuyu teyit edecektir.', EN: 'Our assistant will call you back to confirm your session.' })}
                     </p>
                   </div>
 
@@ -304,7 +297,7 @@ export default function Hero({
                         required
                       >
                         <option value="" className="bg-navy text-slate-400">
-                          {language === 'TR' ? 'Uzmanlık Seçiniz' : 'Select Expertise'}
+                          {L(language, { TR: 'Uzmanlık Seçiniz', EN: 'Select Expertise' })}
                         </option>
                         {specialties.map((s) => (
                           <option key={s.id} value={s.id} className="bg-navy text-white">
@@ -322,7 +315,7 @@ export default function Hero({
                       <textarea
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
-                        placeholder={language === 'TR' ? 'Mesajınız (Opsiyonel)' : 'Your Message (Optional)'}
+                        placeholder={L(language, { TR: 'Mesajınız (Opsiyonel)', EN: 'Your Message (Optional)' })}
                         rows={2}
                         className="w-full bg-white/5 border border-white/10 p-3 text-sm rounded outline-none text-white focus:border-gold transition-colors resize-none font-sans"
                       />
@@ -364,9 +357,7 @@ export default function Hero({
             <div>
               <h3 className="text-white font-bold text-sm mb-1">{t.heroBadge1}</h3>
               <p className="text-slate-400 text-xs leading-relaxed font-light">
-                {language === 'TR'
-                  ? 'Akademik geçmişi ile binlerce başarılı operasyona imza atmış cerrah.'
-                  : 'With a distinguished academic background, surgeon with thousands of highly successful cases.'}
+                {L(language, { TR: 'Akademik geçmişi ile binlerce başarılı operasyona imza atmış cerrah.', EN: 'With a distinguished academic background, surgeon with thousands of highly successful cases.' })}
               </p>
             </div>
           </div>
@@ -378,9 +369,7 @@ export default function Hero({
             <div>
               <h3 className="text-white font-bold text-sm mb-1">{t.heroBadge2}</h3>
               <p className="text-slate-400 text-xs leading-relaxed font-light">
-                {language === 'TR'
-                  ? 'Uluslararası saygın hakemli dergilerde yayınlanmış 80+ bilimsel makale ve yayın.'
-                  : 'Over 80 scientific papers published in peer-reviewed international journals.'}
+                {L(language, { TR: 'Uluslararası saygın hakemli dergilerde yayınlanmış 80+ bilimsel makale ve yayın.', EN: 'Over 80 scientific papers published in peer-reviewed international journals.' })}
               </p>
             </div>
           </div>
@@ -392,9 +381,7 @@ export default function Hero({
             <div>
               <h3 className="text-white font-bold text-sm mb-1">{t.heroBadge3}</h3>
               <p className="text-slate-400 text-xs leading-relaxed font-light">
-                {language === 'TR'
-                  ? 'daVinci Robotik Cerrahi ve Holmiyum Lazer (HoLEP) teknolojilerinde uzman sertifikalı klinisyen.'
-                  : 'Certified specialist in daVinci Robotic Surgery and Holmium Laser (HoLEP) systems.'}
+                {L(language, { TR: 'daVinci Robotik Cerrahi ve Holmiyum Lazer (HoLEP) teknolojilerinde uzman sertifikalı klinisyen.', EN: 'Certified specialist in daVinci Robotic Surgery and Holmium Laser (HoLEP) systems.' })}
               </p>
             </div>
           </div>

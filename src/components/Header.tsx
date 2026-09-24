@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { L } from '../i18n';
 import { Menu, X, Calendar, Globe, Clock, Phone, Instagram } from 'lucide-react';
 import { Language } from '../types';
 import { uiTranslations } from '../translations';
+import LanguageSwitcher from './LanguageSwitcher';
 import { internationalPath } from '../routes';
 import { contactDetails } from '../data';
 
@@ -124,44 +126,21 @@ export default function Header({
               </button>
             ))}
             {/* EN: yabancı hasta sayfası — ana sayfadan gerçek <a> ile bağlantı (SEO) */}
-            {language === 'EN' && (
+            {language !== 'TR' && (
               <a
                 id="nav-international"
-                href={internationalPath()}
+                href={internationalPath(language)}
                 className="px-3 py-2 text-xs uppercase tracking-widest text-gold hover:text-white font-semibold transition-all rounded-sm hover:bg-white/5 border border-gold/30"
               >
-                International Patients
+                {language === 'RU' ? 'Лечение в Турции' : 'International Patients'}
               </a>
             )}
           </nav>
 
           {/* Right Action Controls */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Language Switcher */}
-            <div className="flex items-center bg-white/5 rounded-full p-0.5 border border-white/10">
-              <button
-                id="lang-tr"
-                onClick={() => setLanguage('TR')}
-                className={`flex items-center justify-center w-7 h-7 rounded-full text-[10px] font-bold transition-all ${
-                  language === 'TR'
-                    ? 'bg-gold text-navy shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                TR
-              </button>
-              <button
-                id="lang-en"
-                onClick={() => setLanguage('EN')}
-                className={`flex items-center justify-center w-7 h-7 rounded-full text-[10px] font-bold transition-all ${
-                  language === 'EN'
-                    ? 'bg-gold text-navy shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                EN
-              </button>
-            </div>
+            {/* Language Switcher (TR / EN / RU) */}
+            <LanguageSwitcher language={language} setLanguage={setLanguage} />
 
             {/* Quick Appointment Action */}
             <button
@@ -189,14 +168,7 @@ export default function Header({
             </a>
 
             {/* Simple mobile lang switch to save space */}
-            <button
-              id="mobile-lang-toggle"
-              onClick={() => setLanguage(language === 'TR' ? 'EN' : 'TR')}
-              className="flex items-center space-x-1 px-2.5 py-1.5 rounded-md bg-white/5 border border-white/10 text-xs text-gold font-bold"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>{language}</span>
-            </button>
+            <LanguageSwitcher language={language} setLanguage={setLanguage} />
 
             {/* Hamburger Menu */}
             <button
