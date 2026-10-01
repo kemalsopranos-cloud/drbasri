@@ -1,0 +1,32 @@
+// OTOMATİK ÜRETİM — scripts/make-covers (scratchpad) tarafından yazılır.
+// Kapağı olan makale slug'ları. meta.ts ve BlogPage buradan okur;
+// listede olmayan yazı sitenin varsayılan og-image'ını kullanır.
+export const COVER_SLUGS: ReadonlySet<string> = new Set([
+  'ameliyatsiz-bobrek-tasi-tedavisi-eswl',
+  'bobrek-tasi-belirtileri-nasil-duser',
+  'bobrek-tasinda-kesisiz-lazer-tedavisi-rirs',
+  'high-psa-second-opinion-prostate-mri',
+  'holep-ameliyati-sonrasi-iyilesme-sureci',
+  'holep-laser-prostate-treatment',
+  'holep-lazer-prostat-tedavisi',
+  'holep-lazernaya-operaciya-prostaty-turciya',
+  'holep-prostate-surgery-turkey-guide',
+  'idrarda-kan-gorulmesi-nedenleri',
+  'kadinlarda-idrar-kacirma-nedenleri-ve-tedavisi',
+  'kadinlarda-idrar-kacirma-tedavisi-tot',
+  'kidney-stone-laser-treatment-rirs-turkey',
+  'lechenie-kamney-v-pochkah-lazerom-rirs',
+  'povyshennyy-psa-chto-delat',
+  'prostat-buyumesi-belirtileri-ve-tedavisi',
+  'prostat-sagliginda-erken-teshis',
+  'prostate-health-early-diagnosis',
+  'psa-yuksekligi-ne-anlama-gelir',
+  'robotic-prostatectomy-istanbul-turkey',
+  'robotic-surgery-urologic-cancer',
+  'robotichenskaya-prostatektomiya-stambul',
+  'robotik-cerrahi-uroloji',
+  'robotik-prostat-kanseri-ameliyati',
+  'sertlesme-sorunu-nedenleri-ve-tedavisi',
+  'varicocele-microsurgery-istanbul',
+  'varikosel-belirtileri-ve-tedavisi',
+]);

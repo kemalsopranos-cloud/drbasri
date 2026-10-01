@@ -10,6 +10,7 @@ import { uiTranslations } from '../translations';
 import LanguageSwitcher from './LanguageSwitcher';
 import { getBlogPosts, contactDetails, getExpertiseItems } from '../data';
 import { blogPath, articlePath, servicePath, LANG_PREFIX } from '../routes';
+import { COVER_SLUGS } from '../content/covers';
 import { generateSlug } from '../utils/seo';
 import AddArticleModal from './AddArticleModal';
 import { firestore } from '../firestore';
@@ -458,6 +459,20 @@ export default function BlogPage({
               </div>
             </div>
 
+            {/* Kapak görseli — paylaşımda kullanılan og:image ile aynı dosya.
+                Kapağı olmayan yazıda (ör. panelden yeni eklenen) hiç basılmaz. */}
+            {COVER_SLUGS.has(activePost.slug) && (
+              <img
+                src={`/covers/${activePost.slug}.jpg`}
+                alt={activePost.title}
+                width={1200}
+                height={630}
+                className="w-full rounded-2xl mb-8 border border-white/10"
+                loading="eager"
+                fetchPriority="high"
+              />
+            )}
+
             {/* Article Header Card */}
             <header className="card-glass p-6 sm:p-10 rounded-2xl mb-8 border border-white/10">
               <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -816,6 +831,16 @@ export default function BlogPage({
                     className="card-glass p-6 sm:p-7 rounded-xl border border-white/10 hover:border-gold/50 transition-all duration-300 flex flex-col justify-between group cursor-pointer relative shadow-lg hover:-translate-y-1"
                   >
                     <div>
+                      {COVER_SLUGS.has(post.slug) && (
+                        <img
+                          src={`/covers/${post.slug}.jpg`}
+                          alt=""
+                          width={1200}
+                          height={630}
+                          className="w-full rounded-lg mb-5 border border-white/10"
+                          loading="lazy"
+                        />
+                      )}
                       {/* Top Meta */}
                       <div className="flex items-center justify-between text-slate-400 text-[11px] mb-4 font-semibold">
                         <span className="bg-gold/15 text-gold border border-gold/30 px-2.5 py-0.5 rounded uppercase text-[10px] font-bold">

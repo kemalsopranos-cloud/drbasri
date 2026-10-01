@@ -1,6 +1,7 @@
 import type { BlogPost, ExpertiseItem, FaqItem, Language } from '../types';
 import { getBlogPosts, getExpertiseItems } from '../data';
 import { SITE_URL, SITE_NAME, OG_IMAGE_PATH, DOCTOR } from './site';
+import { COVER_SLUGS } from '../content/covers';
 import {
   parseRoute, routeToPath, alternatePath, homePath, blogPath, articlePath, servicePath, internationalPath,
   type Route,
@@ -19,6 +20,8 @@ import {
 
 export interface SeoMeta {
   lang: Language;
+  /** Paylaşım görseli (og:image). Makalelerde kendi kapağı, diğerlerinde site görseli. */
+  image: string;
   title: string;
   description: string;
   keywords: string;
@@ -44,6 +47,16 @@ export function escapeHtml(str: string): string {
 }
 
 const abs = (path: string) => `${SITE_URL}${path === '/' ? '/' : path}`;
+
+/**
+ * Makalenin kapak görseli. Kapaklar public/covers/<slug>.jpg olarak üretilir
+ * (bkz. src/content/covers.ts). Kapağı olmayan yazı — örneğin panelden yeni
+ * eklenmiş bir yazı — sitenin varsayılan görseline düşer; böylece paylaşım
+ * önizlemesi hiçbir durumda boş kalmaz.
+ */
+export function coverPath(slug: string): string {
+  return COVER_SLUGS.has(slug) ? `/covers/${slug}.jpg` : OG_IMAGE_PATH;
+}
 
 // ---------------------------------------------------------------------------
 // SERP uzunlukları (1 Eki 2026 denetimi).
@@ -250,6 +263,7 @@ export function buildHomeMeta(lang: Language = 'TR'): SeoMeta {
         'уролог Стамбул, лечение в Турции урология, HoLEP Турция, роботическая простатэктомия Стамбул, лечение камней в почках Турция, проф Басри Чакыроглу',
       canonical: abs(homePath('RU')),
       ogType: 'website',
+      image: `${SITE_URL}${OG_IMAGE_PATH}`,
       alternates: allLangs(route),
       jsonLd: [physicianJsonLd('RU'), websiteJsonLd('RU')],
     };
@@ -265,6 +279,7 @@ export function buildHomeMeta(lang: Language = 'TR'): SeoMeta {
           'urologist Istanbul, urologist Turkey international patients, HoLEP surgery Turkey, robotic prostatectomy Istanbul, kidney stone treatment Turkey, Prof Dr Basri Cakiroglu',
         canonical: abs(homePath('EN')),
         ogType: 'website',
+        image: `${SITE_URL}${OG_IMAGE_PATH}`,
         alternates: allLangs(route),
         jsonLd: [physicianJsonLd('EN'), websiteJsonLd('EN')],
       }
@@ -278,6 +293,7 @@ export function buildHomeMeta(lang: Language = 'TR'): SeoMeta {
           'Prof Dr Basri Çakıroğlu, üroloji uzmanı istanbul, ürolog ümraniye, HoLEP lazer prostat ameliyatı, robotik cerrahi, böbrek taşı lazer, ürolojik onkoloji',
         canonical: abs(homePath('TR')),
         ogType: 'website',
+        image: `${SITE_URL}${OG_IMAGE_PATH}`,
         alternates: allLangs(route),
         jsonLd: [physicianJsonLd('TR'), websiteJsonLd('TR')],
       };
@@ -309,6 +325,7 @@ export function buildBlogHubMeta(lang: Language = 'TR'): SeoMeta {
         : 'üroloji makaleleri, HoLEP lazer, robotik cerrahi, böbrek taşı, prostat kanseri erken teşhis, Basri Çakıroğlu',
     canonical: url,
     ogType: 'website',
+    image: `${SITE_URL}${OG_IMAGE_PATH}`,
     alternates: allLangs(route),
     jsonLd: [
       breadcrumbJsonLd([
@@ -324,6 +341,7 @@ export function buildArticleMeta(post: BlogPost, lang: Language = post.language 
   const dates = postDates(post);
   const url = abs(articlePath(lang, post.slug));
   const keywords = post.keywords || `${post.category}, ${lang === 'EN' ? 'Urology' : 'Üroloji'}, ${DOCTOR.name}`;
+  const cover = `${SITE_URL}${coverPath(post.slug)}`;
   const route: Route = { lang, kind: 'article', slug: post.slug };
   // Çeviri karşılığı varsa iki dil de bildirilir; yoksa yalnızca kendi dili
   // (diğer dilde blog listesine işaret etmek yanlış hreflang olur).
@@ -340,6 +358,7 @@ export function buildArticleMeta(post: BlogPost, lang: Language = post.language 
     keywords,
     canonical: url,
     ogType: 'article',
+    image: cover,
     alternates,
     jsonLd: [
       {
@@ -353,7 +372,7 @@ export function buildArticleMeta(post: BlogPost, lang: Language = post.language 
         ...(dates.published ? { datePublished: dates.published } : {}),
         ...(dates.modified ? { dateModified: dates.modified, lastReviewed: dates.modified } : {}),
         inLanguage: LOCALE[lang].schema,
-        image: `${SITE_URL}${OG_IMAGE_PATH}`,
+        image: cover,
         author: physicianAuthor(lang),
         reviewedBy: physicianAuthor(lang),
         publisher: organizationPublisher(lang),
@@ -397,6 +416,7 @@ export function buildServiceMeta(item: ExpertiseItem, lang: Language = 'TR'): Se
         : `${item.title}, ${item.conditions.slice(0, 3).join(', ')}, Prof Dr Basri Çakıroğlu, Ümraniye Üroloji`,
     canonical: url,
     ogType: 'website',
+    image: `${SITE_URL}${OG_IMAGE_PATH}`,
     alternates: allLangs(route),
     jsonLd: [
       {
@@ -440,6 +460,7 @@ export function buildInternationalMeta(lang: 'EN' | 'RU' = 'EN'): SeoMeta {
         'лечение в Турции урология, уролог Стамбул для иностранцев, операция простаты за рубежом, HoLEP Турция, роботическая простатэктомия Турция, камни в почках лечение Стамбул',
       canonical: url,
       ogType: 'website',
+      image: `${SITE_URL}${OG_IMAGE_PATH}`,
       alternates: { RU: url },
       jsonLd: [
         {
@@ -471,6 +492,7 @@ export function buildInternationalMeta(lang: 'EN' | 'RU' = 'EN'): SeoMeta {
       'urology treatment Turkey international patients, medical tourism urology Istanbul, prostate surgery abroad, HoLEP Turkey, robotic prostatectomy Turkey, kidney stone surgery Istanbul',
     canonical: url,
     ogType: 'website',
+    image: `${SITE_URL}${OG_IMAGE_PATH}`,
     alternates: { EN: url },
     jsonLd: [
       {
@@ -538,7 +560,7 @@ export function hreflangLinks(meta: SeoMeta): string {
  */
 export function injectSeoIntoHtml(html: string, meta: SeoMeta): string {
   let out = html;
-  const ogImage = `${SITE_URL}${OG_IMAGE_PATH}`;
+  const ogImage = meta.image;
   const rep = (re: RegExp, value: string) => {
     out = out.replace(re, value);
   };
@@ -555,6 +577,8 @@ export function injectSeoIntoHtml(html: string, meta: SeoMeta): string {
   rep(/<meta\s+property="og:image"\s+content="[^"]*"\s*\/>/, `<meta property="og:image" content="${ogImage}" />`);
   rep(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${escapeHtml(meta.title)}" />`);
   rep(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${escapeHtml(meta.description)}" />`);
+  rep(/<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/>/, `<meta name="twitter:image" content="${ogImage}" />`);
+  rep(/<meta\s+property="og:image:alt"\s+content="[^"]*"\s*\/>/, `<meta property="og:image:alt" content="${escapeHtml(meta.title)}" />`);
   rep(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/, `<link rel="canonical" href="${meta.canonical}" />`);
   rep(/<!--hreflang-->/, hreflangLinks(meta));
 

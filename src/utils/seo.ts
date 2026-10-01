@@ -1,5 +1,5 @@
 import { LOCALE, type SeoMeta } from '../seo/meta';
-import { SITE_URL, OG_IMAGE_PATH } from '../seo/site';
+
 
 /**
  * Accurately transliterates Turkish and special characters into clean URL slugs
@@ -73,7 +73,8 @@ export function updatePageSeo(meta: SeoMeta) {
   setMeta('meta[property="og:description"]', metaByProperty('og:description'), meta.description);
   setMeta('meta[property="og:type"]', metaByProperty('og:type'), meta.ogType);
   setMeta('meta[property="og:url"]', metaByProperty('og:url'), meta.canonical);
-  setMeta('meta[property="og:image"]', metaByProperty('og:image'), `${SITE_URL}${OG_IMAGE_PATH}`);
+  setMeta('meta[property="og:image"]', metaByProperty('og:image'), meta.image);
+  setMeta('meta[name="twitter:image"]', metaByName('twitter:image'), meta.image);
   setMeta('meta[name="twitter:title"]', metaByName('twitter:title'), meta.title);
   setMeta('meta[name="twitter:description"]', metaByName('twitter:description'), meta.description);
 
