@@ -345,12 +345,12 @@ export function buildArticleMeta(post: BlogPost, lang: Language = post.language 
   const route: Route = { lang, kind: 'article', slug: post.slug };
   // Çeviri karşılığı varsa iki dil de bildirilir; yoksa yalnızca kendi dili
   // (diğer dilde blog listesine işaret etmek yanlış hreflang olur).
+  // Çevirisi bildirilen her dil hreflang'e girer; karşılığı olmayan dil hiç
+  // bildirilmez (var olmayan sayfaya hreflang vermek Google'da hata üretir).
   const alternates: SeoMeta['alternates'] = { [lang]: url };
-  if (post.translationOf) {
-    // Karşılık yalnızca TR ↔ (EN|RU) arasında tanımlı; üçüncü dil bildirilmez.
-    const other: Language = lang === 'TR' ? (post.translationLang ?? 'EN') : 'TR';
-    alternates[other] = abs(alternatePath(route, other, post.translationOf));
-  }
+  Object.entries(post.translations ?? {}).forEach(([l, slug]) => {
+    if (slug) alternates[l as Language] = abs(articlePath(l as Language, slug));
+  });
   return {
     lang,
     title: withBrand(post.title),
@@ -449,6 +449,14 @@ export function buildServiceMeta(item: ExpertiseItem, lang: Language = 'TR'): Se
 
 export function buildInternationalMeta(lang: 'EN' | 'RU' = 'EN'): SeoMeta {
   const url = abs(internationalPath(lang));
+  // Yabanci hasta sayfasinin TR karsiligi YOK, ama EN ve RU surumleri
+  // birbirinin cevirisidir: ikisi de iki dili birlikte bildirmeli. Tek yonlu
+  // hreflang Google'da "alternate sayfa geri baglanti vermiyor" uyarisi uretir
+  // ve iki sayfa ayri ayri taranir (1 Eki 2026 denetimi).
+  const intlAlternates: SeoMeta['alternates'] = {
+    EN: abs(internationalPath('EN')),
+    RU: abs(internationalPath('RU')),
+  };
   if (lang === 'RU') {
     return {
       lang: 'RU',
@@ -461,7 +469,7 @@ export function buildInternationalMeta(lang: 'EN' | 'RU' = 'EN'): SeoMeta {
       canonical: url,
       ogType: 'website',
       image: `${SITE_URL}${OG_IMAGE_PATH}`,
-      alternates: { RU: url },
+      alternates: intlAlternates,
       jsonLd: [
         {
           '@context': 'https://schema.org',
@@ -493,7 +501,7 @@ export function buildInternationalMeta(lang: 'EN' | 'RU' = 'EN'): SeoMeta {
     canonical: url,
     ogType: 'website',
     image: `${SITE_URL}${OG_IMAGE_PATH}`,
-    alternates: { EN: url },
+    alternates: intlAlternates,
     jsonLd: [
       {
         '@context': 'https://schema.org',

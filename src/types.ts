@@ -52,8 +52,15 @@ export interface BlogPost {
   faq?: FaqItem[];
   sources?: SourceRef[];
   relatedService?: string;  // expertiseSlugs anahtarı → hizmet sayfasına iç bağlantı
-  translationOf?: string;   // diğer dildeki karşılığın slug'ı (hreflang + dil düğmesi)
-  translationLang?: Language; // karşılığın dili (TR yazılarında; varsayılan EN)
+  /**
+   * Diğer dillerdeki karşılıkların slug'ları: { EN: '...', RU: '...' }
+   * hreflang ve dil düğmesi bunu kullanır.
+   *
+   * Eskiden tek bir `translationOf` alanıydı; bir Türkçe yazı yalnızca TEK
+   * dile bağlanabiliyordu, yani EN karşılığı olan bir yazının RU karşılığı
+   * hreflang'de hiç bildirilemiyordu (1 Eki 2026 denetimi).
+   */
+  translations?: Partial<Record<Language, string>>;
 }
 
 export interface Appointment {

@@ -57,10 +57,9 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
   }, [route, language]);
 
   // Makale sayfasındaysak çeviri karşılığının slug'ı (dil düğmesi için)
-  const translationSlug = useMemo(() => {
+  const translations = useMemo(() => {
     if (route.kind !== 'article') return null;
-    const post = getBlogPosts(language).find((p) => p.slug === route.slug);
-    return post?.translationOf ?? null;
+    return getBlogPosts(language).find((p) => p.slug === route.slug)?.translations ?? null;
   }, [route, language]);
 
   const setLanguage = (lang: Language) => {
@@ -69,9 +68,11 @@ export default function App({ initialPath, ssrPosts }: AppProps = {}) {
     // güncellemez; bu yüzden GERÇEK adres window.location'dan okunur, aksi
     // hâlde makaledeyken dil düğmesi çeviri yerine listeye götürür (yaşandı).
     const liveRoute = typeof window !== 'undefined' ? parseRoute(window.location.pathname) : route;
-    let slug: string | null = translationSlug;
+    let slug: string | null = translations?.[lang] ?? null;
     if (liveRoute.kind === 'article') {
-      slug = getBlogPosts(liveRoute.lang).find((p) => p.slug === liveRoute.slug)?.translationOf ?? null;
+      const post = getBlogPosts(liveRoute.lang).find((p) => p.slug === liveRoute.slug);
+      // Hedef dilde karşılığı varsa oraya, yoksa o dilin blog listesine
+      slug = post?.translations?.[lang] ?? null;
     }
     navigateToPath(alternatePath(liveRoute, lang, slug));
   };

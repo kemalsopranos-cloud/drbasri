@@ -29,7 +29,7 @@ export const ARTICLES_EN: BlogPost[] = [
     id: 'en-holep-turkey',
     title: 'HoLEP Laser Prostate Surgery in Turkey: What International Patients Should Know',
     slug: 'holep-prostate-surgery-turkey-guide',
-    translationOf: 'holep-ameliyati-sonrasi-iyilesme-sureci',
+    translations: { TR: 'holep-ameliyati-sonrasi-iyilesme-sureci', RU: 'holep-lazernaya-operaciya-prostaty-turciya' },
     language: 'EN',
     excerpt:
       'HoLEP is the size-independent, low-bleeding gold standard for enlarged prostate. Here is how the procedure, hospital stay, recovery and travel planning work for patients coming to Istanbul from abroad.',
@@ -128,7 +128,7 @@ ${DISCLAIMER}`,
     id: 'en-robotic-prostatectomy-turkey',
     title: 'Robotic Prostatectomy in Istanbul: A Guide for Patients Considering Treatment in Turkey',
     slug: 'robotic-prostatectomy-istanbul-turkey',
-    translationOf: 'robotik-prostat-kanseri-ameliyati',
+    translations: { TR: 'robotik-prostat-kanseri-ameliyati', RU: 'robotichenskaya-prostatektomiya-stambul' },
     language: 'EN',
     excerpt:
       'Nerve-sparing daVinci robotic prostatectomy for localised prostate cancer: who benefits, how continence and erectile function are protected, what the hospital stay looks like and how follow-up works when you live abroad.',
@@ -215,7 +215,7 @@ ${DISCLAIMER}`,
     id: 'en-kidney-stone-rirs-turkey',
     title: 'Kidney Stone Laser Treatment (RIRS) in Turkey: Incision-Free Surgery and a 3-Day Stay',
     slug: 'kidney-stone-laser-treatment-rirs-turkey',
-    translationOf: 'bobrek-tasi-belirtileri-nasil-duser',
+    translations: { TR: 'bobrek-tasi-belirtileri-nasil-duser', RU: 'lechenie-kamney-v-pochkah-lazerom-rirs' },
     language: 'EN',
     excerpt:
       'Which stones pass on their own, which need treatment, and how flexible ureteroscopy with holmium laser (RIRS) removes kidney stones without any incision — with a typical stay of only three days in Istanbul.',
@@ -304,7 +304,7 @@ ${DISCLAIMER}`,
     id: 'en-varicocele-microsurgery',
     title: 'Microsurgical Varicocele Repair in Istanbul: Improving Male Fertility Without a Long Stay',
     slug: 'varicocele-microsurgery-istanbul',
-    translationOf: 'varikosel-belirtileri-ve-tedavisi',
+    translations: { TR: 'varikosel-belirtileri-ve-tedavisi', RU: 'varikocele-simptomy-mikrohirurgicheskaya-operaciya' },
     language: 'EN',
     excerpt:
       'Varicocele is the most common correctable cause of male infertility. Learn who benefits from repair, why the microsurgical subinguinal technique is the gold standard, and how a day-case operation fits into a short trip to Istanbul.',
@@ -392,7 +392,7 @@ ${DISCLAIMER}`,
     id: 'en-psa-second-opinion',
     title: 'High PSA: Getting a Second Opinion Before a Prostate Biopsy',
     slug: 'high-psa-second-opinion-prostate-mri',
-    translationOf: 'psa-yuksekligi-ne-anlama-gelir',
+    translations: { TR: 'psa-yuksekligi-ne-anlama-gelir', RU: 'povyshennyy-psa-chto-delat' },
     language: 'EN',
     excerpt:
       'A raised PSA is not a cancer diagnosis. Learn what pushes PSA up, how free PSA, PSA density and multiparametric MRI refine the decision, and how MRI-fusion biopsy avoids unnecessary procedures — including how to get an expert review of your results remotely.',
@@ -470,6 +470,330 @@ ${DISCLAIMER}`,
       { title: 'EAU Guidelines: Prostate Cancer', url: 'https://uroweb.org/guidelines/prostate-cancer' },
       { title: 'AUA Guideline: Early Detection of Prostate Cancer', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/early-detection-of-prostate-cancer-guidelines' },
       { title: 'National Cancer Institute: PSA Test', url: 'https://www.cancer.gov/types/prostate/psa-fact-sheet' },
+    ],
+  },
+  // =========================================================================
+  // 6. BPH — belirtiler ve tedavi seçenekleri (HoLEP yazısıyla çakışmaz:
+  //    orada ameliyat süreci, burada tanı + hangi tedavi kime uygun)
+  // =========================================================================
+  {
+    id: 'en-bph-options',
+    title: 'Enlarged Prostate (BPH): Symptoms, Tests and Which Treatment Fits',
+    slug: 'enlarged-prostate-bph-treatment-options',
+    translations: { TR: 'prostat-buyumesi-belirtileri-ve-tedavisi', RU: 'uvelichenie-prostaty-dgpzh-lechenie' },
+    language: 'EN',
+    excerpt:
+      'Waking at night, a weak stream, difficulty starting — benign prostatic hyperplasia affects most men over 50. What the tests mean, when medication is enough, and how to choose between HoLEP, Rezum and surgery.',
+    category: 'Prostate Health',
+    date: 'October 1, 2026',
+    datePublished: '2026-10-01',
+    dateModified: '2026-10-01',
+    readTime: '8',
+    author: AUTHOR,
+    keywords:
+      'enlarged prostate treatment, BPH symptoms, benign prostatic hyperplasia, nocturia treatment, weak urine stream, prostate medication vs surgery, BPH treatment Turkey, IPSS score',
+    metaDescription:
+      'Enlarged prostate (BPH): symptoms, IPSS score, the tests that matter, when medication is enough and how HoLEP, Rezum and TURP compare. Prof. Dr. Basri Çakıroğlu.',
+    relatedService: 'prostate-diseases',
+    content: `### What Benign Prostatic Hyperplasia Means
+The prostate sits directly below the bladder and surrounds the urethra. From around the age of 40 it slowly enlarges under hormonal influence. This growth is **not cancer**; it is benign prostatic hyperplasia (BPH). The problem is mechanical: the enlarged tissue squeezes the channel urine passes through, and over the years the bladder has to work harder to push against it.
+
+BPH affects roughly half of men over 50 and the large majority over 70. Not every enlarged prostate needs treatment. What matters is not the size of the gland but how much it disturbs your life and whether it is damaging the bladder or kidneys.
+
+### The Symptoms
+They usually begin quietly and worsen over years, which is why many men dismiss them as "getting older". They fall into two groups:
+
+**Obstructive (emptying) symptoms**
+* Hesitancy — waiting for the stream to start
+* A weak, thin or interrupted stream
+* Dribbling at the end
+* The feeling that the bladder is not empty
+* Needing to strain
+
+**Irritative (storage) symptoms**
+* Frequency — passing urine more than eight times a day
+* **Nocturia** — waking at night to urinate, the symptom that most often ruins sleep
+* Sudden, hard-to-postpone urgency
+* Not reaching the toilet in time
+
+Severity is measured with the **IPSS** (International Prostate Symptom Score), a seven-question form: under 8 is mild, 8-19 moderate, 20 and above severe. Filling it in before your appointment makes the conversation far more precise.
+
+### What Happens If It Is Left
+Untreated obstruction does more than reduce quality of life. The bladder muscle thickens, then gradually weakens. In advanced cases:
+* **Acute urinary retention** — suddenly being unable to pass urine at all, requiring an emergency catheter
+* Recurrent urinary infections and bladder stones
+* Visible blood in the urine
+* Urine retained permanently in the bladder, back-pressure on the kidneys (hydronephrosis) and loss of kidney function
+
+Once any of these appears, treatment is no longer a matter of preference.
+
+### The Tests That Matter
+1. History and the IPSS questionnaire
+2. Digital rectal examination — size, consistency, any suspicious firmness
+3. **PSA** blood test, to rule out prostate cancer
+4. Urine analysis
+5. **Uroflowmetry** — a peak flow below 10 ml per second suggests obstruction
+6. Ultrasound for prostate volume and post-void residual urine
+
+Together these confirm BPH and separate it from conditions that cause similar symptoms: bladder cancer, urethral stricture, overactive bladder or a neurological cause.
+
+### When Medication Is Enough
+For moderate symptoms without complications, drugs are the first step.
+* **Alpha blockers** (tamsulosin, silodosin, alfuzosin) relax the muscle in the prostate and bladder neck and improve flow within days. They do not shrink the prostate. Dizziness and absent ejaculation are possible side effects.
+* **5-alpha reductase inhibitors** (finasteride, dutasteride) shrink the gland by about a quarter over 6-12 months and suit prostates above 40 ml. They act slowly and may reduce libido and erectile quality. They also halve PSA, so follow-up values must be doubled when interpreted.
+
+The two groups are often combined. Where nocturia dominates, limiting evening fluids, caffeine and alcohol helps. Men who also have erectile difficulty may benefit from tadalafil, which addresses both.
+
+### When Surgery Becomes the Answer
+Surgery is considered when symptoms persist despite medication or side effects are intolerable, and whenever retention, recurrent infection, stones, bleeding or kidney back-pressure has appeared.
+
+Almost all operations today are endoscopic, through the urethra, with no external incision:
+
+**HoLEP (holmium laser enucleation).** The enlarged tissue is separated from its capsule in one piece and removed. Works at **any prostate size**, including 150-200 ml glands that would once have required open surgery. Low bleeding risk makes it one of the safest choices for men on blood thinners, and re-growth is very unlikely because the whole adenoma is taken out. Catheter usually comes out within 24-48 hours. The common trade-off is retrograde ejaculation.
+
+**Rezum (water vapour therapy).** A few seconds of steam injected into the prostate shrink the tissue. Day-case, under local anaesthesia, with a high chance of preserving ejaculation. Suited to small and medium glands; the effect appears over weeks.
+
+**TUR-P.** The long-established endoscopic method, cutting tissue piece by piece with electrical energy. Generally limited to prostates under 80 ml, with higher bleeding and re-growth rates than laser enucleation.
+
+**Robotic or laparoscopic simple prostatectomy.** For very large glands where endoscopic enucleation is not suitable.
+
+The right choice depends on prostate size, your age, medications, other conditions and how much weight you place on preserving ejaculation. This is a decision made together, not a ranking.
+
+### Planning Treatment from Abroad
+Your uroflowmetry, ultrasound (prostate volume and residual urine) and PSA can be reviewed before you travel, so the recommended method and the length of stay are known in advance. HoLEP typically requires 4-5 days in Istanbul; the dedicated guide on that operation covers the stay and recovery day by day.
+
+${DISCLAIMER}`,
+    faq: [
+      {
+        q: 'Does an enlarged prostate turn into cancer?',
+        a: 'No. Benign prostatic hyperplasia and prostate cancer are different diseases, and BPH does not become cancer. They can coexist, which is why men with prostate symptoms are also assessed with a PSA test and examination.',
+      },
+      {
+        q: 'Do I have to take prostate medication for life?',
+        a: 'Medication controls symptoms rather than removing the prostate, so it is usually continued for as long as it works. Symptoms generally return if it is stopped. Men who want a definitive solution, or who do not benefit from drugs, are offered surgery.',
+      },
+      {
+        q: 'Which operation is best for a large prostate?',
+        a: 'HoLEP is size-independent and is routinely performed on glands of 150-200 ml, avoiding open surgery. TURP is generally limited to prostates under 80 ml, and Rezum suits small to medium glands.',
+      },
+      {
+        q: 'Will treatment affect my sex life?',
+        a: 'Erectile function is generally preserved after laser enucleation, but most men experience retrograde ejaculation — semen passes into the bladder. This is harmless and does not remove the sensation of orgasm, though it matters for men planning children. Rezum has a higher chance of preserving normal ejaculation.',
+      },
+      {
+        q: 'When should I see a urologist?',
+        a: 'As soon as nocturia, a weak stream or frequency begins to affect daily life, regardless of age. Even without symptoms, an annual prostate check is advised from 50 — or from 45 with a family history of prostate cancer.',
+      },
+    ],
+    sources: [
+      { title: 'EAU Guidelines: Management of Non-neurogenic Male LUTS', url: 'https://uroweb.org/guidelines/management-of-non-neurogenic-male-luts' },
+      { title: 'AUA Guideline: Management of Benign Prostatic Hyperplasia', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/benign-prostatic-hyperplasia-(bph)-guideline' },
+    ],
+  },
+
+  // =========================================================================
+  // 7. ERECTILE DYSFUNCTION
+  // =========================================================================
+  {
+    id: 'en-erectile-dysfunction',
+    title: 'Erectile Dysfunction: Causes, Tests and Treatment Options in Istanbul',
+    slug: 'erectile-dysfunction-treatment-istanbul',
+    translations: { TR: 'sertlesme-sorunu-nedenleri-ve-tedavisi', RU: 'erektilnaya-disfunkciya-lechenie-stambul' },
+    language: 'EN',
+    excerpt:
+      'Erectile dysfunction is often the earliest warning sign of vascular disease, not merely a sexual problem. What causes it, which tests are worth doing, and how treatment progresses from tablets to shockwave therapy and penile implants.',
+    category: 'Andrology',
+    date: 'October 1, 2026',
+    datePublished: '2026-10-01',
+    dateModified: '2026-10-01',
+    readTime: '8',
+    author: AUTHOR,
+    keywords:
+      'erectile dysfunction treatment, ED treatment Turkey, penile implant Istanbul, shockwave therapy ED, penile Doppler ultrasound, PDE5 inhibitors, male sexual health Turkey',
+    metaDescription:
+      'Erectile dysfunction explained: vascular, hormonal and psychological causes, the tests that matter, and treatment from tablets to shockwave therapy and penile implants in Istanbul.',
+    relatedService: 'andrology-infertility',
+    content: `### What Counts as Erectile Dysfunction
+Erectile dysfunction (ED) is the **persistent or recurrent** inability to achieve or maintain an erection sufficient for satisfactory intercourse. Isolated failures, which almost every man experiences, do not meet that definition; the problem is assessed when it has lasted at least three months. Roughly half of men over 40 are affected to some degree, and the proportion rises with age — but ED is not rare in younger men either.
+
+### Why It Happens
+An erection depends on a chain: brain, nerves, hormones, arteries and the erectile tissue itself. Cerebral arousal widens the penile arteries, the spongy tissue fills with blood, and the filled tissue compresses the veins so blood stays in. A fault anywhere along that chain impairs the erection. ED is therefore a **symptom**, not a disease in itself.
+
+**Vascular — the most common cause.** The penile arteries are among the narrowest in the body, so atherosclerosis shows there first. This is why ED can appear **two to five years before** coronary artery disease announces itself. Diabetes, hypertension, high cholesterol, smoking and inactivity are the main risk factors.
+
+**Hormonal.** Low testosterone (hypogonadism), thyroid disorders, raised prolactin. Low testosterone typically reduces desire as well.
+
+**Neurological.** Diabetic nerve damage, spinal injury, multiple sclerosis, Parkinson's disease, pelvic surgery (radical prostatectomy, rectal surgery) and radiotherapy.
+
+**Medication.** Some blood pressure drugs — particularly beta blockers and thiazides — antidepressants, prostate medication (5-alpha reductase inhibitors) and certain psychiatric drugs.
+
+**Psychological.** Performance anxiety, depression, stress, relationship difficulties; more often prominent in younger men. Preserved morning and masturbatory erections point towards a psychogenic cause, though psychological and organic factors frequently coexist.
+
+**Lifestyle and structural.** Smoking, excess alcohol, obesity, sleep apnoea, and Peyronie's disease (a plaque causing curvature).
+
+### The Tests Worth Doing
+1. **Detailed history** — onset (sudden or gradual), morning erections, desire, ejaculation, relationship context, medication, smoking and alcohol. The **IIEF** questionnaire quantifies severity.
+2. **Examination** — penis, testes, pulses, prostate where age-appropriate, secondary sexual characteristics.
+3. **Blood tests** — fasting glucose or HbA1c, lipid profile, morning **total testosterone**; prolactin, thyroid and PSA where indicated.
+4. **Penile Doppler ultrasound** — arterial inflow and venous leak measured after an intracavernosal injection. The most informative test for confirming a vascular cause and choosing treatment, though not every man needs it.
+
+Every man presenting with ED should also have his **cardiovascular risk** assessed. An ED diagnosis is sometimes the first clue to silent heart disease.
+
+### Treatment, Step by Step
+**1. Treat the cause and the lifestyle.** Controlling diabetes and blood pressure, losing weight, stopping smoking and exercising regularly can improve ED on their own and make every other treatment work better. Where a drug is responsible, it can be changed under medical supervision; where testosterone is low, replacement is considered in suitable men. Where a psychological component exists, sex therapy — ideally involving the partner — matters.
+
+**2. Oral medication (PDE5 inhibitors).** Sildenafil, tadalafil, vardenafil and avanafil strengthen the vascular response **when sexual stimulation is present**; they do not create an erection on their own. Most men respond. Tadalafil's long action also suits low-dose daily use. Headache, flushing, nasal congestion and indigestion are the usual side effects. They must **never** be combined with nitrate heart medication (isosorbide, nitroglycerin), which causes a dangerous drop in blood pressure. Use prescribed medication and avoid counterfeit products sold online.
+
+**3. Low-intensity shockwave therapy (Li-ESWT).** Low-energy sound waves applied externally aim to stimulate new vessel formation. Painless, no anaesthesia, typically 6-12 sessions. It may help men with mild to moderate **vascular** ED who respond partially to tablets. Guidelines describe it as an option in selected patients rather than a standard for everyone; long-term evidence is still accumulating.
+
+**4. Vacuum erection device.** A cylinder draws blood into the penis, held by a ring at the base. Drug-free and safe; particularly useful in rehabilitation after prostate surgery and for men who cannot take tablets.
+
+**5. Intracavernosal injection.** Alprostadil, alone or in combination, injected into the side of the penis before intercourse. Highly effective in men who do not respond to tablets; the first doses are titrated under medical supervision. Dose rules must be followed because of the risk of a prolonged erection (priapism).
+
+**6. Penile implant.** The definitive solution when other methods fail or are unsuitable. **Inflatable** three-piece implants (a pump in the scrotum inflates and deflates them, giving the most natural result) or **malleable** semi-rigid devices allow an erection whenever wanted. Sensation, orgasm and ejaculation are unaffected. Patient and partner satisfaction is the highest of all ED treatments; infection is the main risk, reduced by modern antibiotic-coated devices. Surgery takes about an hour, with one night in hospital and a return to sexual activity after 4-6 weeks.
+
+### When to Seek Help
+Erectile difficulty lasting more than three months, loss of morning erections, a marked drop in desire, penile curvature or pain, or symptoms starting before the age of 40 all deserve assessment. ED is a treatable medical condition — and often a valuable opportunity to protect your cardiovascular health.
+
+${DISCLAIMER}`,
+    faq: [
+      {
+        q: 'Can erectile dysfunction be a sign of heart disease?',
+        a: 'Yes. Because the penile arteries are very narrow, atherosclerosis affects them first, and ED can appear two to five years before coronary disease becomes apparent. Every man presenting with ED should have blood sugar, blood pressure, cholesterol and cardiovascular risk assessed.',
+      },
+      {
+        q: 'Are ED tablets safe for the heart?',
+        a: 'In men with stable heart disease who do not take nitrates, these drugs are safe. They must never be combined with nitrate medication (isosorbide, nitroglycerin). Men with a recent heart attack or uncontrolled cardiac disease should be assessed by a cardiologist first, and medication should always be prescribed rather than bought online.',
+      },
+      {
+        q: 'Does shockwave therapy cure erectile dysfunction permanently?',
+        a: 'In mild to moderate vascular ED it may help by stimulating new vessel formation, and it is painless with 6-12 sessions. It does not work for everyone, and guidelines present it as an option in selected patients. Evidence on how long the benefit lasts is still accumulating.',
+      },
+      {
+        q: 'Does a penile implant feel natural?',
+        a: 'Inflatable three-piece implants are not visible from outside and are inflated and deflated as wanted. Sensation, orgasm and ejaculation are unchanged. Satisfaction rates among patients and partners are the highest of all ED treatments, and sexual activity resumes after 4-6 weeks.',
+      },
+      {
+        q: 'How can I tell whether the cause is psychological or physical?',
+        a: 'Preserved morning and masturbatory erections, a sudden onset and variation by partner or situation suggest a psychological cause. A gradual problem present in all circumstances, with morning erections also diminishing, points to an organic (vascular or hormonal) cause. Blood tests and, where needed, penile Doppler ultrasound distinguish them — and the two often coexist.',
+      },
+    ],
+    sources: [
+      { title: 'EAU Guidelines: Sexual and Reproductive Health', url: 'https://uroweb.org/guidelines/sexual-and-reproductive-health' },
+      { title: 'AUA Guideline: Erectile Dysfunction', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/erectile-dysfunction-(ed)-guideline' },
+    ],
+  },
+
+  // =========================================================================
+  // 8. FEMALE URINARY INCONTINENCE
+  // =========================================================================
+  {
+    id: 'en-female-incontinence',
+    title: 'Urinary Incontinence in Women: Types, Treatment and the TOT Sling',
+    slug: 'female-urinary-incontinence-treatment-turkey',
+    translations: { TR: 'kadinlarda-idrar-kacirma-nedenleri-ve-tedavisi', RU: 'nederzhanie-mochi-u-zhenshchin-lechenie' },
+    language: 'EN',
+    excerpt:
+      'Leaking when you cough, laugh or cannot reach the toilet in time is not an inevitable part of ageing. How stress and urge incontinence differ, what pelvic floor training achieves, and when a 30-minute sling operation is the answer.',
+    category: 'Female Urology',
+    date: 'October 1, 2026',
+    datePublished: '2026-10-01',
+    dateModified: '2026-10-01',
+    readTime: '8',
+    author: AUTHOR,
+    keywords:
+      'urinary incontinence treatment women, stress incontinence surgery, TOT sling Turkey, overactive bladder treatment, pelvic floor exercises, bladder botox, incontinence surgery Istanbul',
+    metaDescription:
+      'Urinary incontinence in women: stress versus urge type, pelvic floor training, medication, bladder Botox and the TOT sling operation. Prof. Dr. Basri Çakıroğlu, Istanbul.',
+    relatedService: 'urogynecology',
+    content: `### A Common Problem That Goes Unspoken
+Urinary incontinence affects roughly one in three women at some point, far more commonly after childbirth and after the menopause. Despite that, many women wait years before seeking help — out of embarrassment, or because they believe it is simply part of growing older. They withdraw from social life, stop exercising and adapt to wearing pads. In reality, most cases are treated successfully once the type is correctly identified.
+
+### The Three Types
+Correct treatment begins with correct classification.
+
+**1. Stress incontinence.** Leakage during coughing, sneezing, laughing, lifting, running or jumping — anything that raises abdominal pressure. The cause is weakness of the pelvic floor muscles and the connective tissue supporting the bladder neck and urethra. Childbirth, the menopause, excess weight and chronic coughing are the main contributors. Typically there is no urge beforehand; the leak happens with the movement.
+
+**2. Urge incontinence.** A sudden, overwhelming need to pass urine and leakage before reaching the toilet, accompanied by frequency (more than eight times a day) and waking at night. The cause is involuntary contraction of the bladder muscle, a picture called **overactive bladder**. The classic example is a sudden urge on hearing running water or turning the key in the front door.
+
+**3. Mixed.** Both together, common with increasing age. Which component dominates determines the order of treatment.
+
+Less common causes include overflow incontinence from incomplete bladder emptying, neurogenic bladder, and fistulae after childbirth or surgery.
+
+### Risk Factors
+* Vaginal delivery, particularly multiple births or a large baby
+* Menopause and falling oestrogen
+* Excess weight
+* Chronic cough (smoking, asthma, COPD) and chronic constipation
+* Recurrent urinary infections
+* Diabetes and neurological disease
+* Certain medications (diuretics, muscle relaxants)
+* Pelvic organ prolapse
+
+### Assessment
+Most women need no elaborate investigation:
+* A detailed history — when does it happen, how often, how much?
+* A **bladder diary** kept for three days, recording fluids, voiding times and leaks. One of the most valuable tools in diagnosis.
+* Urine analysis, and culture where indicated — infection alone can cause urgency
+* Examination: cough test, pelvic floor strength, presence of prolapse
+* Post-void residual urine on ultrasound
+* **Urodynamics** — bladder filling and voiding pressures. Not needed in every woman; reserved for unclear cases, previous surgery or when an operation is planned.
+
+### Treatment, from Simple to Complex
+Guidelines recommend starting with conservative measures in every type; many women improve without medication or surgery.
+
+**Lifestyle.** Even 5-10% weight loss markedly reduces leakage episodes. Reducing caffeine, carbonated drinks and alcohol, spreading fluids through the day and stopping 2-3 hours before bed, treating constipation and chronic cough, and stopping smoking all help.
+
+**Pelvic floor (Kegel) exercises.** First-line treatment for stress incontinence and useful in the urge type too. Contract and relax the pelvic muscles as if holding urine, 5-10 seconds at a time, three sets of 10-15 repetitions daily, consistently for at least three months. **Biofeedback** or electrical stimulation with a physiotherapist helps confirm that the right muscles are working. Done properly, more than half of women improve meaningfully.
+
+**Bladder training.** For the urge type, gradually extending the interval between visits to the toilet — starting at an hour and adding 15 minutes a week towards 3-4 hours — restores bladder capacity and control.
+
+**Medication (urge type / overactive bladder).**
+* **Antimuscarinics** (solifenacin, tolterodine) reduce bladder contractions; dry mouth and constipation are common.
+* **Beta-3 agonists** (mirabegron) are similarly effective without dry mouth; blood pressure is monitored.
+* **Vaginal oestrogen** cream strengthens the mucosa in postmenopausal women and reduces urgency and infections.
+There is no effective drug for stress incontinence; there the treatment is exercise and, where needed, surgery.
+
+**Advanced options for drug-resistant urge incontinence.**
+* **Botulinum toxin** injected into the bladder during cystoscopy; the effect lasts 6-9 months and can be repeated.
+* **Tibial nerve stimulation** — a weekly fine-needle stimulus at the ankle.
+* **Sacral neuromodulation** — an implanted "bladder pacemaker".
+
+**Surgery for stress incontinence.**
+* **Mid-urethral sling (TOT / TVT).** Through a 1-2 cm vaginal incision a thin tape is placed beneath the urethra; it supports the urethra at the moment of coughing. The procedure takes 20-30 minutes, with discharge the same or next day, and long-term dry rates are high.
+* **Urethral bulking injections.** Can be done under local anaesthesia; the effect is shorter-lived than a sling, suiting women who prefer to avoid surgery or carry higher surgical risk.
+* **Burch colposuspension.** The classic approach, performed laparoscopically or robotically, often chosen when other pelvic surgery is planned in the same session.
+* Where prolapse coexists, repair is planned together with the incontinence procedure.
+
+### When to Seek Help
+Any leakage that affects your quality of life is reason enough. Blood in the urine, pain, recurrent infections, sudden severe symptoms or neurological signs (numbness or weakness in the legs) should be assessed without delay. Incontinence treatment today is a stepwise, patient-led field with high success rates — living with pads is not the only option.
+
+${DISCLAIMER}`,
+    faq: [
+      {
+        q: 'Do pelvic floor exercises really stop leakage?',
+        a: 'Yes — they are the first-line treatment for stress incontinence and, done correctly and consistently, produce meaningful improvement in more than half of women. They should be continued for at least three months, three sets a day. A physiotherapist and biofeedback help confirm the right muscles are being used.',
+      },
+      {
+        q: 'What is the difference between stress and urge incontinence?',
+        a: 'In stress incontinence urine leaks with coughing, laughing or lifting, without a preceding urge; the cause is pelvic floor weakness. In urge incontinence a sudden overwhelming need arises and leakage occurs before reaching the toilet; the cause is involuntary bladder contraction. The treatments differ.',
+      },
+      {
+        q: 'What does a TOT sling operation involve?',
+        a: 'A thin tape is placed under the urethra through a 1-2 cm vaginal incision in a 20-30 minute procedure. Most women go home the same or next day and return to daily life within days. Long-term dry rates are high, making it one of the most effective treatments for stress incontinence.',
+      },
+      {
+        q: 'Is there medication for incontinence?',
+        a: 'Antimuscarinics and mirabegron are effective for urge incontinence (overactive bladder). There is no effective drug for stress incontinence; treatment there is pelvic floor training and, where needed, a sling operation.',
+      },
+      {
+        q: 'Does incontinence after childbirth resolve?',
+        a: 'Mild leakage in the first months after delivery usually improves with pelvic floor exercises. Leakage continuing beyond a year, or affecting quality of life, should be assessed — physiotherapy or surgical options are then discussed.',
+      },
+    ],
+    sources: [
+      { title: 'EAU Guidelines: Non-neurogenic Female LUTS', url: 'https://uroweb.org/guidelines/non-neurogenic-female-luts' },
+      { title: 'AUA/SUFU Guideline: Surgical Treatment of Female Stress Urinary Incontinence', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/stress-urinary-incontinence-(sui)-guideline' },
     ],
   },
 ];
