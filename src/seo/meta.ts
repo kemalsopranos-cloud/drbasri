@@ -45,6 +45,45 @@ export function escapeHtml(str: string): string {
 
 const abs = (path: string) => `${SITE_URL}${path === '/' ? '/' : path}`;
 
+// ---------------------------------------------------------------------------
+// SERP uzunlukları (1 Eki 2026 denetimi).
+//
+// Google arama sonucunda başlığı ~60, açıklamayı ~155-160 karakterden sonra
+// keser. Denetimde 56 sayfanın 52'sinde başlık 60'ı aşıyordu (ortalama 86,
+// en uzunu 117) — çünkü her başlığa " | Prof. Dr. Basri Çakıroğlu" ekleniyordu
+// ve makale başlıkları zaten uzun. Marka eki artık YALNIZCA sığdığında ekleniyor;
+// sığmadığında başlığın kendisi korunuyor (anahtar kelime başlıkta kalsın).
+// ---------------------------------------------------------------------------
+const TITLE_MAX = 60;
+const DESC_MAX = 158;
+const DESC_MIN = 120;
+const BRAND_SHORT = 'Dr. Çakıroğlu';
+
+/** Kelime sınırında kısaltır; sonda noktalama bırakmaz. */
+function clampWords(text: string, max: number): string {
+  const t = text.trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max - 1);
+  const at = cut.lastIndexOf(' ');
+  return (at > max * 0.6 ? cut.slice(0, at) : cut).replace(/[\s.,;:–-]+$/, '') + '…';
+}
+
+/** "Başlık | Marka" — yalnızca sınıra sığarsa marka eklenir. */
+function withBrand(title: string): string {
+  const full = `${title} | ${DOCTOR.name}`;
+  if (full.length <= TITLE_MAX) return full;
+  const short = `${title} | ${BRAND_SHORT}`;
+  if (short.length <= TITLE_MAX) return short;
+  return clampWords(title, TITLE_MAX);
+}
+
+/** Açıklamayı sınıra sığdırır; çok kısaysa tamamlayıcı cümle eklenir. */
+function fitDesc(desc: string, filler?: string): string {
+  let d = desc.trim().replace(/\s+/g, ' ');
+  if (d.length < DESC_MIN && filler) d = `${d} ${filler.trim()}`;
+  return clampWords(d, DESC_MAX);
+}
+
 const physicianAuthor = (lang: Language) => ({
   '@type': 'Physician',
   name: DOCTOR.name,
@@ -203,9 +242,10 @@ export function buildHomeMeta(lang: Language = 'TR'): SeoMeta {
   if (lang === 'RU') {
     return {
       lang,
-      title: 'Проф. д-р Басри Чакыроглу | Уролог в Стамбуле — HoLEP и роботическая хирургия',
-      description:
-        'Профессор урологии и роботический хирург в Стамбуле. Лазерная операция простаты HoLEP, роботическая простатэктомия daVinci, лазерное лечение камней в почках и мужское бесплодие — для пациентов из стран СНГ.',
+      title: 'Проф. д-р Басри Чакыроглу | Уролог в Стамбуле, Турция',
+      description: fitDesc(
+        'Профессор урологии и роботический хирург в Стамбуле: лазерная операция простаты HoLEP, роботическая простатэктомия daVinci, лечение камней в почках.'
+      ),
       keywords:
         'уролог Стамбул, лечение в Турции урология, HoLEP Турция, роботическая простатэктомия Стамбул, лечение камней в почках Турция, проф Басри Чакыроглу',
       canonical: abs(homePath('RU')),
@@ -217,9 +257,10 @@ export function buildHomeMeta(lang: Language = 'TR'): SeoMeta {
   return lang === 'EN'
     ? {
         lang,
-        title: 'Prof. Dr. Basri Çakıroğlu | Urologist in Istanbul, Turkey – HoLEP & Robotic Surgery',
-        description:
-          'Professor of Urology and robotic surgeon in Istanbul, Turkey. HoLEP laser prostate surgery, daVinci robotic prostatectomy, laser kidney stone treatment and male infertility care for international patients.',
+        title: 'Prof. Dr. Basri Çakıroğlu | Urologist in Istanbul, Turkey',
+        description: fitDesc(
+          'Professor of Urology and robotic surgeon in Istanbul: HoLEP laser prostate surgery, daVinci robotic prostatectomy and laser kidney stone treatment.'
+        ),
         keywords:
           'urologist Istanbul, urologist Turkey international patients, HoLEP surgery Turkey, robotic prostatectomy Istanbul, kidney stone treatment Turkey, Prof Dr Basri Cakiroglu',
         canonical: abs(homePath('EN')),
@@ -229,9 +270,10 @@ export function buildHomeMeta(lang: Language = 'TR'): SeoMeta {
       }
     : {
         lang,
-        title: 'Prof. Dr. Basri Çakıroğlu | Üroloji Uzmanı İstanbul – HoLEP & Robotik Cerrahi',
-        description:
-          'Prof. Dr. Basri Çakıroğlu - İstanbul Ümraniye Üroloji ve Robotik Cerrahi Uzmanı. HoLEP lazer prostat tedavisi, daVinci robotik cerrahi, böbrek taşı ve ürolojik onkoloji.',
+        title: 'Prof. Dr. Basri Çakıroğlu | Üroloji Uzmanı, İstanbul',
+        description: fitDesc(
+          'İstanbul Ümraniye Üroloji ve Robotik Cerrahi Uzmanı. HoLEP lazer prostat tedavisi, daVinci robotik cerrahi, böbrek taşı ve ürolojik onkoloji.'
+        ),
         keywords:
           'Prof Dr Basri Çakıroğlu, üroloji uzmanı istanbul, ürolog ümraniye, HoLEP lazer prostat ameliyatı, robotik cerrahi, böbrek taşı lazer, ürolojik onkoloji',
         canonical: abs(homePath('TR')),
@@ -248,16 +290,17 @@ export function buildBlogHubMeta(lang: Language = 'TR'): SeoMeta {
     lang,
     title:
       lang === 'RU'
-        ? 'Статьи об урологии и материалы для пациентов | Проф. д-р Басри Чакыроглу'
+        ? 'Статьи об урологии | Проф. д-р Басри Чакыроглу'
         : lang === 'EN'
-        ? 'Urology Articles & Patient Guides | Prof. Dr. Basri Çakıroğlu'
-        : 'Üroloji Makaleleri & Sağlık Rehberi | Prof. Dr. Basri Çakıroğlu',
-    description:
+        ? 'Urology Articles & Patient Guides | Dr. Çakıroğlu'
+        : 'Üroloji Makaleleri & Sağlık Rehberi | Dr. Çakıroğlu',
+    description: fitDesc(
       lang === 'RU'
-        ? 'Материалы для пациентов: лазерная операция простаты HoLEP, роботическая простатэктомия, лазерное лечение камней в почках и мужское здоровье. Проф. д-р Басри Чакыроглу, Стамбул.'
+        ? 'Материалы для пациентов: лазерная операция простаты HoLEP, роботическая простатэктомия, лечение камней в почках и мужское здоровье.'
         : lang === 'EN'
-        ? 'Patient guides on HoLEP laser prostate surgery, robotic prostatectomy, kidney stone laser treatment and male fertility by Prof. Dr. Basri Çakıroğlu, Istanbul.'
-        : 'Prof. Dr. Basri Çakıroğlu tarafından hazırlanan HoLEP lazer prostat cerrahisi, daVinci robotik cerrahi, böbrek taşı ve üroloji makaleleri.',
+        ? 'Patient guides on HoLEP laser prostate surgery, robotic prostatectomy, kidney stone laser treatment and male fertility. Prof. Dr. Çakıroğlu, Istanbul.'
+        : 'Prof. Dr. Basri Çakıroğlu tarafından hazırlanan HoLEP lazer prostat cerrahisi, daVinci robotik cerrahi, böbrek taşı ve üroloji makaleleri.'
+    ),
     keywords:
       lang === 'RU'
         ? 'урология статьи, HoLEP Турция, роботическая простатэктомия Стамбул, лечение камней в почках за рубежом, второе мнение рак простаты'
@@ -292,8 +335,8 @@ export function buildArticleMeta(post: BlogPost, lang: Language = post.language 
   }
   return {
     lang,
-    title: `${post.title} | ${DOCTOR.name}`,
-    description,
+    title: withBrand(post.title),
+    description: fitDesc(description),
     keywords,
     canonical: url,
     ogType: 'article',
@@ -331,16 +374,21 @@ export function buildServiceMeta(item: ExpertiseItem, lang: Language = 'TR'): Se
   const route: Route = { lang, kind: 'service', id: item.id, slug: '' };
   const url = abs(servicePath(lang, item.id));
   // EN başlık yabancı hastanın sorgusuna göre ("... in Istanbul, Turkey")
-  const title =
+  const title = withBrand(
+    lang === 'EN' ? `${item.title} in Istanbul` : lang === 'RU' ? `${item.title} в Стамбуле` : item.title
+  );
+  // Hizmet açıklamaları (shortDesc) çoğu dilde 100-115 karakter kalıyordu;
+  // konum ve hekim bilgisiyle tamamlanıp SERP'te tam satır dolduruluyor.
+  const descFiller =
     lang === 'EN'
-      ? `${item.title} in Istanbul, Turkey | ${DOCTOR.name}`
+      ? 'Prof. Dr. Basri Çakıroğlu, Istanbul — for local and international patients.'
       : lang === 'RU'
-      ? `${item.title} в Стамбуле (Турция) | ${DOCTOR.name}`
-      : `${item.title} | ${DOCTOR.name}`;
+      ? 'Проф. д-р Басри Чакыроглу, Стамбул — для пациентов из-за рубежа.'
+      : 'Prof. Dr. Basri Çakıroğlu, Ümraniye / İstanbul.';
   return {
     lang,
     title,
-    description: item.shortDesc,
+    description: fitDesc(item.shortDesc, descFiller),
     keywords:
       lang === 'EN'
         ? `${item.title} Turkey, ${item.title} Istanbul, ${item.conditions.slice(0, 3).join(', ')}, urologist Istanbul international patients`
@@ -384,9 +432,10 @@ export function buildInternationalMeta(lang: 'EN' | 'RU' = 'EN'): SeoMeta {
   if (lang === 'RU') {
     return {
       lang: 'RU',
-      title: 'Лечение в Турции — урология в Стамбуле для иностранных пациентов | Проф. д-р Басри Чакыроглу',
-      description:
-        'Как проходит лечение урологических заболеваний в Стамбуле для пациентов из стран СНГ: дистанционная оценка документов, план лечения, госпитализация в Hisar Intercontinental Hospital, сроки поездки и наблюдение после возвращения.',
+      title: 'Лечение урологии в Турции | Проф. д-р Чакыроглу',
+      description: fitDesc(
+        'Лечение урологии в Стамбуле для пациентов из СНГ: дистанционная оценка документов, план лечения, сроки поездки и наблюдение после возвращения.'
+      ),
       keywords:
         'лечение в Турции урология, уролог Стамбул для иностранцев, операция простаты за рубежом, HoLEP Турция, роботическая простатэктомия Турция, камни в почках лечение Стамбул',
       canonical: url,
@@ -414,9 +463,10 @@ export function buildInternationalMeta(lang: 'EN' | 'RU' = 'EN'): SeoMeta {
   }
   return {
     lang: 'EN',
-    title: 'International Patients – Urology Treatment in Istanbul | Prof. Dr. Basri Çakıroğlu',
-    description:
-      'How international patients receive urology care in Istanbul: remote report review, treatment planning, hospital stay at Hisar Intercontinental Hospital, travel and follow-up. HoLEP, robotic prostatectomy, kidney stone laser surgery.',
+    title: 'International Patients | Urology in Istanbul, Turkey',
+    description: fitDesc(
+      'Urology care in Istanbul for international patients: remote report review, treatment plan, hospital stay, travel and follow-up. HoLEP, robotic surgery, stones.'
+    ),
     keywords:
       'urology treatment Turkey international patients, medical tourism urology Istanbul, prostate surgery abroad, HoLEP Turkey, robotic prostatectomy Turkey, kidney stone surgery Istanbul',
     canonical: url,

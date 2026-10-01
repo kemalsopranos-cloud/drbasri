@@ -4,7 +4,7 @@ import { Menu, X, Calendar, Globe, Clock, Phone, Instagram } from 'lucide-react'
 import { Language } from '../types';
 import { uiTranslations } from '../translations';
 import LanguageSwitcher from './LanguageSwitcher';
-import { internationalPath } from '../routes';
+import { internationalPath, blogPath } from '../routes';
 import { contactDetails } from '../data';
 
 interface HeaderProps {
@@ -36,6 +36,11 @@ export default function Header({
     { label: t.navExpertise, id: 'expertise' },
     { label: t.navContact, id: 'contact' },
   ];
+
+  // SEO: Makaleler hub'ı ana menüde yoktu ve site genelinde yalnızca 1 iç
+  // bağlantı alıyordu (1 Eki 2026 denetimi) — oysa 18 makalenin tamamı oradan
+  // bağlanıyor. Gerçek <a href> olarak eklendi (Googlebot onClick'i takip etmez).
+  const blogHref = blogPath(language);
 
   const scrollToSection = (id: string) => {
     setIsOpen(false);
@@ -125,6 +130,14 @@ export default function Header({
                 {item.label}
               </button>
             ))}
+            <a
+              id="nav-blog"
+              href={blogHref}
+              className="px-3 py-2 text-xs uppercase tracking-widest text-slate-200 hover:text-gold font-medium transition-all rounded-sm hover:bg-white/5"
+            >
+              {t.navBlog}
+            </a>
+
             {/* EN: yabancı hasta sayfası — ana sayfadan gerçek <a> ile bağlantı (SEO) */}
             {language !== 'TR' && (
               <a
