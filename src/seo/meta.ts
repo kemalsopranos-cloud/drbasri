@@ -285,12 +285,19 @@ export function buildHomeMeta(lang: Language = 'TR'): SeoMeta {
       }
     : {
         lang,
-        title: 'Prof. Dr. Basri Çakıroğlu | Üroloji Uzmanı, İstanbul',
+        // YEREL SORGU: başlık HEM ilçeyi HEM şehri taşımalı. Yalnızca
+        // "İstanbul" yazmak ilçe sorgusunu ("ümraniye üroloji doktoru"),
+        // yalnızca "Ümraniye" yazmak şehir sorgusunu ("istanbul üroloji
+        // doktoru") zayıflatıyordu. Sıralama "İstanbul Ümraniye" doğal okunur
+        // ve iki sorguyu da karşılar. Tam ad 60 karaktere sığmadığı için
+        // kısa marka (BRAND_SHORT ile aynı biçim) kullanılıyor; tam ad H1,
+        // şema ve alan adında zaten geçiyor.
+        title: 'İstanbul Ümraniye Üroloji Doktoru | Prof. Dr. Çakıroğlu',
         description: fitDesc(
-          'İstanbul Ümraniye Üroloji ve Robotik Cerrahi Uzmanı. HoLEP lazer prostat tedavisi, daVinci robotik cerrahi, böbrek taşı ve ürolojik onkoloji.'
+          'İstanbul Ümraniye’de üroloji doktoru Prof. Dr. Basri Çakıroğlu — Hisar Intercontinental Hospital. HoLEP lazer prostat, robotik cerrahi, böbrek taşı tedavisi.'
         ),
         keywords:
-          'Prof Dr Basri Çakıroğlu, üroloji uzmanı istanbul, ürolog ümraniye, HoLEP lazer prostat ameliyatı, robotik cerrahi, böbrek taşı lazer, ürolojik onkoloji',
+          'ümraniye üroloji doktoru, ümraniye ürolog, istanbul üroloji doktoru, istanbul ürolog, üroloji uzmanı istanbul, Prof Dr Basri Çakıroğlu, HoLEP lazer prostat ameliyatı, robotik cerrahi, böbrek taşı lazer',
         canonical: abs(homePath('TR')),
         ogType: 'website',
         image: `${SITE_URL}${OG_IMAGE_PATH}`,

@@ -11,7 +11,9 @@
 
 export const RU_TEXT: Record<string, string> = {
   // --- Kahraman bölümü / genel ---
-  'Modern Üroloji · Akademik Vizyon · İstanbul': 'Современная урология · Научный подход · Стамбул',
+  // Anahtar Türkçe kaynak metindir: Hero rozetinin metni değişince bu anahtar
+  // da güncellenmeli, yoksa Rusça sayfa sessizce İngilizceye düşer.
+  'Üroloji & Robotik Cerrahi · Ümraniye, İstanbul': 'Урология и роботическая хирургия · Умрание, Стамбул',
   'Hızlı Randevu Formu': 'Быстрая запись на приём',
   'Klinik asistanımız sizi arayarak randevuyu teyit edecektir.':
     'Наш координатор перезвонит вам и подтвердит приём.',

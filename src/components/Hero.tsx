@@ -112,7 +112,11 @@ export default function Hero({
             <div className="inline-flex self-start items-center space-x-2 bg-white/5 border border-gold/30 px-4 py-2 rounded-full mb-2">
               <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
               <span className="text-[11px] font-semibold tracking-wider text-gold uppercase font-sans">
-                {L(language, { TR: 'Modern Üroloji · Akademik Vizyon · İstanbul', EN: 'Modern Urology · Academic Vision · Istanbul' })}
+                {/* YEREL SEO: rozet ilçeyi VE şehri görünür kılar. "Ümraniye
+                    ürolog" arayan hasta doğru yerde olduğunu ilk ekranda
+                    görür; Google da iki konum adını ana içerikte bulur —
+                    yalnızca şema/footer'da geçmesi daha zayıf bir sinyal. */}
+                {L(language, { TR: 'Üroloji & Robotik Cerrahi · Ümraniye, İstanbul', EN: 'Urology & Robotic Surgery · Ümraniye, Istanbul' })}
               </span>
             </div>
 
