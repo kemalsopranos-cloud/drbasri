@@ -63,6 +63,10 @@ export const DOCTOR = {
     'https://hisarhospital.com/doktorlarimiz/prof-dr-basri-cakiroglu/',
     'https://uskudar.edu.tr/en/academic-staff/basri-cakiroglu',
     'https://www.doktortakvimi.com/profil/basri-cakiroglu-2',
+    // Business Profile'ın "hizmetler bağlantısı" alanında duruyordu ama sitede
+    // bildirilmiyordu; dizin profilleri Google için kimlik doğrulayan alıntıdır
+    // (15 Kas 2026, GBP dışa aktarımından bulundu — 200 döndü).
+    'https://www.doktorsitesi.com/basri-cakiroglu/uroloji/istanbul',
     'https://www.researchgate.net/profile/Basri-Cakiroglu',
     'https://www.linkedin.com/in/basri-%C3%A7ak%C4%B1ro%C4%9Flu-9749a129a/',
   ],
