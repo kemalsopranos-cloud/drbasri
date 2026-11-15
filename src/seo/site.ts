@@ -48,9 +48,13 @@ export const DOCTOR = {
   // Yerel arama: hizmet verilen ilçeler (Anadolu Yakası)
   areaServed: ['Ümraniye', 'Ataşehir', 'Çekmeköy', 'Üsküdar', 'Sancaktepe', 'Kadıköy', 'Maltepe', 'Beykoz', 'İstanbul'],
   // sameAs — Google'ın kimliği doğrulamak için eşleştirdiği dış profiller.
-  // Hepsi 14 Eyl 2026'da 200 döndü. Google Business Profile URL'si alındığında
-  // buraya EKLE.
+  // Hepsi 14 Eyl 2026'da 200 döndü.
   sameAs: [
+    // Google Business Profile — harita paketiyle siteyi AYNI işletme olarak
+    // eşleştiren bağlantı. Profil Eylül'den beri vardı ama sitede hiç
+    // bildirilmiyordu; sameAs'te olmaması Google'ın iki varlığı eşleştirmesini
+    // zorlaştırır (15 Kas 2026 denetimi).
+    'https://maps.app.goo.gl/MnS882cg8M34JW9n7',
     'https://www.instagram.com/drbasricakiroglu/',
     'https://hisarhospital.com/doktorlarimiz/prof-dr-basri-cakiroglu/',
     'https://uskudar.edu.tr/en/academic-staff/basri-cakiroglu',
