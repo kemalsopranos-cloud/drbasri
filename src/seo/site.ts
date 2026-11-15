@@ -32,8 +32,12 @@ export const DOCTOR = {
   },
   // Tek satırlık gösterim (iletişim bölümü, footer)
   addressLine: 'Saray Mah. Site Yolu Cad. No: 7, 34768 Ümraniye / İstanbul',
-  // Hisar Intercontinental Hospital — harita gömme URL'sindeki koordinatlar
-  geo: { latitude: 41.02176, longitude: 29.11719 },
+  // Google Business Profile'daki iğnenin koordinatları — DOĞRU KAYNAK BURASI.
+  // Eskiden hastanenin harita gömme URL'sinden alınmıştı (41.02176 / 29.11719)
+  // ve GBP iğnesinden ~600 m sapıyordu. Yerel sıralamada mesafe doğrudan
+  // etkili olduğu için şema ile profil AYNI noktayı göstermeli; ayrıldıklarında
+  // Google iki farklı konum görür (15 Kas 2026, kullanıcı GBP'yi doğruladı).
+  geo: { latitude: 41.02693, longitude: 29.11499 },
   mapUrl: 'https://maps.app.goo.gl/MnS882cg8M34JW9n7',
   hospital: {
     name: 'Hisar Intercontinental Hospital',
