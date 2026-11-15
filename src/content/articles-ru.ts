@@ -22,7 +22,7 @@ export const ARTICLES_RU: BlogPost[] = [
   // =========================================================================
   {
     id: 'ru-holep-turciya',
-    title: 'Лазерная операция на простате HoLEP в Турции: как проходит лечение иностранных пациентов',
+    title: 'Операция HoLEP в Турции: как проходит и сколько длится',
     slug: 'holep-lazernaya-operaciya-prostaty-turciya',
     translations: { TR: 'holep-ameliyati-sonrasi-iyilesme-sureci', EN: 'holep-prostate-surgery-turkey-guide' },
     language: 'RU',
@@ -121,7 +121,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'ru-kamni-rirs',
-    title: 'Лечение камней в почках в Турции: лазерное дробление без разрезов (RIRS)',
+    title: 'Лечение камней в почках лазером (RIRS) в Турции',
     slug: 'lechenie-kamney-v-pochkah-lazerom-rirs',
     translations: { TR: 'bobrek-tasi-belirtileri-nasil-duser', EN: 'kidney-stone-laser-treatment-rirs-turkey' },
     language: 'RU',
@@ -208,7 +208,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'ru-robot-prostatektomiya',
-    title: 'Роботическая простатэктомия в Стамбуле: что нужно знать при раке простаты',
+    title: 'Роботическая простатэктомия в Стамбуле',
     slug: 'robotichenskaya-prostatektomiya-stambul',
     translations: { TR: 'robotik-prostat-kanseri-ameliyati', EN: 'robotic-prostatectomy-istanbul-turkey' },
     language: 'RU',
@@ -382,7 +382,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'ru-bph-options',
-    title: 'Увеличение простаты (ДГПЖ): симптомы, обследование и выбор лечения',
+    title: 'Увеличение простаты (ДГПЖ): симптомы и лечение',
     slug: 'uvelichenie-prostaty-dgpzh-lechenie',
     translations: { TR: 'prostat-buyumesi-belirtileri-ve-tedavisi', EN: 'enlarged-prostate-bph-treatment-options' },
     language: 'RU',
@@ -500,7 +500,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'ru-erectile-dysfunction',
-    title: 'Эректильная дисфункция: причины, обследование и лечение в Стамбуле',
+    title: 'Эректильная дисфункция: причины и лечение',
     slug: 'erektilnaya-disfunkciya-lechenie-stambul',
     translations: { TR: 'sertlesme-sorunu-nedenleri-ve-tedavisi', EN: 'erectile-dysfunction-treatment-istanbul' },
     language: 'RU',
@@ -706,7 +706,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'ru-varicocele',
-    title: 'Варикоцеле: симптомы, влияние на бесплодие и микрохирургическая операция',
+    title: 'Варикоцеле: симптомы и микрохирургическая операция',
     slug: 'varikocele-simptomy-mikrohirurgicheskaya-operaciya',
     translations: { TR: 'varikosel-belirtileri-ve-tedavisi', EN: 'varicocele-microsurgery-istanbul' },
     language: 'RU',

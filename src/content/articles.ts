@@ -30,7 +30,7 @@ export const ARTICLES_TR: BlogPost[] = [
   // =========================================================================
   {
     id: 'bph-belirtileri-tedavisi',
-    title: 'Prostat Büyümesi Belirtileri ve Tedavisi: İlaç mı, Ameliyat mı?',
+    title: 'Prostat Büyümesi Belirtileri: İlaç mı, Ameliyat mı?',
     slug: 'prostat-buyumesi-belirtileri-ve-tedavisi',
     translations: { EN: 'enlarged-prostate-bph-treatment-options', RU: 'uvelichenie-prostaty-dgpzh-lechenie' },
     excerpt:
@@ -155,7 +155,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'psa-yuksekligi',
-    title: 'PSA Yüksekliği Ne Anlama Gelir? Yüksek PSA Her Zaman Kanser mi?',
+    title: 'PSA Yüksekliği Ne Demek? PSA Kaç Olmalı, Kanser mi?',
     slug: 'psa-yuksekligi-ne-anlama-gelir',
     translations: { EN: 'high-psa-second-opinion-prostate-mri', RU: 'povyshennyy-psa-chto-delat' },
     excerpt:
@@ -169,7 +169,7 @@ ${DISCLAIMER}`,
     keywords:
       'PSA yüksekliği, PSA testi kaç olmalı, yüksek PSA nedenleri, PSA 4 üstü, serbest PSA oranı, multiparametrik prostat MR, füzyon biyopsi, prostat kanseri tarama',
     metaDescription:
-      'PSA yüksekliğinin nedenleri, normal PSA değerleri, serbest/total PSA oranı ve prostat MR ile füzyon biyopsinin ne zaman gerektiği. Prof. Dr. Basri Çakıroğlu.',
+      'PSA yüksekliği ne anlama gelir, PSA kaç olmalı, yükselmenin kanser dışı nedenleri ve biyopsi ne zaman gerekir? Prof. Dr. Basri Çakıroğlu anlatıyor.',
     relatedService: 'urologic-oncology',
     content: `### PSA Nedir, Neyi Ölçer?
 PSA (Prostat Spesifik Antijen), prostat bezinin ürettiği ve meninin sıvı kalmasını sağlayan bir proteindir. Küçük bir kısmı kana karışır ve basit bir kan testiyle ölçülebilir. PSA, prostat dokusuna özgüdür; ancak **kansere özgü değildir**. Yani PSA'yı yükselten her durum kanser değildir; prostatı büyüten, tahriş eden veya ona basınç uygulayan her şey PSA'yı artırabilir.
@@ -268,7 +268,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'bobrek-tasi-nasil-duser',
-    title: 'Böbrek Taşı Belirtileri: Taş Kendiliğinden Düşer mi, Ne Zaman Ameliyat Gerekir?',
+    title: 'Böbrek Taşı Kaç Günde Düşer? 5-10 mm Taş Düşer mi?',
     slug: 'bobrek-tasi-belirtileri-nasil-duser',
     translations: { EN: 'kidney-stone-laser-treatment-rirs-turkey', RU: 'lechenie-kamney-v-pochkah-lazerom-rirs' },
     excerpt:
@@ -282,7 +282,7 @@ ${DISCLAIMER}`,
     keywords:
       'böbrek taşı belirtileri, böbrek taşı nasıl düşer, böbrek taşı düşürme, üreter taşı, böbrek taşı ağrısı, lazerle taş kırma, RIRS, ESWL, böbrek taşı ameliyatı istanbul',
     metaDescription:
-      'Böbrek taşı belirtileri, hangi taşların kendiliğinden düştüğü, acil durumlar ve RIRS/ESWL/PNL gibi tedavi yöntemleri. Prof. Dr. Basri Çakıroğlu anlatıyor.',
+      'Böbrek taşı kaç günde düşer, hangi boyuttaki taş kendiliğinden düşer, belirtileri neler ve ne zaman ameliyat gerekir? Prof. Dr. Basri Çakıroğlu anlatıyor.',
     relatedService: 'stone-disease',
     content: `### Böbrek Taşı Nasıl Oluşur?
 İdrar, içinde kalsiyum, oksalat, ürik asit ve fosfat gibi minerallerin çözünmüş hâlde bulunduğu bir sıvıdır. Bu maddelerin yoğunluğu arttığında ya da onları çözünmüş tutan koruyucu maddeler (sitrat gibi) azaldığında kristaller oluşur; kristaller birleşerek zamanla taşa dönüşür. Taşların yaklaşık %80'i kalsiyum oksalat yapısındadır; ürik asit, struvit (enfeksiyon) ve sistin taşları daha nadirdir.
@@ -388,7 +388,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'holep-sonrasi-iyilesme',
-    title: 'HoLEP Ameliyatı Sonrası İyileşme Süreci: Gün Gün Neler Beklemelisiniz?',
+    title: 'HoLEP Sonrası İyileşme: Cinsellik, İdrar Kaçırma, Süre',
     slug: 'holep-ameliyati-sonrasi-iyilesme-sureci',
     translations: { EN: 'holep-prostate-surgery-turkey-guide', RU: 'holep-lazernaya-operaciya-prostaty-turciya' },
     excerpt:
@@ -402,7 +402,7 @@ ${DISCLAIMER}`,
     keywords:
       'HoLEP ameliyatı sonrası, HoLEP iyileşme süresi, HoLEP sonrası idrar kaçırma, HoLEP sonrası kanama, HoLEP sonrası cinsellik, prostat ameliyatı sonrası dikkat edilmesi gerekenler',
     metaDescription:
-      'HoLEP ameliyatı sonrası iyileşme süreci: hastanede kalış, sonda, kanama, idrar kaçırma, işe dönüş ve cinsel yaşam. Prof. Dr. Basri Çakıroğlu’ndan hasta rehberi.',
+      'HoLEP ameliyatı sonrası iyileşme: hastanede kalış, sonda, kanama, idrar kaçırma, cinsel yaşam ve işe dönüş. Prof. Dr. Basri Çakıroğlu’ndan hasta rehberi.',
     relatedService: 'prostate-diseases',
     content: `### HoLEP'i Kısaca Hatırlayalım
 HoLEP (Holmiyum Lazer Enükleasyonu), iyi huylu prostat büyümesinde idrar kanalını tıkayan dokunun idrar yolundan girilerek lazerle kapsülünden ayrılıp mesane içinde parçalanarak çıkarıldığı kapalı bir ameliyattır. Vücutta kesi yoktur, kanama riski düşüktür ve prostatın boyutu ne olursa olsun uygulanabilir. Ameliyat kadar önemli olan bir konu da sonrasındaki iyileşme sürecinin doğru yönetilmesidir. Bu yazı, hastalarımızın en sık sorduğu soruları zaman çizelgesine göre yanıtlıyor.
@@ -482,7 +482,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'kadin-idrar-kacirma',
-    title: 'Kadınlarda İdrar Kaçırma: Nedenleri, Türleri ve Tedavi Seçenekleri',
+    title: 'Kadınlarda İdrar Kaçırma: Nedenleri ve Tedavisi',
     slug: 'kadinlarda-idrar-kacirma-nedenleri-ve-tedavisi',
     translations: { EN: 'female-urinary-incontinence-treatment-turkey', RU: 'nederzhanie-mochi-u-zhenshchin-lechenie' },
     excerpt:
@@ -602,7 +602,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'robotik-radikal-prostatektomi',
-    title: 'Robotik Prostat Kanseri Ameliyatı (Radikal Prostatektomi): Süreç, Avantajlar ve İyileşme',
+    title: 'Robotik Prostat Ameliyatı (da Vinci): Nasıl Yapılır?',
     slug: 'robotik-prostat-kanseri-ameliyati',
     translations: { EN: 'robotic-prostatectomy-istanbul-turkey', RU: 'robotichenskaya-prostatektomiya-stambul' },
     excerpt:
@@ -616,7 +616,7 @@ ${DISCLAIMER}`,
     keywords:
       'robotik prostat ameliyatı, radikal prostatektomi, daVinci prostat kanseri ameliyatı, sinir koruyucu prostatektomi, prostat kanseri ameliyatı sonrası idrar kaçırma, prostat kanseri tedavisi istanbul',
     metaDescription:
-      'Robotik radikal prostatektomi nasıl yapılır, kimlere uygundur, idrar kontrolü ve sertleşme fonksiyonu nasıl korunur, iyileşme süreci nasıldır? Prof. Dr. Basri Çakıroğlu.',
+      'Robotik radikal prostatektomi nasıl yapılır, kimlere uygundur, idrar kontrolü ve sertleşme nasıl korunur? Prof. Dr. Basri Çakıroğlu anlatıyor.',
     relatedService: 'robotic-surgery',
     content: `### Radikal Prostatektomi Nedir?
 Radikal prostatektomi, prostat bezinin seminal veziküllerle birlikte tamamen çıkarılması ve idrar kanalının mesaneye yeniden bağlanmasıdır. Prostatın dışına yayılmamış (lokalize) ya da sınırlı bölgesel yayılım gösteren prostat kanserinde **tam iyileşme amaçlı** temel tedavi seçeneklerinden biridir. Bu ameliyat açık, laparoskopik veya **robot yardımlı** olarak yapılabilir; günümüzde gelişmiş merkezlerde büyük çoğunluğu robotik yöntemle gerçekleştirilmektedir.
@@ -701,7 +701,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'varikosel',
-    title: 'Varikosel Nedir? Belirtileri, Kısırlıkla İlişkisi ve Mikrocerrahi Tedavisi',
+    title: 'Varikosel Nedir? Belirtileri ve Mikrocerrahi Tedavisi',
     slug: 'varikosel-belirtileri-ve-tedavisi',
     translations: { EN: 'varicocele-microsurgery-istanbul', RU: 'varikocele-simptomy-mikrohirurgicheskaya-operaciya' },
     excerpt:
@@ -715,7 +715,7 @@ ${DISCLAIMER}`,
     keywords:
       'varikosel nedir, varikosel belirtileri, varikosel ameliyatı, mikroskopik varikoselektomi, varikosel kısırlık, testis damar genişlemesi, sperm sayısı düşüklüğü, erkek infertilitesi istanbul',
     metaDescription:
-      'Varikosel belirtileri, kısırlıkla ilişkisi, kimlerde ameliyat gerektiği ve mikrocerrahi varikoselektomi. Prof. Dr. Basri Çakıroğlu anlatıyor.',
+      'Varikosel nedir, belirtileri neler, kısırlığa neden olur mu ve mikrocerrahi varikoselektomi kimlere uygundur? Prof. Dr. Basri Çakıroğlu anlatıyor.',
     relatedService: 'andrology-infertility',
     content: `### Varikosel Nedir?
 Varikosel, testisten kanı taşıyan toplardamar ağının (pampiniform pleksus) tıpkı bacaklardaki varis gibi genişleyip kıvrımlı hâle gelmesidir. Damar kapakçıklarının yetersizliği nedeniyle kan testise doğru geri kaçar ve göllenir. Anatomik nedenlerle olguların büyük çoğunluğu **sol tarafta** görülür; iki taraflı varikosel de nadir değildir.
@@ -811,7 +811,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'erektil-disfonksiyon',
-    title: 'Sertleşme Sorunu (Erektil Disfonksiyon): Nedenleri, Tanısı ve Tedavi Basamakları',
+    title: 'Sertleşme Sorunu (Erektil Disfonksiyon) Nedenleri',
     slug: 'sertlesme-sorunu-nedenleri-ve-tedavisi',
     translations: { EN: 'erectile-dysfunction-treatment-istanbul', RU: 'erektilnaya-disfunkciya-lechenie-stambul' },
     excerpt:
@@ -916,7 +916,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'hematuri',
-    title: 'İdrarda Kan Görülmesi (Hematüri): Nedenleri ve Ne Zaman Ciddiye Alınmalı?',
+    title: 'İdrarda Kan (Hematüri) Neden Olur? Ne Zaman Tehlikeli?',
     slug: 'idrarda-kan-gorulmesi-nedenleri',
     excerpt:
       'İdrarda kan görmek korkutucudur; nedenlerin çoğu enfeksiyon ve taş gibi iyi huylu olsa da ağrısız kanama mesane kanserinin ilk ve bazen tek belirtisidir. Hangi tetkikler gerekir, neden "kendiliğinden geçti" denip beklenmemelidir?',
@@ -929,7 +929,7 @@ ${DISCLAIMER}`,
     keywords:
       'idrarda kan görülmesi, hematüri nedenleri, idrarda kan ağrısız, mikroskobik hematüri, sistoskopi, mesane kanseri belirtileri, idrar tahlilinde eritrosit, üroloji istanbul',
     metaDescription:
-      'İdrarda kan görülmesinin (hematüri) nedenleri, ağrılı ve ağrısız kanamanın farkı, mesane kanseri riski ve sistoskopi/BT ürografi ile değerlendirme. Prof. Dr. Basri Çakıroğlu.',
+      'İdrarda kan görülmesinin nedenleri, ağrılı ve ağrısız kanamanın farkı, mesane kanseri riski ve hangi tetkiklerin gerektiği. Prof. Dr. Basri Çakıroğlu.',
     relatedService: 'urologic-oncology',
     content: `### Hematüri Nedir?
 Hematüri, idrarda kan bulunmasıdır. İki şekilde karşımıza çıkar:
@@ -1021,7 +1021,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'eswl-ameliyatsiz-bobrek-tasi',
-    title: 'Ameliyatsız Böbrek Taşı Tedavisi (ESWL): Kimlere Uygun, Nasıl Yapılır, Ne Kadar Başarılı?',
+    title: 'ESWL ile Ameliyatsız Böbrek Taşı Kırma: Kimlere Uygun?',
     slug: 'ameliyatsiz-bobrek-tasi-tedavisi-eswl',
     excerpt:
       'ESWL, kesi ve anestezi olmadan vücut dışından gönderilen şok dalgalarıyla böbrek taşını kırma yöntemidir. Hangi taşlarda işe yarar, hangi durumlarda uygun değildir, işlem ve sonrası nasıl geçer, başarı oranı gerçekte nedir?',

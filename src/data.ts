@@ -470,7 +470,7 @@ Böbrek içindeki taşa ulaşıldığında, milimetrik lazer fiberi kullanılara
         },
         {
           id: "female-incontinence-solutions",
-          title: "Kadınlarda İdrar Kaçırma: Nedenleri ve Modern Askı Ameliyatları (TOT)",
+          title: "Kadınlarda İdrar Kaçırma ve TOT Askı Ameliyatı",
           slug: "kadinlarda-idrar-kacirma-tedavisi-tot",
           excerpt: "Öksürme, gülme veya ağır kaldırma sırasında idrar kaçırma kader değildir. 15-20 dakikalık modern askı operasyonları ile kalıcı konfor sağlanır.",
           category: "Kadın Ürolojisi",
@@ -501,7 +501,7 @@ Günümüzde stres tipi idrar kaçırmada altın standart cerrahi tedavi TOT ask
         {
           id: "prostate-early-diagnosis",
           translations: { TR: "prostat-sagliginda-erken-teshis" },
-          title: "The Importance of Early Diagnosis in Prostate Health and PSA Screening",
+          title: "Early Diagnosis in Prostate Health and PSA Screening",
           slug: "prostate-health-early-diagnosis",
           excerpt: "Prostate cancer is one of the most common cancers diagnosed in men. Early detection is a lifesaver for this silent disease.",
           category: "Oncology",
@@ -523,7 +523,7 @@ If an elevated PSA or suspicious physical examination is detected, a **Multipara
         },
         {
           id: "holep-prostate-treatment",
-          title: "HoLEP: Incision-free and Safe Laser Solution for Enlarged Prostate",
+          title: "HoLEP: Incision-Free Laser Surgery for Large Prostates",
           slug: "holep-laser-prostate-treatment",
           translations: { TR: "holep-lazer-prostat-tedavisi" },
           excerpt: "Recognized as the gold standard in benign prostatic hyperplasia (BPH) surgery, HoLEP utilizes state-of-the-art Holmium Laser to treat any prostate size with no incision.",

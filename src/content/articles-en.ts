@@ -27,7 +27,7 @@ export const ARTICLES_EN: BlogPost[] = [
   // =========================================================================
   {
     id: 'en-holep-turkey',
-    title: 'HoLEP Laser Prostate Surgery in Turkey: What International Patients Should Know',
+    title: 'HoLEP Laser Prostate Surgery in Turkey: A Guide',
     slug: 'holep-prostate-surgery-turkey-guide',
     translations: { TR: 'holep-ameliyati-sonrasi-iyilesme-sureci', RU: 'holep-lazernaya-operaciya-prostaty-turciya' },
     language: 'EN',
@@ -126,7 +126,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'en-robotic-prostatectomy-turkey',
-    title: 'Robotic Prostatectomy in Istanbul: A Guide for Patients Considering Treatment in Turkey',
+    title: 'Robotic Prostatectomy in Istanbul: Patient Guide',
     slug: 'robotic-prostatectomy-istanbul-turkey',
     translations: { TR: 'robotik-prostat-kanseri-ameliyati', RU: 'robotichenskaya-prostatektomiya-stambul' },
     language: 'EN',
@@ -213,7 +213,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'en-kidney-stone-rirs-turkey',
-    title: 'Kidney Stone Laser Treatment (RIRS) in Turkey: Incision-Free Surgery and a 3-Day Stay',
+    title: 'Kidney Stone Laser Treatment (RIRS) in Turkey',
     slug: 'kidney-stone-laser-treatment-rirs-turkey',
     translations: { TR: 'bobrek-tasi-belirtileri-nasil-duser', RU: 'lechenie-kamney-v-pochkah-lazerom-rirs' },
     language: 'EN',
@@ -302,7 +302,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'en-varicocele-microsurgery',
-    title: 'Microsurgical Varicocele Repair in Istanbul: Improving Male Fertility Without a Long Stay',
+    title: 'Microsurgical Varicocele Repair in Istanbul',
     slug: 'varicocele-microsurgery-istanbul',
     translations: { TR: 'varikosel-belirtileri-ve-tedavisi', RU: 'varikocele-simptomy-mikrohirurgicheskaya-operaciya' },
     language: 'EN',
@@ -478,7 +478,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'en-bph-options',
-    title: 'Enlarged Prostate (BPH): Symptoms, Tests and Which Treatment Fits',
+    title: 'Enlarged Prostate (BPH): Symptoms and Treatment',
     slug: 'enlarged-prostate-bph-treatment-options',
     translations: { TR: 'prostat-buyumesi-belirtileri-ve-tedavisi', RU: 'uvelichenie-prostaty-dgpzh-lechenie' },
     language: 'EN',
@@ -596,7 +596,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'en-erectile-dysfunction',
-    title: 'Erectile Dysfunction: Causes, Tests and Treatment Options in Istanbul',
+    title: 'Erectile Dysfunction: Causes, Tests and Treatment',
     slug: 'erectile-dysfunction-treatment-istanbul',
     translations: { TR: 'sertlesme-sorunu-nedenleri-ve-tedavisi', RU: 'erektilnaya-disfunkciya-lechenie-stambul' },
     language: 'EN',
@@ -689,7 +689,7 @@ ${DISCLAIMER}`,
   // =========================================================================
   {
     id: 'en-female-incontinence',
-    title: 'Urinary Incontinence in Women: Types, Treatment and the TOT Sling',
+    title: 'Urinary Incontinence in Women: Types and Treatment',
     slug: 'female-urinary-incontinence-treatment-turkey',
     translations: { TR: 'kadinlarda-idrar-kacirma-nedenleri-ve-tedavisi', RU: 'nederzhanie-mochi-u-zhenshchin-lechenie' },
     language: 'EN',
