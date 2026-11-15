@@ -27,6 +27,7 @@ import { resolveSeoMeta, injectSeoIntoHtml, postDates, hreflangLinks } from '../
 import { SITE_URL } from '../src/seo/site';
 import { homePath, blogPath, articlePath, servicePath, internationalPath, parseRoute } from '../src/routes';
 import type { BlogPost, Language } from '../src/types';
+import { SUPERSEDED_DB_SLUGS } from '../src/content/superseded';
 
 const ROOT = process.cwd();
 const DIST = path.join(ROOT, 'dist');
@@ -106,7 +107,11 @@ async function main() {
   const postsByLang: Record<Language, BlogPost[]> = { TR: [], EN: [], RU: [] };
   const routes: string[] = [];
   for (const lang of ['TR', 'EN', 'RU'] as Language[]) {
-    const fromDb = firestorePosts.filter((p) => (p.language ?? 'TR') === lang);
+    // Koda tasinmis Firestore yazilari elenir; aksi halde bozuk slug'li eski
+    // kayit yeni yaziyi EZER (birlestirme sirasi fromDb once).
+    const fromDb = firestorePosts.filter(
+      (p) => (p.language ?? 'TR') === lang && !SUPERSEDED_DB_SLUGS.has(p.slug)
+    );
     // Firestore'daki bir yazı varsayılanla aynı slug'a sahipse Firestore kazanır
     const seen = new Set<string>();
     const all: BlogPost[] = [];

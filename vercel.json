@@ -12,6 +12,21 @@
       "source": "/iletisim",
       "destination": "/#contact",
       "permanent": true
+    },
+    {
+      "source": "/blog/idrar-yolu-enfeksiyonu-nedir-belirtileri-nedenleri-ve-tedavi-yntemleri",
+      "destination": "/blog/idrar-yolu-enfeksiyonu-iye-belirtileri-tedavisi",
+      "permanent": true
+    },
+    {
+      "source": "/blog/prostat-kanseri-nedir-belirtileri-risk-faktrleri-ve-tedavi-yntemleri",
+      "destination": "/blog/prostat-kanseri-belirtileri-tanisi-ve-tedavisi",
+      "permanent": true
+    },
+    {
+      "source": "/blog/tm-ynleriyle-snnet",
+      "destination": "/blog/sunnet-ne-zaman-yapilmali-yontemleri",
+      "permanent": true
     }
   ],
   "rewrites": [

@@ -16,6 +16,7 @@ import AddArticleModal from './AddArticleModal';
 import { firestore } from '../firestore';
 import { updatePageSeo } from '../utils/seo';
 import { buildArticleMeta, buildBlogHubMeta } from '../seo/meta';
+import { SUPERSEDED_DB_SLUGS } from '../content/superseded';
 
 interface BlogPageProps {
   language: Language;
@@ -119,7 +120,9 @@ export default function BlogPage({
   // Combine Firestore database posts with default high-quality articles
   const allPosts = useMemo(() => {
     const defaultPosts = getBlogPosts(language);
-    return [...dbPosts, ...defaultPosts];
+    // Koda tasinmis Firestore yazilari elenir — prerender ile AYNI kural.
+    // Elenmezse eski bozuk slug'li kayit yeni yaziyi ezer (dbPosts once).
+    return [...dbPosts.filter((p) => !SUPERSEDED_DB_SLUGS.has(p.slug)), ...defaultPosts];
   }, [dbPosts, language]);
 
   // Determine active post if viewing article

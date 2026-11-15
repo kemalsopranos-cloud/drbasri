@@ -1116,4 +1116,426 @@ ${DISCLAIMER}`,
       { title: 'NIDDK: Kidney Stones — Treatment', url: 'https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/treatment' },
     ],
   },
+  // =========================================================================
+  // 11. İDRAR YOLU ENFEKSİYONU (İYE)
+  //
+  // Panelden (Firestore) eklenmişti; slug'ı bozuktu
+  // ("...-ve-tedavi-yntemleri"), başlığı 60 karakteri aştığı için SERP'te
+  // ortasından kesiliyordu, FAQ şeması ve iç bağlantısı yoktu. 90 günde 660
+  // gösterim alıp SIFIR tıklama getiriyordu. Metin hekimin kendi yazısıdır,
+  // BİREBİR korundu; yalnızca ambalaj düzeltildi (15 Kas 2026).
+  //
+  // Başlıkta "İYE" kısaltması bilinçli: "iye nedir" / "ıye nedir" / "yye
+  // nedir" sorguları tek başına 116 gösterim getiriyor ama kısaltma hiçbir
+  // yerde geçmediği için tıklanmıyordu.
+  // =========================================================================
+  {
+    id: 'idrar-yolu-enfeksiyonu-iye',
+    title: 'İdrar Yolu Enfeksiyonu (İYE): Belirtileri ve Tedavisi',
+    slug: 'idrar-yolu-enfeksiyonu-iye-belirtileri-tedavisi',
+    excerpt:
+      'İdrar yolu enfeksiyonu (İYE) nedir, belirtileri nelerdir? İdrarda yanma, sık idrara çıkma ve kasık ağrısı gibi şikayetlerin nedenleri ve güncel tedavi yöntemlerini Prof. Dr. Basri Çakıroğlu anlatıyor.',
+    category: 'İdrar Yolu Enfeksiyonu',
+    date: '3 Eylül 2026',
+    datePublished: '2026-09-03',
+    dateModified: '2026-11-15',
+    readTime: '5',
+    author: AUTHOR,
+    keywords:
+      'idrar yolu enfeksiyonu, İYE nedir, iye nedir tıp, idrarda yanma, sık idrara çıkma, sistit, piyelonefrit, idrar yolu enfeksiyonu belirtileri, erkeklerde idrar yolu enfeksiyonu, idrar kültürü',
+    metaDescription:
+      'İdrar yolu enfeksiyonu (İYE) nedir, belirtileri nelerdir? İdrarda yanma, sık idrara çıkma ve kasık ağrısının nedenleri ile tanı ve tedavi süreci. Prof. Dr. Basri Çakıroğlu.',
+    content: `İdrar yolu enfeksiyonu (İYE), boşaltım sistemini oluşturan böbrekler, idrar boruları (üreterler), mesane ve idrar kanalı (üretra) gibi organların bakteriyel etkenlerle iltihaplanması durumudur. Hem kadınlarda hem de erkeklerde sıklıkla karşılaşılan bu rahatsızlık, yaşam kalitesini olumsuz etkilemekle birlikte zamanında müdahale edilmediğinde daha ciddi sağlık sorunlarına yol açabilir.
+
+Üroloji pratiğimizde en sık karşılaştığımız alt üriner sistem enfeksiyonlarından biri sistit (mesane iltihabı) iken, böbrekleri tutan üst üriner sistem enfeksiyonları ise piyelonefrit olarak adlandırılır.
+
+### İdrar Yolu Enfeksiyonu Belirtileri Nelerdir?
+
+İdrar yolu enfeksiyonları başlangıçta hafif seyretse de ilerledikçe belirgin rahatsızlıklara sebep olur. En yaygın klinik belirtiler şunlardır:
+
+* İdrar Yaparken Yanma ve Sızlama: En karakteristik belirtidir.
+* Sık İdrara Çıkma İsteği: Kişinin sürekli tuvalete gitme ihtiyacı hissetmesine rağmen çok az miktarda idrar yapabilmesi.
+* Bulanık veya Kötü Kokulu İdrar: Enfeksiyonun varlığına işaret eden idrar yapısı değişiklikleri.
+* Kasık ve Alt Karın Ağrısı: Özellikle mesane bölgesinde hissedilen baskı ve rahatsızlık.
+* İdrarda Kan Görülmesi: İdrarın pembe, kırmızı ya da koyu renkte olması.
+
+Yüksek ateş, titreme, sırt veya yan ağrısı (böbrek bölgesinde), bulantı ve kusma gibi şikayetler eklenmişse enfeksiyon böbreklere ulaşmış olabilir. Bu durumda gecikmeden bir üroloji uzmanına muayene olunmalıdır.
+
+### İdrar Yolu Enfeksiyonu Neden Olur? Risk Faktörleri
+
+Enfeksiyonların büyük çoğunluğuna Escherichia coli (E. coli) bakterisi neden olur. Bakterilerin dış idrar kanalından girip yukarı doğru ilerlemesiyle tablo gelişir.
+
+Risk artışına neden olan temel faktörler şunlardır:
+
+* Anatomik Yapı: Kadınlarda üretra erkeklere göre belirgin şekilde daha kısadır; bu durum bakterilerin mesaneye ulaşmasını kolaylaştırır.
+* Yetersiz Sıvı Tüketimi: Az su içilmesi, idrar yolunun doğal olarak yıkanıp bakterilerden temizlenmesini engeller.
+* İdrarı Tutma Alışkanlığı: İdrarın mesanede uzun süre beklemesi bakteriyel çoğalmayı tetikler.
+* Böbrek Taşları ve Tıkanıklıklar: İdrar akışını engelleyen taşlar veya erkeklerde prostat büyümeleri enfeksiyon riskini artırır.
+* Hijyen Hataları: Yanlış tuvalet temizliği bakterilerin idrar yoluna taşınmasına yol açabilir.
+
+Erkeklerde idrar yolu enfeksiyonu kadınlara göre daha seyrek görülür; bu nedenle erkeklerde ortaya çıkan bir enfeksiyon altta yatan bir nedeni (prostat büyümesi, taş, darlık) düşündürür ve mutlaka araştırılmalıdır. Tekrarlayan enfeksiyonlar için de aynı kural geçerlidir — [böbrek taşı](/blog/bobrek-tasi-belirtileri-nasil-duser) ve [prostat büyümesi](/blog/prostat-buyumesi-belirtileri-ve-tedavisi) en sık karşılaşılan zeminlerdir.
+
+### İdrar Yolu Enfeksiyonu Tanı ve Tedavi Süreci
+
+İdrar yolu enfeksiyonunun teşhisi, hastanın şikayetlerinin değerlendirilmesi, Tam İdrar Tahlili (TİT) ve gerekli durumlarda İdrar Kültürü testi ile koyulur. Kültür testi sayesinde enfeksiyona neden olan bakteri türü ve bu bakteriye etkili en uygun antibiyotik tespit edilir.
+
+* Antibiyotik Tedavisi: Bakteriyel enfeksiyonların temel tedavisi doğru antibiyotik kullanımıdır. Hekim tarafından reçete edilen antibiyotiklerin, semptomlar geçse bile önerilen süre boyunca düzenli kullanılması nüksleri önlemek açısından şarttır.
+* Bol Sıvı Alımı: Tedavi sürecinde bol su tüketilmesi, bakterilerin sistemden atılmasını hızlandırır.
+* Destekleyici Yöntemler: Ağrı ve spazmı hafifletmek amacıyla doktor kontrolünde semptomatik ilaçlar reçete edilebilir.
+
+Enfeksiyon sırasında idrarda kan görülmesi sık rastlanan bir bulgudur ve tedaviyle birlikte geriler. Ancak enfeksiyon geçtikten sonra da devam eden kanama farklı bir nedeni işaret edebilir; bu durumda [idrarda kan görülmesi](/blog/idrarda-kan-gorulmesi-nedenleri) ayrı olarak değerlendirilmelidir.
+
+### İdrar Yolu Enfeksiyonundan Korunma Yolları
+
+* Günlük en az 2-2,5 litre su tüketmeye özen gösterin.
+* İdrarınızı uzun süre tutmayın, sıkışma hissettiğinizde bekletmeden tuvalete gidin.
+* Tuvalet temizliğini daima önden arkaya doğru gerçekleştirin.
+* Islak mayo ve nemli kıyafetlerle uzun süre kalmamaya özen gösterin.
+
+Sağlıklı bir üriner sistem için düzenli ürolojik kontrollerinizi aksatmamanız önem taşımaktadır. İdrar yollarınızda sürekli tekrarlayan veya geçmeyen şikayetleriniz varsa kişiye özel değerlendirme ve doğru tedavi planı için kliniğimize başvurabilirsiniz.
+
+${DISCLAIMER}`,
+    faq: [
+      {
+        q: 'İYE ne demek?',
+        a: 'İYE, idrar yolu enfeksiyonunun kısaltmasıdır. Böbrekler, üreterler, mesane ve üretradan oluşan idrar yollarının bakteriyel iltihaplanmasını tanımlar. Mesaneyi tutan alt üriner sistem enfeksiyonuna sistit, böbrekleri tutan üst üriner sistem enfeksiyonuna piyelonefrit denir.',
+      },
+      {
+        q: 'İdrar yolu enfeksiyonu kasık ağrısı yapar mı?',
+        a: 'Evet. Kasık ve alt karın bölgesinde hissedilen baskı ve ağrı, idrar yolu enfeksiyonunun yaygın belirtilerindendir ve genellikle mesane bölgesinde hissedilir. Ağrıya sırt veya yan ağrısı, yüksek ateş ve titreme eklendiyse enfeksiyon böbreklere ulaşmış olabilir; bu durumda gecikmeden başvurulmalıdır.',
+      },
+      {
+        q: 'İdrar yolu enfeksiyonu kendiliğinden geçer mi?',
+        a: 'Hafif tablolar bol sıvı alımıyla gerileyebilir, ancak bakteriyel enfeksiyonun temel tedavisi uygun antibiyotiktir. Tedavi edilmeyen enfeksiyon böbreklere ilerleyebilir. Reçete edilen antibiyotik, şikâyetler geçse bile önerilen süre boyunca tamamlanmalıdır; yarıda bırakmak nüksü kolaylaştırır.',
+      },
+      {
+        q: 'Erkeklerde idrar yolu enfeksiyonu neden olur?',
+        a: 'Erkeklerde üretra daha uzun olduğu için enfeksiyon kadınlara göre seyrek görülür. Bu nedenle erkekte ortaya çıkan bir enfeksiyon çoğunlukla altta yatan bir nedene işaret eder: prostat büyümesi, böbrek veya mesane taşı, idrar yolu darlığı ya da mesanenin tam boşalamaması. Bu yüzden erkeklerde İYE mutlaka araştırılmalıdır.',
+      },
+      {
+        q: 'İdrar kültürü neden isteniyor?',
+        a: 'Tam idrar tahlili enfeksiyonun varlığını gösterir; idrar kültürü ise enfeksiyona hangi bakterinin yol açtığını ve bu bakteriye hangi antibiyotiğin etkili olduğunu belirler. Özellikle tekrarlayan enfeksiyonlarda, erkeklerde ve tedaviye yanıt alınamayan durumlarda kültür sonucu doğru antibiyotiği seçmek için gereklidir.',
+      },
+    ],
+    sources: [
+      { title: 'EAU Guidelines: Urological Infections', url: 'https://uroweb.org/guidelines/urological-infections' },
+      { title: 'NIDDK: Bladder Infection (Urinary Tract Infection) in Adults', url: 'https://www.niddk.nih.gov/health-information/urologic-diseases/bladder-infection-uti-in-adults' },
+    ],
+  },
+
+  // =========================================================================
+  // 12. PROSTAT KANSERİ
+  //
+  // Firestore'dan taşındı. Slug bozuktu ("...risk-faktrleri-ve-tedavi-
+  // yntemleri"), başlık kırpılıyordu, FAQ şeması yoktu. Metinde ayrıca
+  // RENDER HATASI vardı: ana bölümler "##" ile yazılmıştı, oysa
+  // BlogPage.renderArticleContent yalnızca "###" tanıyor — başlıklar
+  // sayfada ham "## Prostat Nedir?" olarak basılıyor ve içindekiler
+  // listesine girmiyordu. Tümü "###"e çevrildi (15 Kas 2026).
+  // Metin hekimin kendi yazısıdır, içerik olarak değiştirilmedi.
+  // =========================================================================
+  {
+    id: 'prostat-kanseri-belirtileri-tedavisi',
+    title: 'Prostat Kanseri Nedir? Belirtileri ve Tedavi Yöntemleri',
+    slug: 'prostat-kanseri-belirtileri-tanisi-ve-tedavisi',
+    excerpt:
+      'Prostat kanseri, erkeklerde en sık görülen kanser türlerinden biridir. Erken dönemde çoğu zaman belirti vermediği için düzenli kontroller büyük önem taşır. Belirtiler, risk faktörleri, tanı yöntemleri ve tedavi seçenekleri.',
+    category: 'Prostat Kanseri',
+    date: '26 Temmuz 2026',
+    datePublished: '2026-07-26',
+    dateModified: '2026-11-15',
+    readTime: '10',
+    author: AUTHOR,
+    keywords:
+      'prostat kanseri, prostat kanseri belirtileri, prostat kanseri tedavisi, PSA testi, multiparametrik prostat MR, prostat biyopsisi, radikal prostatektomi, prostat kanseri taraması, prostat kanseri risk faktörleri',
+    metaDescription:
+      'Prostat kanseri belirtileri, risk faktörleri, PSA ve MR ile tanı, radikal prostatektomi ve diğer tedavi seçenekleri. Tarama ne zaman başlamalı? Prof. Dr. Basri Çakıroğlu.',
+    relatedService: 'urologic-oncology',
+    content: `Bu yazıda prostat kanserinin ne olduğu, belirtileri, risk faktörleri, tanı yöntemleri ve güncel tedavi seçenekleri hakkında merak edilenleri ele alıyoruz.
+
+### Prostat Nedir?
+
+Prostat, yalnızca erkeklerde bulunan ve üreme sisteminin önemli bir parçası olan yaklaşık 15-20 gram ağırlığında bir bezdir. Mesanenin hemen altında yer alır ve içinden idrar kanalı geçer.
+
+Prostatta görülebilen başlıca üç hastalık şunlardır:
+
+* Prostat iltihabı (Prostatit)
+* İyi huylu prostat büyümesi (BPH)
+* Prostat kanseri
+
+Bu yazının konusu olan prostat kanseri, prostat hücrelerinin kontrolsüz şekilde çoğalması sonucu gelişen kötü huylu bir tümördür. İyi huylu prostat büyümesi ise kanser değildir ve ayrı bir hastalıktır; ayrıntısı için [prostat büyümesi belirtileri ve tedavisi](/blog/prostat-buyumesi-belirtileri-ve-tedavisi) yazısına bakabilirsiniz.
+
+### Prostat Kanseri Nasıl Gelişir?
+
+Prostat kanseri genellikle yaşın ilerlemesiyle birlikte ortaya çıkar. Özellikle 50 yaşından sonra prostat hücrelerinde meydana gelen genetik değişiklikler kanser gelişimine zemin hazırlayabilir. Hastalık çoğu zaman yavaş ilerlese de bazı hastalarda daha agresif seyredebilir.
+
+### Prostat Kanserinin Belirtileri Nelerdir?
+
+Prostat kanseri erken evrede çoğunlukla hiçbir belirti vermez. Bu nedenle birçok hasta yalnızca düzenli tarama sırasında tanı alır.
+
+Hastalık ilerlediğinde görülebilecek belirtiler şunlardır:
+
+* Sık idrara çıkma
+* İdrar yaparken yanma
+* Kesik kesik idrar yapma
+* İdrarı tam boşaltamama hissi
+* Tekrarlayan idrar yolu enfeksiyonları
+* İdrarda kan görülmesi
+* İleri evrede kemik ağrıları ve genel sağlık durumunda bozulma
+
+Bu belirtiler yalnızca prostat kanserine özgü değildir. Benzer şikayetler iyi huylu prostat büyümesinde de görülebilir. Kesin tanı için mutlaka üroloji uzmanına başvurulmalıdır.
+
+### Prostat Kanseri İçin Risk Faktörleri
+
+Prostat kanseri riskini artıran birçok faktör bulunmaktadır.
+
+**Yaş.** En önemli risk faktörüdür. Hastalığın görülme sıklığı 50 yaşından sonra belirgin şekilde artar.
+
+**Aile Öyküsü.** Baba, kardeş, amca veya dede gibi birinci derece akrabalarda prostat kanseri bulunması riski önemli ölçüde artırır. Ayrıca ailede meme kanseri öyküsünün bulunması da bazı genetik mutasyonlar nedeniyle risk oluşturabilir.
+
+**Beslenme ve Yaşam Tarzı.** Yağdan zengin beslenme alışkanlıkları ve bazı çevresel faktörlerin prostat kanseri gelişimine katkıda bulunduğu düşünülmektedir.
+
+### Prostat Kanseri Taraması Ne Zaman Başlamalıdır?
+
+Üroloji uzmanları genel olarak:
+
+* **50 yaşından itibaren** her erkeğin yılda bir kez prostat kontrolü yaptırmasını,
+* **Ailesinde prostat kanseri öyküsü bulunan kişilerin ise 40 yaşından itibaren** düzenli üroloji kontrollerine başlamasını önermektedir.
+
+Risk grubundaki hastalarda kontroller gerekirse 6 ayda bir planlanabilir.
+
+### Prostat Kanseri Nasıl Teşhis Edilir?
+
+Erken teşhis için uygulanan temel yöntemler şunlardır:
+
+**Dijital Rektal Muayene.** Üroloji uzmanı prostat bezini elle değerlendirerek sertlik veya düzensizlik olup olmadığını kontrol eder.
+
+**PSA Kan Testi.** PSA (Prostat Spesifik Antijen), prostat kanseri taramasında kullanılan en önemli kan testlerinden biridir. Basit bir kan örneğiyle ölçülür ve yaşa göre belirlenen normal değerler dikkate alınarak değerlendirilir. PSA yüksekliğinin her zaman kanser anlamına gelmediğini belirtmek gerekir; ayrıntısı için [PSA yüksekliği ne demek](/blog/psa-yuksekligi-ne-anlama-gelir) yazısına bakabilirsiniz.
+
+**Multiparametrik Prostat MR.** PSA yüksekliği veya muayenede şüpheli bulgu saptanması durumunda multiparametrik prostat MR çekilebilir. Bu görüntüleme yöntemi prostat içerisindeki şüpheli alanların belirlenmesinde oldukça değerlidir.
+
+**Prostat Biyopsisi.** MR sonucunda şüpheli alan tespit edilmesi halinde tanıyı kesinleştirmek amacıyla prostat biyopsisi yapılır. Günümüzde MR hedefli biyopsiler erken tanıda yüksek başarı sağlamaktadır.
+
+### Prostat Kanserinde Erken Teşhis Neden Önemlidir?
+
+Prostat kanseri erken evrede yakalandığında tedavi başarısı oldukça yüksektir. Hastalık prostat dışına yayılmadan teşhis edildiğinde birçok hasta tamamen iyileşebilmektedir.
+
+Geç evrede ise kanser kemiklere veya diğer organlara yayılabilir ve tedavi daha karmaşık hale gelebilir. Bu nedenle düzenli kontroller hayat kurtarıcıdır.
+
+### Prostat Kanserinde Tedavi Seçenekleri
+
+Tedavi yöntemi hastalığın evresine, hastanın yaşına ve genel sağlık durumuna göre belirlenir.
+
+**Cerrahi Tedavi (Radikal Prostatektomi).** Kanser prostat ile sınırlıysa en sık uygulanan tedavi radikal prostatektomidir. Bu ameliyatta prostat tamamen çıkarılır.
+
+Ameliyat şu yöntemlerle gerçekleştirilebilir:
+
+* Açık cerrahi
+* Laparoskopik cerrahi
+* Robotik cerrahi
+
+Günümüzde robotik ve laparoskopik yöntemler daha küçük kesilerle uygulanabildiği için hastaların iyileşme süreci daha konforlu olabilmektedir. Robotik yöntemin ayrıntısı için [robotik prostat ameliyatı](/blog/robotik-prostat-kanseri-ameliyati) yazısına bakabilirsiniz.
+
+**Radyoterapi.** Cerrahiye uygun olmayan veya belirli hasta gruplarında radyoterapi etkili bir tedavi seçeneğidir.
+
+**İlaç Tedavileri.** İleri evre veya metastatik prostat kanserinde;
+
+* Hormon (antiandrojen) tedavileri
+* Kemoterapi
+* Diğer sistemik tedaviler
+
+hastalığın kontrol altına alınmasında kullanılabilir.
+
+### Ameliyat Sonrası İyileşme Süreci
+
+İyileşme süresi uygulanan cerrahi yönteme göre değişmektedir.
+
+Açık ameliyat sonrası idrar sondası yaklaşık iki hafta kalabilirken, robotik veya laparoskopik cerrahide bu süre çoğu hastada 7-10 güne kadar düşebilmektedir.
+
+Robotik cerrahi uygulanan hastalar genellikle günlük yaşamlarına ve masa başı işlerine daha kısa sürede dönebilmektedir.
+
+### Ailesinde Prostat Kanseri Olanlar Nelere Dikkat Etmeli?
+
+Aile öyküsü bulunan kişilerde prostat kanseri riski daha yüksektir. Bu nedenle:
+
+* 40 yaşından itibaren üroloji kontrollerine başlanmalıdır.
+* PSA testi düzenli yaptırılmalıdır.
+* Gerekli görüldüğünde prostat muayenesi ihmal edilmemelidir.
+* Doktorun önerisine göre takip aralıkları belirlenmelidir.
+
+Erken tanı sayesinde hastalık henüz belirti vermeden tespit edilebilir.
+
+### Sonuç
+
+Prostat kanseri erkeklerde sık görülen ancak erken teşhis edildiğinde başarıyla tedavi edilebilen bir hastalıktır. Düzenli üroloji kontrolleri, PSA testi ve gerektiğinde ileri görüntüleme yöntemleri sayesinde hastalık erken evrede yakalanabilir.
+
+Özellikle 50 yaş üzerindeki erkeklerin ve ailesinde prostat kanseri öyküsü bulunan kişilerin düzenli sağlık kontrollerini ihmal etmemeleri büyük önem taşımaktadır. Erken tanı, hem tedavi başarısını artırmakta hem de yaşam kalitesinin korunmasına önemli katkı sağlamaktadır.
+
+${DISCLAIMER}`,
+    faq: [
+      {
+        q: 'Prostat kanseri belirti verir mi?',
+        a: 'Erken evrede çoğunlukla hiçbir belirti vermez; bu yüzden birçok hasta tanıyı yalnızca düzenli tarama sırasında alır. İlerlediğinde sık idrara çıkma, kesik kesik idrar, idrarda kan ve ileri evrede kemik ağrıları görülebilir. Bu şikâyetler iyi huylu prostat büyümesinde de olur, ayırt etmek için muayene gerekir.',
+      },
+      {
+        q: 'Prostat kanseri taraması kaç yaşında başlamalı?',
+        a: 'Genel öneri 50 yaşından itibaren yılda bir kez prostat kontrolüdür. Ailesinde prostat kanseri öyküsü bulunanların 40 yaşından itibaren başlaması önerilir. Risk grubundaki hastalarda kontroller gerekirse 6 ayda bir planlanabilir.',
+      },
+      {
+        q: 'PSA yüksekliği prostat kanseri anlamına gelir mi?',
+        a: 'Hayır. PSA prostata özgüdür ama kansere özgü değildir; iyi huylu prostat büyümesi, prostat iltihabı, idrar yolu enfeksiyonu ve hatta bisiklet kullanımı gibi nedenlerle de yükselebilir. Bu yüzden yüksek PSA tek başına tanı koydurmaz, muayene ve gerektiğinde MR ile birlikte değerlendirilir.',
+      },
+      {
+        q: 'Prostat kanseri ameliyatından sonra sonda ne kadar kalır?',
+        a: 'Açık ameliyat sonrası idrar sondası yaklaşık iki hafta kalabilirken, robotik veya laparoskopik cerrahide bu süre çoğu hastada 7-10 güne kadar düşebilmektedir. Robotik cerrahi uygulanan hastalar günlük yaşamlarına ve masa başı işlerine genellikle daha kısa sürede dönebilmektedir.',
+      },
+      {
+        q: 'Prostat kanseri tedavi edilebilir mi?',
+        a: 'Erken evrede yakalandığında tedavi başarısı oldukça yüksektir ve hastalık prostat dışına yayılmadan teşhis edildiğinde birçok hasta tamamen iyileşebilmektedir. Geç evrede kanser kemiklere veya diğer organlara yayılabilir ve tedavi karmaşıklaşır; bu nedenle düzenli kontroller belirleyicidir.',
+      },
+    ],
+    sources: [
+      { title: 'EAU Guidelines: Prostate Cancer', url: 'https://uroweb.org/guidelines/prostate-cancer' },
+      { title: 'AUA Guideline: Early Detection of Prostate Cancer', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/early-detection-of-prostate-cancer-guidelines' },
+    ],
+  },
+
+  // =========================================================================
+  // 13. SÜNNET
+  //
+  // Firestore'dan taşındı. Slug'ı "tm-ynleriyle-snnet" idi — Türkçe
+  // karakterler düştüğü için OKUNAKSIZ ve aranabilir değildi. Başlıkları
+  // "##" ile yazılmıştı (renderer yalnızca "###" tanıyor), ayrıca metnin
+  // başında başlığı tekrar eden bir "# Tüm Yönleriyle Sünnet" satırı vardı;
+  // sayfada başlık iki kez görünüyordu (15 Kas 2026).
+  // =========================================================================
+  {
+    id: 'sunnet-rehberi',
+    title: 'Sünnet: Ne Zaman Yapılmalı, Yöntemleri ve Riskleri',
+    slug: 'sunnet-ne-zaman-yapilmali-yontemleri',
+    excerpt:
+      'Sünnet, sünnet derisinin cerrahi olarak çıkarılması işlemidir. Uzman hekim tarafından steril hastane ortamında yapıldığında güvenli bir uygulamadır. Doğru zamanlama, uygun cerrahi teknik ve işlem sonrası bakım başarılı bir iyileşme için belirleyicidir.',
+    category: 'Sünnet',
+    date: '19 Temmuz 2026',
+    datePublished: '2026-07-19',
+    dateModified: '2026-11-15',
+    readTime: '5',
+    author: AUTHOR,
+    keywords:
+      'sünnet, sünnet ne zaman yapılmalı, sünnet yöntemleri, fimozis, parafimozis, hipospadias, sünnet riskleri, yenidoğan sünneti, sünnet yaşı',
+    metaDescription:
+      'Sünnet ne zaman yapılmalı, hangi yöntemler kullanılır, tıbbi gereklilikleri ve olası riskleri neler? Hipospadiasta neden sünnet yapılmaz? Prof. Dr. Basri Çakıroğlu.',
+    content: `### Sünnet Nedir?
+
+Sünnet, penisin uç kısmını (glans) örten ve tıp dilinde **prepisyum** olarak adlandırılan sünnet derisinin cerrahi yöntemle uygun miktarda çıkarılması işlemidir. Bu sayede penis başı açığa çıkar.
+
+Sünnet, dünyada en sık uygulanan cerrahi işlemlerden biridir. Erkeklerin yaklaşık dörtte biri dini, kültürel, tıbbi veya kişisel nedenlerle sünnet edilmektedir. Bazı ülkelerde yenidoğan döneminde rutin olarak uygulanırken, bazı toplumlarda dini ve kültürel geleneklerin önemli bir parçasıdır.
+
+Türkiye'de sünnet hem dini hem de sosyal açıdan önemli bir gelenektir. Birçok aile için sünnet töreni özel bir anlam taşırken, çocuk açısından da önemli bir yaşam olayı olarak görülmektedir.
+
+### Sünnet Ne Zaman Yapılmalıdır?
+
+Sünnet her yaşta yapılabilir. Ancak psikolojik gelişim açısından 2–6 yaş arasındaki dönemde, tıbbi zorunluluk yoksa ertelenmesi önerilebilir. Günümüzde birçok uzman, uygun sağlık koşulları sağlandığında yenidoğan dönemini iyileşmenin hızlı olması, bakımın kolaylığı ve psikolojik etkilerin daha az olması nedeniyle uygun dönemlerden biri olarak değerlendirmektedir.
+
+Bununla birlikte fimozis, tekrarlayan idrar yolu enfeksiyonları veya diğer tıbbi gereklilikler söz konusuysa yaş beklenmeden sünnet yapılabilir.
+
+### Sünneti Kim Yapmalıdır?
+
+Sünnet, deneyimli ve eğitimli bir hekim tarafından, uygun steril koşullarda yapılmalıdır. Günümüzde en sık çocuk cerrahları ve üroloji uzmanları tarafından uygulanmaktadır.
+
+### Sünnet Nerede ve Nasıl Yapılmalıdır?
+
+Sünnetin hastane veya tam donanımlı sağlık kuruluşlarında steril şartlarda gerçekleştirilmesi önerilir.
+
+Anestezi yöntemi çocuğun yaşına, sağlık durumuna ve hekimin değerlendirmesine göre belirlenir. Günümüzde hem lokal hem de genel anestezi güvenli şekilde uygulanabilmektedir. Amaç çocuğun ağrı hissetmemesi ve işlemin güvenli koşullarda tamamlanmasıdır.
+
+### Sünnet Yöntemleri
+
+Günümüzde çeşitli sünnet teknikleri bulunmaktadır. En yaygın yöntem, sünnet derisinin cerrahi olarak çıkarılması ve uygun şekilde dikilmesidir. Kullanılacak yöntem hastanın yaşına, anatomik yapısına ve cerrahın deneyimine göre belirlenir.
+
+### Sünnet Öncesinde Nelere Dikkat Edilmelidir?
+
+Hipospadias (halk arasında "peygamber sünneti" olarak bilinen durum) bulunan çocuklarda sünnet yapılmamalıdır. Çünkü bu hastalarda sünnet derisi daha sonra yapılacak düzeltici ameliyatta kullanılabilir.
+
+Ayrıca aşağıdaki durumlarda sünnet öncesinde mutlaka hekim değerlendirmesi gerekir:
+
+* Ailede kanama bozukluğu bulunması,
+* Çocukta kolay morarma veya uzun süren kanamalar olması,
+* Daha önce geçirilmiş önemli hastalıklar veya ameliyatlar,
+* Sürekli kullanılan ilaçlar.
+
+### Sünnetin Olası Faydaları
+
+Bilimsel çalışmalar sünnetin bazı sağlık yararları sağlayabileceğini göstermektedir. Bunlar arasında:
+
+* Fimozis gelişme riskinin ortadan kaldırılması,
+* Bebeklik döneminde idrar yolu enfeksiyonu riskinin azalması,
+* Penis kanseri riskinin azalması,
+* Bazı cinsel yolla bulaşan enfeksiyonların bulaşma riskinde azalma,
+* Hijyenin daha kolay sağlanabilmesi.
+
+Ancak sünnet, cinsel yolla bulaşan hastalıklara karşı tam koruma sağlamaz. Güvenli cinsel yaşam uygulamaları her zaman önemini korur.
+
+### Sünnetin Tıbbi Endikasyonları
+
+Sünnet aşağıdaki durumlarda tıbbi gereklilik oluşturabilir:
+
+* **Fimozis:** Sünnet derisinin geri çekilemeyecek kadar dar olması.
+* **Parafimozis:** Geri çekilen sünnet derisinin eski yerine dönememesi.
+* **Balanopostit:** Glans ve sünnet derisinin birlikte iltihaplanması.
+* Tekrarlayan idrar yolu enfeksiyonları.
+* Bazı doğumsal ürolojik anomaliler.
+
+Tekrarlayan idrar yolu enfeksiyonları söz konusuysa altta yatan nedenin ayrıca araştırılması gerekir; ayrıntısı için [idrar yolu enfeksiyonu (İYE)](/blog/idrar-yolu-enfeksiyonu-iye-belirtileri-tedavisi) yazısına bakabilirsiniz.
+
+### Olası Komplikasyonlar
+
+Deneyimli hekimler tarafından uygun koşullarda yapılan sünnetlerde komplikasyon oranı düşüktür. Ancak her cerrahi işlemde olduğu gibi bazı riskler bulunmaktadır.
+
+Bunlar arasında:
+
+* Kanama,
+* Enfeksiyon,
+* Yara iyileşme sorunları,
+* Kozmetik şekil bozuklukları,
+* Fazla veya yetersiz deri çıkarılması,
+* Nadir olarak penis başı veya idrar kanalının yaralanması,
+* İdrar deliğinde (meatus) darlık gelişmesi.
+
+Bu risklerin büyük bölümü işlemin deneyimli cerrahlar tarafından steril hastane koşullarında yapılmasıyla önemli ölçüde azaltılabilir.
+
+### Sonuç
+
+Sünnet, doğru endikasyonla ve uygun koşullarda yapıldığında güvenli bir cerrahi işlemdir. İşlem öncesinde çocuğun ayrıntılı olarak değerlendirilmesi, varsa ek hastalıkların belirlenmesi ve sünnetin deneyimli hekimler tarafından steril ortamda gerçekleştirilmesi komplikasyon riskini en aza indirir.
+
+Ailelerin sünnet kararı öncesinde çocuk cerrahisi veya üroloji uzmanından görüş alması, hem işlemin güvenliği hem de olası risklerin doğru değerlendirilmesi açısından önem taşımaktadır.
+
+${DISCLAIMER}`,
+    faq: [
+      {
+        q: 'Sünnet için en uygun yaş nedir?',
+        a: 'Sünnet her yaşta yapılabilir, ancak psikolojik gelişim açısından 2–6 yaş arasındaki dönemde tıbbi zorunluluk yoksa ertelenmesi önerilebilir. Birçok uzman, uygun sağlık koşulları sağlandığında yenidoğan dönemini iyileşmenin hızlı olması ve bakımın kolaylığı nedeniyle uygun dönemlerden biri olarak değerlendirmektedir.',
+      },
+      {
+        q: 'Hipospadiasta neden sünnet yapılmaz?',
+        a: 'Hipospadias (halk arasında "peygamber sünneti" olarak bilinen durum) bulunan çocuklarda sünnet yapılmamalıdır; çünkü bu hastalarda sünnet derisi daha sonra yapılacak düzeltici ameliyatta kullanılacaktır. Deri çıkarılırsa onarımda kullanılacak doku kaybedilir.',
+      },
+      {
+        q: 'Sünnetin tıbbi olarak gerekli olduğu durumlar nelerdir?',
+        a: 'Fimozis (sünnet derisinin geri çekilemeyecek kadar dar olması), parafimozis (geri çekilen derinin eski yerine dönememesi), balanopostit (glans ve sünnet derisinin iltihaplanması), tekrarlayan idrar yolu enfeksiyonları ve bazı doğumsal ürolojik anomaliler sünneti tıbbi gereklilik hâline getirebilir.',
+      },
+      {
+        q: 'Sünnet öncesi hangi durumlar hekime bildirilmeli?',
+        a: 'Ailede kanama bozukluğu bulunması, çocukta kolay morarma veya uzun süren kanamalar olması, daha önce geçirilmiş önemli hastalıklar veya ameliyatlar ve sürekli kullanılan ilaçlar mutlaka bildirilmelidir. Bu durumlarda sünnet öncesinde ek değerlendirme gerekir.',
+      },
+      {
+        q: 'Sünnetin riskleri nelerdir?',
+        a: 'Deneyimli hekimler tarafından steril koşullarda yapıldığında komplikasyon oranı düşüktür. Olası riskler kanama, enfeksiyon, yara iyileşme sorunları, kozmetik şekil bozuklukları, fazla veya yetersiz deri çıkarılması ve nadiren penis başı ya da idrar kanalı yaralanması ile idrar deliğinde darlık gelişmesidir.',
+      },
+    ],
+    sources: [
+      { title: 'EAU Guidelines: Paediatric Urology', url: 'https://uroweb.org/guidelines/paediatric-urology' },
+      { title: 'AAP: Circumcision Policy Statement', url: 'https://publications.aap.org/pediatrics/article/130/3/585/30235/Circumcision-Policy-Statement' },
+    ],
+  },
 ];
