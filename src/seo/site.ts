@@ -46,7 +46,7 @@ export const DOCTOR = {
   },
   // schema.org openingHoursSpecification — iletişim bölümündeki tabloyla aynı
   openingHours: [
-    { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '09:00', closes: '18:00' },
+    { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '09:00', closes: '17:30' },
     { days: ['Saturday'], opens: '09:00', closes: '14:00' },
   ],
   // Yerel arama: hizmet verilen ilçeler (Anadolu Yakası)

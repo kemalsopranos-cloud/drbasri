@@ -78,6 +78,8 @@ export interface Appointment {
 
 export interface ClinicHours {
   days: string;
+  /** Üst çubuk gibi dar alanlar için kısa gün etiketi ("Pzt - Cum"). */
+  daysShort: string;
   hours: string;
 }
 

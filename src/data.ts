@@ -584,9 +584,14 @@ export const contactDetails: ContactInfo = {
   // gösteriyordu. Yer kimliği (!1s) ve koordinatlar GBP kaydından alındı.
   mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010.1587375253813!2d29.1149897!3d41.0269263!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cac9f7a853137b%3A0xae1b15263c000d0c!2sProf.%20Dr.%20Basri%20%C3%87ak%C4%B1ro%C4%9Flu!5e0!3m2!1str!2str!4v1721035200000!5m2!1str!2str",
   gmapsDirectionUrl: DOCTOR.mapUrl,
+  // ÇALIŞMA SAATLERİ — TEK KAYNAK. Google Business Profile ile birebir aynı
+  // olmalı; site.ts'teki openingHoursSpecification de buradan kopyalanır.
+  // Üst çubuk (Header) eskiden "Pzt - Cmt 09:00 - 18:00" diye ELLE yazılmıştı:
+  // hem kapanış saati yanlıştı hem de Cumartesi'yi 18:00'e kadar açık
+  // gösteriyordu. Artık buradan türetiliyor (15 Kas 2026, GBP ile hizalandı).
   hours: [
-    { days: "Pazartesi - Cuma / Mon - Fri", hours: "09:00 - 18:00" },
-    { days: "Cumartesi / Saturday", hours: "09:00 - 14:00" },
-    { days: "Pazar / Sunday", hours: "Kapalı / Closed" }
+    { days: "Pazartesi - Cuma / Mon - Fri", daysShort: "Pzt - Cum", hours: "09:00 - 17:30" },
+    { days: "Cumartesi / Saturday", daysShort: "Cmt", hours: "09:00 - 14:00" },
+    { days: "Pazar / Sunday", daysShort: "Paz", hours: "Kapalı / Closed" }
   ]
 };

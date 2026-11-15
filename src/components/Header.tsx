@@ -74,7 +74,15 @@ export default function Header({
           <div className="flex items-center space-x-6">
             <span className="flex items-center">
               <Clock className="w-3.5 h-3.5 text-gold mr-2" />
-              <span>Pzt - Cmt / Mon - Sat: 09:00 - 18:00</span>
+              {/* Saatler ELLE YAZILMAZ — contactDetails.hours tek kaynaktır.
+                  Sabit metin hem 18:00 diyordu hem de Cumartesi'yi akşama
+                  kadar açık gösteriyordu (gerçekte 14:00'te kapanıyor). */}
+              <span>
+                {contactDetails.hours
+                  .filter((h) => !/Kapalı/i.test(h.hours))
+                  .map((h) => `${h.daysShort} ${h.hours}`)
+                  .join(' · ')}
+              </span>
             </span>
             <span className="flex items-center">
               <Phone className="w-3.5 h-3.5 text-gold mr-2" />
